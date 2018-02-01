@@ -80,7 +80,13 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 \end{abstract}
 
 \begin{acknowledgement}
-Thank you ....
+\iffalse
+First I would like to thank my main advisor Professor Otto Anshus and co-advisor Associate Professor John Markus Bjørndalen for providing guidance, support, ideas and feedback whenever I needed it through this thesis.
+
+I want to express my sincerest gratitude to the \textit{Masterinos}. I would not have made it without you guys. 
+
+I would also like to thanks my parents for encouraging me to take a higher education and supporting me through every decision. A great thanks to my boyfriend
+\fi
 \end{acknowledgement}
 
 \tableofcontents
@@ -91,25 +97,35 @@ Thank you ....
 \mainmatter
 
 \chapter{Introduction}
-W3, problem definition: This project investigated .... x, with the purpose of y.
+\textbf{FRA CAPSTONE:}
+The Arctic tundra in the far northern hemisphere is challenged by climate
+changes in the world today and is one of the ecosystems that are most affected by these changes [10]. The Climate-ecological Observatory for Arctic Tundra - COAT is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020 [10].
+
+\textit{This thesis presents the architecture, design and implementation of a peer observation that can observe and accumulate data from in-situ observation units.}
+
+\section{Motivation}
+The motivation behind this project is...
 
 
-This project will 
-Develop an approach to 
-Let observation units observe data observed by observation units. 
-To gradually accumulate the data to observation units being a DAO Store (there can be multiple DAO Stores depending on user needs).
-Do a prototype of such a system focused on three levels of observation units: (i) In-situ observation units being (ii) observed by back-end observation units, being (iii) observed by a DAO Store observation unit.
+This project will develop an approach to 
+\begin{itemize}
+\item Let observation units observe data observed by observation units. 
+\item To gradually accumulate the data to observation units being a DAO Store (there can be multiple DAO Stores depending on user needs).
+\item Do a prototype of such a system focused on three levels of observation units: (i) In-situ observation units being (ii) observed by back-end observation units, being (iii) observed by a DAO Store observation unit.
+\end{itemize}
 
-The purpose is
-To fetch and accumulate data observed by observation units for further use.
+The purpose is to fetch and accumulate data observed by observation units for further use.
 
 The observation units to be used for the prototype comprises
 Observation Unit Processes executing on PCs and/or Raspberry Pi.
 
 
-\section{Motivation}
-
 \section{Contributions}
+The dissertation makes the following contributions:
+\begin{itemize}
+\item A
+\item B
+\end{itemize}
 
 \section{Assumptions}
 Avgrense viktig!
@@ -117,6 +133,18 @@ Avgrense viktig!
 \section{Limitations}
 Avgrense viktig!
 %\paragraph{A paragraph}
+
+\section{Outline}
+This thesis is structured into X chapters including the introduction.
+
+\begin{description}
+\item[Chapter 2] describes ..
+\item[Chapter 3]
+\item[Chapter 4]
+\item[Chapter 5]
+\item[Chapter 6]
+\item[Chapter 7]
+\end{description}
 
 \iffalse
 \subsection{A subsection}
@@ -151,12 +179,17 @@ footnote.}
 \fi
 
 
+
+
 \chapter{Related Work}
+
 
 \chapter{The Data Set/Background stuff..}
 
+
 \chapter{Architecture}
 Tell it clean/neat. Abstractions, functionalities
+
 
 \chapter{Design}
 Server, p2p, protocols..
@@ -233,26 +266,49 @@ main(m1,s) char *s; {
 \chapter{Implementation}
 Threads, data structures, language
 
+This chapter will elaborate on how we implemented the system, general implementation requirements, issues and choices. 
+%We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
+
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}.
+
+
 \chapter{Evaluation}
 This chapter describes the experimental setup and metrics used to evaluate the implemented system.
 
 \section{Experimental Setup}
-All experiments were done on a Lenovo ThinkCenter with an Intel® CoreTM
-i5-6400T CPU @ 2.20GHz × 4, Intel® HD Graphics 530 (Skylake GT2), 15,6
-GiB memory and 503 GB disk. It ran on Ubuntu 17.04 64-bit with gcc V6.3.0 compiler and Python V3.5.3.
+All experiements were done on a Lenovo ThinkCenter with the following specifications:
+\begin{itemize}
+\item Intel® CoreTM i5-6400T CPU @ 2.20GHz × 4
+\item Intel® HD Graphics 530 (Skylake GT2)
+\item 15,6 GiB memory and 503 GB disk
+\item Ubuntu 17.04 64-bit with gcc V6.3.0 compiler and GO 1.9.3
+\end{itemize}
 
 
 \section{Experimental Design}
+How did we do the experiments?
+
+%For hvert eksperiment bør du prøve å få fram: 
+%- hva ønsker du å finne ut? 
+%- hvordan måler du + hva måler du? 
+%- hva gjør den delen av systemet som du måler? (leser fra disk, regner, sammenligner, koordinerer med andre osv)
+%- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
+%Det gjør det lettere for leseren å henge med. 
+
 \section{Results}
 What does the results say?
 \subsection{Result 1}
 
 
 \chapter{Discussion}
-Idea, arch, design, resutls, other solutions, "arch has scale issue"
+Idea, arch, design, resutls, other solutions, "arch has scale issue"..
+
+This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with...
 
 \chapter{Conclusion}
+In this thesis, we have implemented a system/prototype...
 
+Our experiments showed that the system ...
 \chapter{Future Work}
 
 \chapter{Appendix}
