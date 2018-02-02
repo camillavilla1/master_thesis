@@ -22,6 +22,7 @@
 \newacronym{2api}{2API}{application programming interface}
 \newacronym{d3}{D3}{Data-Driven Documents}
 \newacronym{html5}{HTML5}{version 5 of the HyperText Markup Language standard}
+\newacronym{camilla}{Camilla}{Camilla Stormoen}
 \newglossaryentry{thesis}
 {
   name=thesis,
@@ -69,10 +70,10 @@
 %\end{dedication}
 
 
-\begin{epigraph}
-\epigraphitem{Simplicity is prerequisite for reliability.}{Edsger Dijkstra}
-\epigraphitem{Beware of bugs in the above code;\\I have only proved it correct, not tried it.}{Donald Knuth}
-\end{epigraph}
+%\begin{epigraph}
+%\epigraphitem{Simplicity is prerequisite for reliability.}{Edsger Dijkstra}
+%\epigraphitem{Beware of bugs in the above code;\\I have only proved it correct, not tried it.}{Donald Knuth}
+%\end{epigraph}
 
 
 \begin{abstract}
@@ -93,6 +94,7 @@ I would also like to thanks my parents for encouraging me to take a higher educa
 
 \listofdefinition
 
+
 %:-------------------------- Mainmatter -----------------------
 \mainmatter
 
@@ -100,6 +102,8 @@ I would also like to thanks my parents for encouraging me to take a higher educa
 \textbf{FRA CAPSTONE:}
 The Arctic tundra in the far northern hemisphere is challenged by climate
 changes in the world today and is one of the ecosystems that are most affected by these changes [10]. The Climate-ecological Observatory for Arctic Tundra - COAT is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020 [10].
+
+\textit{FRA PAPER LEACH: Microsensor networks can contain hundreds or thousands of sensing nodes. It is desirable to make these nodes as cheap and energy-efficient as possible and rely on their large number tp obtain high quality results.}
 
 \textit{This thesis presents the architecture, design and implementation of a peer observation that can observe and accumulate data from in-situ observation units.}
 
@@ -148,7 +152,6 @@ This thesis is structured into X chapters including the introduction.
 
 \iffalse
 \subsection{A subsection}
-
 We can use the \ac{api} to \ac{2api} do stuff, and write about what we did in a \gls{thesis}!
 
 This is some stuff, {\sc smallcaps {\em smallcapsemphasized}} {\em regularemphasized}
@@ -164,10 +167,10 @@ now.}
 
 It is fun to use \emph{modern \upsc{OpenMP}} technology! And it is fun to use \ac{d3} and \ac{html5}.
 
-Referencing figure \ref{fig:ex} to test link.\footnote{This is another
-footnote.}
 
 \definition{Some other definition}
+
+
 
 \begin{figure}
 \centering
@@ -181,6 +184,8 @@ footnote.}
 
 
 
+
+
 \chapter{Related Work}
 \begin{itemize}
 \item Disconnected Operations in the Coda File System
@@ -189,6 +194,16 @@ footnote.}
 \item Ad-hoc on-demand distance vector routing (1999)
 \item Søk etter: sensor networks, sensor net wireless, multipath, leaders, overlay network, overlay, content delivery (CDN)
 \end{itemize}
+
+\section{Routing Protocols in WSNs}
+\subsection{Flat-based Routing}
+\subsection{Hierarchical Routing}
+Hierarchical routing is a well know technique for network routing with special advantages related to scalability, efficient communication and energy-efficient routing in WSNs \cite{leach}\cite{leach_perf}.
+
+\textit{Hierarchical routing is an efficient way to lower energy consumption within a cluster, performing data aggregation and fusion in order to decrease the number of transmitted messages to the base station.}
+%\gls{camilla}
+
+\subsection{Location-based Routing}
 
 \chapter{The Data Set/Background stuff..}
 
@@ -328,10 +343,17 @@ Our experiments showed that the system ...
 
 \begin{thebibliography}{9}
 %1
-%\bibitem{VirtualSensors2006}
-%S. Kabadayi and A. Pridgen and C. Julien,
-%\newblock {\em Virtual Sensors: Abstracting Data from Physical Sensors}, 2006,
-%\newblock in {\em 2006 International Symposium on a World of Wireless, Mobile and Multimedia Networks(WoWMoM'06), 6 pp.-592}.
+\bibitem{leach}
+W. R. Heinzelman and A. Chandrakasan and H. Balakrishnan,
+\newblock {\em Energy-efficient communication protocol for wireless microsensor networks}, 2000,
+\newblock in {\em Proceedings of the 33rd Annual Hawaii International Conference on System Sciences, 10 pp. vol.2-}.
+
+
+%2
+\bibitem{leach_perf}
+K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
+\newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
+\newblock in {\em 2012 Seventh International Conference on Broadband, Wireless Computing, Communication and Applications, pp. 620-625}.
 
 \end{thebibliography}
 
