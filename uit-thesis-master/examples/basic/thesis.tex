@@ -12,7 +12,7 @@
 \documentclass[USenglish]{uit-thesis}
 
 % Lorem ipsum
-\usepackage{lipsum}
+%\usepackage{lipsum}
 
 \makeglossaries
 
@@ -22,20 +22,21 @@
 \newacronym{2api}{2API}{application programming interface}
 \newacronym{d3}{D3}{Data-Driven Documents}
 \newacronym{html5}{HTML5}{version 5 of the HyperText Markup Language standard}
-\newacronym{camilla}{Camilla}{Camilla Stormoen}
+\newacronym{wsn}{WSN}{Wireless Sensor Network}
+\newacronym{bs}{BS}{Base Station}
+\newacronym{coat}{COAT}{Climate-ecological Observatory for Arctic Tundra}
+
+
 \newglossaryentry{thesis}
 {
   name=thesis,
   description={is a document submitted in support of candidature for an
-    academic degree or professional qualification presenting the author's
-    research and findings
-    },
+    academic degree or professional qualification presenting the author's research and findings},
 }
 \newglossaryentry{lage}
 {
   name={long ass glossary entry},
-  description={is a long ass entry with a lot of text describing the properties of the glossary entry. Hopefully this spans some lines now.
-  },
+  description={is a long ass entry with a lot of text describing the properties of the glossary entry. Hopefully this spans some lines now.},
 }
 
 
@@ -53,10 +54,10 @@
 %:-------------------------- Frontpage ------------------------
 
 \title{Peer Observations of Observation Units}
-\subtitle{Subtitle}			% Optional
+%\subtitle{Subtitle}			% Optional
 \author{Camilla Stormoen}
 \thesisfaculty{Faculty of Science and Technology \\ Department of Computer Science}
-\thesisprogramme{Master thesis in Computer Science … May 2018}
+\thesisprogramme{INF-3981 Master's Thesis in Computer Science ... May 2018}
 %\ThesisFrontpageImage{example_image.jpg}	% Optional
 
 \maketitle
@@ -94,29 +95,38 @@ I would also like to thanks my parents for encouraging me to take a higher educa
 
 \listofdefinition
 
+\listoflistings
+
+
+\printglossary[type=\acronymtype]
+%\printglossaries
+
 
 %:-------------------------- Mainmatter -----------------------
 \mainmatter
 
 \chapter{Introduction}
 \textbf{FRA CAPSTONE:}
-The Arctic tundra in the far northern hemisphere is challenged by climate
-changes in the world today and is one of the ecosystems that are most affected by these changes [10]. The Climate-ecological Observatory for Arctic Tundra - COAT is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020 [10].
+The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes[10]. The \gls{coat} is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020[10].
 
-\textit{FRA PAPER LEACH: Microsensor networks can contain hundreds or thousands of sensing nodes. It is desirable to make these nodes as cheap and energy-efficient as possible and rely on their large number tp obtain high quality results.}
+
+\Gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
+
+%It is beneficial to make these sensors as cheap and energy-efficient as possible.
 
 \textit{This thesis presents the architecture, design and implementation of a peer observation that can observe and accumulate data from in-situ observation units.}
 
 \section{Motivation}
 The motivation behind this project is...
 
-
+\iffalse
 This project will develop an approach to 
 \begin{itemize}
 \item Let observation units observe data observed by observation units. 
 \item To gradually accumulate the data to observation units being a DAO Store (there can be multiple DAO Stores depending on user needs).
 \item Do a prototype of such a system focused on three levels of observation units: (i) In-situ observation units being (ii) observed by back-end observation units, being (iii) observed by a DAO Store observation unit.
 \end{itemize}
+\fi
 
 The purpose is to fetch and accumulate data observed by observation units for further use.
 
@@ -147,7 +157,7 @@ This thesis is structured into X chapters including the introduction.
 \item[Chapter 4]
 \item[Chapter 5]
 \item[Chapter 6]
-\item[Chapter 7]
+\item[Chapter X]
 \end{description}
 
 \iffalse
@@ -186,7 +196,32 @@ It is fun to use \emph{modern \upsc{OpenMP}} technology! And it is fun to use \a
 
 
 
+
+
+
+
+
+
+\chapter{Routing Techniques in WSNs?}
+Som eget kapittel eller ha det under Related Work?
+
+\iffalse
+\section{Routing Protocols in WSNs}
+\subsection{Flat-based Routing}
+\subsection{Hierarchical Routing}
+\subsection{Location-based Routing}
+
+\section{Routing Protcol Operations}
+\subsection{Multipath Routing Protocol}
+\subsection{Query-based Protocol Operation}
+\subsection{Negotiation-based Protocol Operation}
+\subsection{QoS-based Protocol Operation}
+\subsection{Coherent-based Protocol Operation}
+\chapter{The Data Set/Background stuff..}
+\fi
+
 \chapter{Related Work}
+\iffalse
 \begin{itemize}
 \item Disconnected Operations in the Coda File System
 \item Satyanarayanan eller Satya..
@@ -194,18 +229,26 @@ It is fun to use \emph{modern \upsc{OpenMP}} technology! And it is fun to use \a
 \item Ad-hoc on-demand distance vector routing (1999)
 \item Søk etter: sensor networks, sensor net wireless, multipath, leaders, overlay network, overlay, content delivery (CDN)
 \end{itemize}
+\fi
 
 \section{Routing Protocols in WSNs}
-\subsection{Flat-based Routing}
+Wireless sensor networks main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem  is that the BS can be far away from the sensor node and the sensor node will die due to energy consumption. Different hierarchical protocols such as LEACH, PEGASIS, TEEN and APTEEN has been proposed as solutions to this problem\cite{fuzzy_rule}\cite{tree_based}.
+
 \subsection{Hierarchical Routing}
 Hierarchical routing is a well know technique for network routing with special advantages related to scalability, efficient communication and energy-efficient routing in WSNs \cite{leach}\cite{leach_perf}.
 
 \textit{Hierarchical routing is an efficient way to lower energy consumption within a cluster, performing data aggregation and fusion in order to decrease the number of transmitted messages to the base station.}
-%\gls{camilla}
+
+
+\begin{itemize}
+\item LEACH
+\item HEED
+\item PEGASIS
+\item TEEN/APTEEN
+\end{itemize}
 
 \subsection{Location-based Routing}
-
-\chapter{The Data Set/Background stuff..}
+\subsection{Flat-based Routing}
 
 
 \chapter{Architecture}
@@ -297,8 +340,8 @@ The system is implemented in the open source programming language GO 1.9.3\footn
 This chapter describes the experimental setup and metrics used to evaluate the implemented system.
 
 \section{Experimental Setup}
-All experiements were done on a Lenovo ThinkCenter with the following specifications:
-\begin{itemize}
+All experiments were done on a Lenovo ThinkCenter with the following specifications:
+\begin{itemize} 
 \item Intel® CoreTM i5-6400T CPU @ 2.20GHz × 4
 \item Intel® HD Graphics 530 (Skylake GT2)
 \item 15,6 GiB memory and 503 GB disk
@@ -319,6 +362,8 @@ How did we do the experiments?
 \section{Results}
 What does the results say?
 \subsection{Result 1}
+\subsection{Result 2}
+\subsection{Result 3}
 
 
 \chapter{Discussion}
@@ -348,12 +393,24 @@ W. R. Heinzelman and A. Chandrakasan and H. Balakrishnan,
 \newblock {\em Energy-efficient communication protocol for wireless microsensor networks}, 2000,
 \newblock in {\em Proceedings of the 33rd Annual Hawaii International Conference on System Sciences, 10 pp. vol.2-}.
 
-
 %2
 \bibitem{leach_perf}
 K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
 \newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
 \newblock in {\em 2012 Seventh International Conference on Broadband, Wireless Computing, Communication and Applications, pp. 620-625}.
+
+%3
+\bibitem{fuzzy_rule}
+K. Gotefode and K. Kolhe,
+\newblock {\em Energy efficiency in wireless sensor network using Fuzzy rule and tree based routing protocol}, 2015,
+\newblock in {\em 2015 International Conference on Energy Systems and Applications, pp. 712-717}.
+
+%4
+\bibitem{tree_based}
+Z. Han and J. Wu and J. Zhang and L. Liu and K. Tian,
+\newblock {\em A General Self-Organized Tree-Based Energy-Balance Routing Protocol for Wireless Sensor Network}, 2014,
+\newblock in {\em IEEE Transactions on Nuclear Science Vol.61, Nr.2, pp. 732-740}.
+
 
 \end{thebibliography}
 
