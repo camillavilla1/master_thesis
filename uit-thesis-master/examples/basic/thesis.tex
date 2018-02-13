@@ -24,6 +24,7 @@
 \newacronym{html5}{HTML5}{version 5 of the HyperText Markup Language standard}
 \newacronym{wsn}{WSN}{Wireless Sensor Network}
 \newacronym{bs}{BS}{Base Station}
+\newacronym{ch}{CH}{Cluster Head}
 \newacronym{coat}{COAT}{Climate-ecological Observatory for Arctic Tundra}
 
 
@@ -146,6 +147,7 @@ Avgrense viktig!
 
 \section{Limitations}
 Avgrense viktig!
+%Fokus på cluster som tar hensyn til batteri mtp at nodene er ute i tundraen og ikke har mye tilgang til strøm.. redundancy, reliability, scalability?? 
 %\paragraph{A paragraph}
 
 \section{Outline}
@@ -170,17 +172,11 @@ This is some stuff, {\sc smallcaps {\em smallcapsemphasized}} {\em regularemphas
 
 If the acronym \ac{uit} is displayed, then loadglsentries works.
 
-It is fun to use modern \upsc{OpenMP} technology!\footnote{This is a snarky
-footnote. Words and etc. Semantic web technologies are technologies that enable
-semantification of the Web as we know it today. Hopefully this spans some lines
-now.}
+It is fun to use modern \upsc{OpenMP} technology!\footnote{This is a snarky footnote. Words and etc. Semantic web technologies are technologies that enable semantification of the Web as we know it today. Hopefully this spans some lines now.}
 
 It is fun to use \emph{modern \upsc{OpenMP}} technology! And it is fun to use \ac{d3} and \ac{html5}.
 
-
 \definition{Some other definition}
-
-
 
 \begin{figure}
 \centering
@@ -195,42 +191,30 @@ It is fun to use \emph{modern \upsc{OpenMP}} technology! And it is fun to use \a
 
 
 \chapter{Routing Techniques in WSNs?}
-Som eget kapittel eller ha det under Related Work?
+Som eget kapittel eller ha det under Related Work? Si noe om routing protocols som hierarchical (evt flat-based og location-based) og si noe om routing protocol operations som multipath (evt. query-based, QoS-based, coherent-based etc..)?
+
+Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks, Holger Karl, Andreas Willig) kap. 11 som heter "Routing Protocols" som sier noe om gossiping, energ-efficient unicast, broadcast/multicast, geographic routing og mobile nodes..
 
 \iffalse
 \section{Routing Protocols in WSNs}
 \subsection{Flat-based Routing}
-\subsection{Hierarchical Routing}
-\subsection{Location-based Routing}
+In flat-based routing...
 
-\section{Routing Protcol Operations}
-\subsection{Multipath Routing Protocol}
-\subsection{Query-based Protocol Operation}
-\subsection{Negotiation-based Protocol Operation}
-\subsection{QoS-based Protocol Operation}
-\subsection{Coherent-based Protocol Operation}
-\chapter{The Data Set/Background stuff..}
-\fi
-
-\chapter{Related Work}
-\iffalse
 \begin{itemize}
-\item Disconnected Operations in the Coda File System
-\item Satyanarayanan eller Satya..
-\item Energy-efficient communication protocol for wireless microsensor networks - LEACH (2000)
-\item Ad-hoc on-demand distance vector routing (1999)
-\item Søk etter: sensor networks, sensor net wireless, multipath, leaders, overlay network, overlay, content delivery (CDN)
+\item SPIN
+\item Direct diffusion
+\item Rumor routing
+\item MCFA 
+\item COUGAR
+\item ACQUIRE
+\item Energy-Aware routing
 \end{itemize}
-\fi
 
-\section{Routing Protocols in WSNs}
-Wireless sensor networks main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem  is that the BS can be far away from the sensor node and the sensor node will die due to energy consumption. Different hierarchical protocols such as LEACH, PEGASIS, TEEN and APTEEN has been proposed as solutions to this problem\cite{fuzzy_rule}\cite{tree_based}.
 
 \subsection{Hierarchical Routing}
 Hierarchical routing is a well know technique for network routing with special advantages related to scalability, efficient communication and energy-efficient routing in WSNs \cite{leach}\cite{leach_perf}.
 
 \textit{Hierarchical routing is an efficient way to lower energy consumption within a cluster, performing data aggregation and fusion in order to decrease the number of transmitted messages to the base station.}
-
 
 \begin{itemize}
 \item LEACH
@@ -249,18 +233,35 @@ In location-based routing are the nodes addressed by means of their locations. T
 \item SPAN
 \end{itemize}
 
-\subsection{Flat-based Routing}
-In flat-based routing
+\section{Routing Protocol Operations}
+\subsection{Multipath Routing Protocol}
+\subsection{Query-based Protocol Operation}
+\subsection{Negotiation-based Protocol Operation}
+\subsection{QoS-based Protocol Operation}
+\subsection{Coherent-based Protocol Operation}
+\fi
 
+\chapter{Related Work}
+\iffalse
 \begin{itemize}
-\item SPIN
-\item Direct diffusion
-\item Rumor routing
-\item MCFA 
-\item COUGAR
-\item ACQUIRE
-\item Energy-Aware routing
+\item Disconnected Operations in the Coda File System
+\item Satyanarayanan eller Satya..
+\item Energy-efficient communication protocol for wireless microsensor networks - LEACH (2000)
+\item Ad-hoc on-demand distance vector routing (1999)
+\item Søk etter: sensor networks, sensor net wireless, multipath, leaders, overlay network, overlay, content delivery (CDN)
 \end{itemize}
+\fi
+
+%\section{Routing Protocols in WSNs}
+Wireless sensor networks main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem  is that the BS can be far away from the sensor node and the sensor node will die due to energy consumption. LEACH, PEGASIS, TEEN and APTEEN are different hierarchical protocols that has been proposed as solutions to this problem \cite{fuzzy_rule}\cite{tree_based}.
+
+LEACH \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes  organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. LEACH is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
+
+PEGASIS \cite{pegasis}
+%\subsection{Hierarchical Routing}
+%\subsection{Location-based Routing}
+%\subsection{Flat-based Routing}
+
 
 \chapter{Architecture}
 Tell it clean/neat. Abstractions, functionalities
@@ -370,6 +371,8 @@ How did we do the experiments?
 %- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
 %Det gjør det lettere for leseren å henge med. 
 
+%\subsection{Network lifetime?}
+
 \section{Results}
 What does the results say?
 \subsection{Result 1}
@@ -404,7 +407,7 @@ W. R. Heinzelman and A. Chandrakasan and H. Balakrishnan,
 \newblock {\em Energy-efficient communication protocol for wireless microsensor networks}, 2000,
 \newblock in {\em Proceedings of the 33rd Annual Hawaii International Conference on System Sciences, 10 pp. vol.2-}.
 
-%2
+%2 - ikke printet ut
 \bibitem{leach_perf}
 K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
 \newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
@@ -427,6 +430,12 @@ Z. Han and J. Wu and J. Zhang and L. Liu and K. Tian,
 J. N. Al-Karaki and A. E. Kamal,
 \newblock {\em Routing techniques in wireless sensor networks: a survey}, 2004,
 \newblock in {\em IEEE Wireless Communications Vol.11, Nr.6, pp. 6-28}.
+
+%6
+\bibitem{pegasis}
+S. Lindsey and C. S. Raghavendra,
+\newblock {\em PEGASIS: Power-efficient gathering in sensor information systems}, 2002,
+\newblock in {\em Proceedings, IEEE Aerospace Conference Vol.3, pp. 3-1125-3-1130}.
 
 
 
