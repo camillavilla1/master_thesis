@@ -94,9 +94,9 @@ I would also like to thanks my parents for encouraging me to take a higher educa
 
 \tableofcontents
 
-\listofdefinition
+%\listofdefinition
 
-\listoflistings
+%\listoflistings
 
 \printglossary
 %\printglossary[type=\acronymtype]
@@ -196,6 +196,14 @@ Som eget kapittel eller ha det under Related Work? Si noe om routing protocols s
 Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks, Holger Karl, Andreas Willig) kap. 11 som heter "Routing Protocols" som sier noe om gossiping, energ-efficient unicast, broadcast/multicast, geographic routing og mobile nodes..
 
 \iffalse
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{taxonomy.png}
+\caption{Figure showing taxonomy of routing protocols in WSNs.}
+\label{fig:taxonomy}
+\end{figure}
+
 \section{Routing Protocols in WSNs}
 \subsection{Flat-based Routing}
 In flat-based routing...
@@ -258,6 +266,11 @@ Wireless sensor networks main task is to periodically collect information of the
 LEACH \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes  organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. LEACH is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
 
 PEGASIS is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive from and transmit to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
+
+Fuzzy logic is also a suitable problem-sovling control system methodologi \cite{fuzzy_logic}.
+
+\Gls{ch} were elected by the \gls{bs} in each round by calculating the change each node has to become the \gls{ch} using three fuzzy descriptors \cite{ch_fuzzy}.
+%present some fuzzy logic based clustering protocols .
 
 
 %\subsection{Hierarchical Routing}
@@ -438,6 +451,26 @@ J. N. Al-Karaki and A. E. Kamal,
 S. Lindsey and C. S. Raghavendra,
 \newblock {\em PEGASIS: Power-efficient gathering in sensor information systems}, 2002,
 \newblock in {\em Proceedings, IEEE Aerospace Conference Vol.3, pp. 3-1125-3-1130}.
+
+%7 - ikke skrevet ut
+\bibitem{atyp_routing}
+X. Liu,
+\newblock {\em Atypical Hierarchical Routing Protocols for Wireless Sensor Networks: A Review}, 2015,
+\newblock in {\em IEEE Sensors Journal Vol.15, Nr.10, pp. 5372-5383}.
+
+%8
+\bibitem{fuzzy_logic}
+A. K. Mishra and R. Kumar and J. Singh,
+\newblock {\em A review on fuzzy logic based clustering algorithms for wireless sensor networks}, 2015,
+\newblock in {\em 2015 International Conference on Futuristic Trends on Computational Analysis and Knowledge Management (ABLAZE), pp. 489-494}.
+
+%9
+\bibitem{ch_fuzzy}
+Indranil Gupta and D. Riordan and Srinivas Sampalli,
+\newblock {\em Cluster-head election using fuzzy logic for wireless sensor networks}, 2005,
+\newblock in {\em 3rd Annual Communication Networks and Services Research Conference (CNSR'05), pp. 255-260}.
+
+
 
 
 
