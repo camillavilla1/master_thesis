@@ -9,14 +9,6 @@ This project will develop an approach to:
 
 The purpose is to fetch and accumulate data observed by observation units for further use.
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
 
 ## Authors
 
