@@ -26,6 +26,7 @@
 \newacronym{bs}{BS}{Base Station}
 \newacronym{ch}{CH}{Cluster Head}
 \newacronym{coat}{COAT}{Climate-ecological Observatory for Arctic Tundra}
+\newacronym{ou}{OU}{Observation Unit}
 
 
 \newglossaryentry{thesis}
@@ -283,11 +284,26 @@ Fuzzy logic is also a suitable problem-sovling control system methodologi \cite{
 
 
 \chapter{Architecture}
-Tell it clean/neat. Abstractions, functionalities
+%Tell it clean/neat. Abstractions, functionalities
 
-\section{Abstraction..?}
+This chapter describes the architecture of the system. 
+
+The main functionality can be divided into X sub-sections: x,x,x,x.. The architecture of the system is presented in Figure X.. 
+
+\section{Discovery Of Other Nodes}
+Each node can only discover nodes withing a possible range. Figure \ref{fig:broadcast_range} shows how a possible range of a node may be discovered. When a new node in the network has been discovered will meta-data about the node such as address be stored on locally on the device in the cluster.
+
+
+\subsection{Node Lookup Service}
+The lookup service is responsible for storing a list of all previous discovered nodes and their address.
+
+\section{Incoming Network Requests}
 \section{Data Transmission?}
-\subsection{Node lookup service?}
+\subsection{Data Transmission Forward Request}
+\subsection{Leader Election Request}
+
+\section{Base Station Access}
+CH should access BS..?
 
 
 \iffalse
@@ -300,14 +316,30 @@ Tell it clean/neat. Abstractions, functionalities
 \fi
 
 \chapter{Design}
-Server, p2p, protocols..
+%Server, p2p, protocols..
 
-\section{Broadcasting?}
-\section{Data Transmission?}
+In this chapter we will look at the design of the system and present the design of each component of the architecture. Figure XX shows how the cluster network may appear (in the system). Nodes are connected to other nearby nodes represented by arrows and together they form a cluster network.
+
+\section{Broadcasting}
+Node discover other nodes in the network, initiate a broadcast..
+Broadcast is limited due to a radio range limitations where only nodes that are within this range will receive the broadcast, shown in Figure \ref{fig:broadcast_range}.
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{broadcast_range.png}
+\caption{Figure show broadcast range of a \gls{ou}.}
+\label{fig:broadcast_range}
+\end{figure}
+
+
+%\section{Broadcasting}
+%\section{Maintenance Of Known Nodes}
+\section{Cluster-Head Election}
+
 \subsection{Base Station Access?}
-\subsection{Cluster Leader?}
-\section{Leader Election?}
-\section{Accumulate Data?}
+\section{Accumulate Data/Forwarding}
+A node may at times forward data to another node in the cluster.
 
 \iffalse
 \definition{Another definition}
@@ -379,16 +411,40 @@ main(m1,s) char *s; {
 
 
 \chapter{Implementation}
-Threads, data structures, language
+%Threads, data structures, language
 
 This chapter will elaborate on how we implemented the system, general implementation requirements, issues and choices. 
 %We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
 
 The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}.
 
-\begin{equation}
+%\section{Simulator}
+%It is not feasible to have nodes out in the Arctic Tundra (like ZebraNet..) at such an early stage. This implementation simulates a real-life environment where nodes can 
+
+\section{Distance To Other Nodes In The Network}
+
+The formula \ref{eq:distance} is used to calculate the range between two points in a two-dimentional coordinate map and is used to see if a node is within a range or not.
+
+\begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
 \end{equation}
+
+%node attempt to connect..
+
+Figure \ref{fig:broadcast_simulation}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{broadcast_simulation.png}
+\caption{Broadcast simulation}
+\label{fig:broadcast_simulation}
+\end{figure}
+
+\section{Data Transmission}
+\section{Data Accumulation}
+
+
+
 
 \begin{equation}
 T(n) = \frac{P}{1-P\times(r \bmod \frac{1}{P})}
@@ -408,6 +464,7 @@ This chapter describes the experimental setup and metrics used to evaluate the i
 
 \section{Experimental Setup}
 All experiments were done on a Lenovo ThinkCenter with the following specifications:
+
 \begin{itemize} 
 \item Intel® CoreTM i5-6400T CPU @ 2.20GHz × 4
 \item Intel® HD Graphics 530 (Skylake GT2)
@@ -417,7 +474,7 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 
 
 \section{Experimental Design}
-How did we do the experiments?
+%How did we do the experiments?
 
 %For hvert eksperiment bør du prøve å få fram: 
 %- hva ønsker du å finne ut? 
@@ -426,19 +483,24 @@ How did we do the experiments?
 %- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
 %Det gjør det lettere for leseren å henge med. 
 
-%\subsection{Network lifetime?}
+\subsection{CPU Measurements}
+\subsection{Memory Measurements}
+\subsection{Network (Socket) Usage}
+\subsection{Network Lifetime?}
+
 
 \section{Results}
-What does the results say?
-\subsection{Result 1}
-\subsection{Result 2}
-\subsection{Result 3}
+%What does the results say?
+\subsection{CPU Usage}
+\subsection{Memory Usage}
+\subsection{Network Usage}
+\subsection{Network Lifetime?}
 
 
 \chapter{Discussion}
-Idea, arch, design, results, other solutions, "arch has scale issue"..
+%Idea, arch, design, results, other solutions, "arch has scale issue"..
 
-This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with...
+This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with..
 
 
 \section{Availability of nodes in the system?}
