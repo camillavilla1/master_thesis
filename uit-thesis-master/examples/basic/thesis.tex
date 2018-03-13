@@ -386,6 +386,22 @@ This chapter will elaborate on how we implemented the system, general implementa
 
 The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}.
 
+\begin{equation}
+d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
+\end{equation}
+
+\begin{equation}
+T(n) = \frac{P}{1-P\times(r \bmod \frac{1}{P})}
+\end{equation}
+
+\begin{equation}
+T(n) = \begin{cases}\frac{P}{1-P\times(r \bmod \frac{1}{P})} & if n \in G\\0 & otherwise\end{cases}
+\end{equation}
+
+\begin{equation}
+P_{i}(t)=\min\left\{\frac{E_{i}(t)}{E_{total}(t)}k, 1\right\}
+\end{equation}
+
 
 \chapter{Evaluation}
 This chapter describes the experimental setup and metrics used to evaluate the implemented system.
