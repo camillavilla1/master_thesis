@@ -180,12 +180,6 @@ It is fun to use \emph{modern \upsc{OpenMP}} technology! And it is fun to use \a
 
 \definition{Some other definition}
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.1]{example_image.jpg}
-\caption{Figure link should point to top of figure.}
-\label{fig:ex}
-\end{figure}
 
 \fi
 
@@ -356,13 +350,13 @@ This request forwards a nodes data to the next node in the path to the leader. I
 \chapter{Design}
 %Server, p2p, protocols..
 
-In this chapter we will look at the design of the system and present the design of each component of the architecture. Figure XX shows how the cluster network may appear (in the system). Nodes are connected to other nearby nodes represented by arrows and together they form a cluster network.
+In this chapter we will look at the design of the system and present the design of each component of the architecture. Figure \ref{fig:design} shows how the cluster network may appear (in the system). Nodes are connected to other nearby nodes represented by arrows and together they form a cluster network.
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{design.png}
 \caption{Figure show design of the system.}
-\label{fig:broadcast_range}
+\label{fig:design}
 \end{figure}
 
 \section{Discovery Of Other Nodes}
@@ -472,7 +466,7 @@ The system is implemented in the open source programming language GO 1.9.3\footn
 
 \section{Distance To Other Nodes In The Network}
 
-The formula \ref{eq:distance} is used to calculate the range between two points in a two-dimentional coordinate map and is used to see if a node is within a range or not.
+The formula \ref{eq:distance} is used to calculate the range between two points in a two-dimentional coordinate map and is used to see if a node is within a range or not (as seen in Figure \ref{fig:broadcast_range}).
 
 \begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
@@ -504,7 +498,8 @@ Figure \ref{fig:broadcast_simulation} shows ...
 
 The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes.
 \begin{lstlisting}[frame=single,caption={Small Go program showing how mutexes are used when updating a map},language=C]
-/*DBStation is data stored at leader*/
+/*DBStation is a strucure that contains 
+a map that store data at leader*/
 var DBStation struct {
 	sync.Mutex
 	BSdatamap map[uint32][]byte
@@ -513,6 +508,8 @@ var DBStation struct {
 func sendDataToLeaderHandler() {
 	DBStation.Lock()
 	defer DataBaseStation.Unlock()
+	
+	...
 	
 	DBStation.BSdatamap[sData.FP] = receivedData
 }
