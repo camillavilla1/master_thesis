@@ -308,9 +308,7 @@ Fuzzy logic is also a suitable problem-sovling control system methodologi \cite{
 \chapter{Architecture}
 %Tell it clean/neat. Abstractions, functionalities
 
-This chapter describes the architecture of the system. 
-
-The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in \ref{fig:architecture}.
+This chapter describes the architecture of the system. The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in \ref{fig:architecture}.
 
 \begin{figure}
 \centering
@@ -327,7 +325,7 @@ The lookup service is responsible for storing a list of all previous discovered 
 Each node can only discover nodes withing a possible range. Figure \ref{fig:broadcast_range} shows how a possible range of a node may be discovered. When a new node in the network has been discovered will meta-data about the node such as address be stored on locally on the device in the cluster.
 
 \section{Incoming Network Requests}
-A node may receive incoming requests from other nodes in the network. The request handler will handle the request based on the type of request. The types of request a node may receive are listed below.
+A node may receive incoming requests from other nodes in the network. The request handler will handle the request based on the type of request. The types of requests a node may receive are listed below.
 
 \subsection{Connect To Neighbours}
 When a node receive a list of neighbours in range, it will try to connect to the neighbours that are within the nodes range. It will only connect to the neighbour node if it receives a OK-message.
@@ -335,21 +333,21 @@ When a node receive a list of neighbours in range, it will try to connect to the
 \subsubsection{Receive OK From Neighbours}
 When a node receives a OK-message it will connect itself to the neighbour. The neighbour will also then have connected to the new node.
 
-\subsection{Leader Election Request}
-A node may receive a leader election request when a node has joined the cluster.
+\subsection{Cluster Head Election Request}
+A node may receive a \gls{ch} election request when a node has joined the cluster.
 
-\subsubsection{Leader Election Request}
-When a node receives a leader election request it will perform a leader election and forward the result to it's neigbours which will do a leader election as well.
+\subsubsection{Cluster Head Election Request}
+When a node receives a \gls{ch} election request it will perform a leader election and forward the result to it's neigbours which will do a leader election as well.
 
-\subsubsection{Leader Election Calculation Request}
-If there is a leader in the cluster already and a new election should be proposed, a leader election calculation request is sent from the leader. Nodes receiving this request will calculate their leader election number. This is explained further in Section xx.
+\subsubsection{Cluster Head Election Calculation Request}
+If there is a leader in the cluster already and a new election should be proposed, a \gls{ch} election calculation request is sent from the leader. Nodes receiving this request will calculate their \gls{ch} election number. This is explained further in Section xx.
 
 \subsection{Data Transmission}
 \subsubsection{Notify Neighbours About Sending Data To Leader}
 A node may receive a request that it should send its data to the leader. This request is forwarded to the nodes neighbour and so on.
 
 \subsubsection{Send Data To Leader}
-This request forwards a nodes data to the next node in the path to the leader.
+This request forwards a nodes data to the next node in the path to the leader. If the nodes data receiving this requests isn't sent to the leader of the cluster, will the data be accumulated with the received data and then forwarded to the next node.
 
 %\section{Base Station Access}
 %CH should access BS..?
@@ -360,9 +358,17 @@ This request forwards a nodes data to the next node in the path to the leader.
 
 In this chapter we will look at the design of the system and present the design of each component of the architecture. Figure XX shows how the cluster network may appear (in the system). Nodes are connected to other nearby nodes represented by arrows and together they form a cluster network.
 
-\section{Broadcasting}
-Node discover other nodes in the network, initiate a broadcast..
-Broadcast is limited due to a radio range limitations where only nodes that are within this range will receive the broadcast, shown in Figure \ref{fig:broadcast_range}.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{design.png}
+\caption{Figure show design of the system.}
+\label{fig:broadcast_range}
+\end{figure}
+
+\section{Discovery Of Other Nodes}
+\subsection{Broadcasting}
+When a new node start it will contact the node lookup service to discover other nodes in the network. The node will then initiate a broadcast.
+Broadcast is limited due to a radio range limitations where only nodes that are within this range will receive the broadcast, shown in Figure \ref{fig:broadcast_range}. \textit{Node 1} will only reach \textit{node 5} and \textit{node 7}.
 
 
 \begin{figure}
@@ -373,22 +379,26 @@ Broadcast is limited due to a radio range limitations where only nodes that are 
 \end{figure}
 
 
-%\section{Broadcasting}
-%\section{Maintenance Of Known Nodes}
-\section{Leader Election}
-
-\section{Accumulate Data/Forwarding}
-A node may at times forward data to another node in the cluster.
-
-%\section{Base Station Access?}
-
-
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{contactNewNeighbour.png}
-\caption{Figure show how a node contacts its neighbours.}
+\caption{Figure show how new nodes (purple) contacts their neighbours.}
 \label{fig:contactNeighbour}
 \end{figure}
+
+
+
+
+%\section{Maintenance Of Known Nodes}
+\section{Cluster Head Election}
+
+\section{Accumulate Data}
+A node may at times forward data to another node in the cluster.
+
+%\section{Base Station Access?}
+%CH will keep data and send it to BS when it has access??
+%CH changes so not
+
 
 
 
@@ -399,19 +409,6 @@ A node may at times forward data to another node in the cluster.
 \label{fig:gatherData}
 \end{figure}
 
-
-\begin{table}[]
-\centering
-\label{my-label}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Parameter}       & \textbf{Value} \\ \hline
-No. of nodes             & 100            \\ \hline
-Network size             & 500 x 500      \\ \hline
-Node broadcast width     & 100            \\ \hline
-\end{tabular}
-\caption{My caption}
-\end{table}
 
 \iffalse
 \definition{Another definition}
@@ -493,8 +490,10 @@ Figure \ref{fig:broadcast_simulation} shows ...
 \end{figure}
 
 \section{Data Transmission}
-\subsection{Cluster-Head Election}
+\subsection{Cluster Head Election}
 %Leader election takes time to stabilizwe because of gossiping..
+
+\section{Minimize Path To Leader}
 
 \section{Data Accumulation}
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
@@ -536,6 +535,19 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 
 
 \section{Experimental Design}
+\begin{table}[]
+\centering
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter}       & \textbf{Value} \\ \hline
+No. of nodes             & 100            \\ \hline
+Network size             & 500 x 500      \\ \hline
+Node broadcast width     & 100            \\ \hline
+\end{tabular}
+\caption{Parameters of simulation}
+\end{table}
+
 %How did we do the experiments?
 
 %For hvert eksperiment bør du prøve å få fram: 
@@ -565,21 +577,29 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with..
 
 
-\section{Availability of nodes in the system?}
+\section{Availability of nodes in the system}
 %When a node wants to join the cluster, should it ask the CH or should it join eitherway.. What if CH is sleeping (or busy) so that it's not reachable, or that nodes in the path to CH are sleeping (then how to contact CH?)..
 
 
-\section{Cluster-head Election?}
+\section{Cluster Head Election}
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
 
 %Gossiping is an excellent way to rapidly spread information among a large number of nodes using only local information. There is no central component where information is coordinated. However, it cannot guarantee that all nodes will receive the information \cite{demers}. One of the main advantages of a gossip based algorithm is its ability to scale.
 
 %To aviod flooding the network (too much), each msg have an ID so that a node can check if it has received the same message before.. If it as been received earlier, the node doesn't need to forward the message because it has likely forwarded the message in an earlier gossip.
 
-\section{Data Transmission?}
+\subsection{Cluster Head Calculation/Rating}
+%now random number, to approve and make it more realistic: number of nodes between CH and node, power left on device, bandwidth, prior history, traffic on node..
+
+\section{Path To Leader}
+%avoid flooding
+\section{Data Transmission}
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
 
 %How to gather data? Receive a GET-post from BS or someone else telling the CH to accumulate/gather data or gather data periodically? How does a BS send a GET-request to CH?? The CH could not be in range of the BS, so maybe send to a node in range and forward msg all the way to CH.. But again, what if some nodes are sleeping to save battery? The CH will then not receive the msg..
+\subsection{Data Accumulation}
+
+\section{Base Station Access}
 
 \chapter{Conclusion}
 In this thesis, we have implemented a system/prototype...
