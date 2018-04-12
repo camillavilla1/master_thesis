@@ -29,6 +29,7 @@
 \newacronym{coat}{COAT}{Climate-ecological Observatory for Arctic Tundra}
 \newacronym{ou}{OU}{Observation Unit}
 \newacronym{leach}{LEACH}{Low-Energy Adaptive Clustering Hierarchy}
+\newacronym{fleach}{F-LEACH}{Fuzzy-LEACH}
 
 
 \newglossaryentry{thesis}
@@ -255,7 +256,7 @@ Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks
 %\end{itemize}
 
 
-\section{Routing Protocols in WSNs}
+%\section{Routing Protocols in WSNs}
 \Gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
 %LEACH, PEGASIS, TEEN and APTEEN are different hierarchical protocols that has been proposed as solutions to this problem \cite{fuzzy_rule}\cite{tree_based}.
@@ -280,21 +281,14 @@ Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks
 %P_{i}(t)=\min\left\{\frac{E_{i}(t)}{E_{total}(t)}k, 1\right\}
 %\end{equation}
 
+\Gls{fleach} \cite{fuzzy_logic} \cite{ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
 
 PEGASIS is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive from and transmit to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
 
-Fuzzy logic is also a suitable problem-sovling control system methodologi \cite{fuzzy_logic}.
 
-%\Gls{ch} were elected by the \gls{bs} in each round by calculating the change each node has to become the \gls{ch} using three fuzzy descriptors \cite{ch_fuzzy}.
-%present some fuzzy logic based clustering protocols .
+%\section{Data Collection/Aggregation in WSNs}
 
 
-\section{Data Collection/Aggregation in WSNs}
-
-%http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5601733
-%http://www.engr.uconn.edu/~bing/data-collection-wasa09.pdf
-%http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.228.3044&rep=rep1&type=pdf
-%https://dl.acm.org/citation.cfm?id=1993049
 
 
 \chapter{Architecture}
@@ -472,6 +466,7 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes ost likely OFF..
 
 \section{Minimize Path To Leader}
+%Djikstra shortest path - Eclidean distance..
 
 \section{Data Accumulation}
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
@@ -690,6 +685,13 @@ Chen, Bai and Zhang, Yaxiao and Li, Yuxian and Hao, Xiao-Chen and Fang, Yan,
 M. Tong and M. Tang,
 \newblock {\em LEACH-B: An Improved LEACH Protocol for Wireless Sensor Network},
 \newblock in {\em J2010 6th International Conference on Wireless Communications Networking and Mobile Computing (WiCOM), 2010, pp. 1-4}.
+
+%16
+\bibitem{zebranet}
+Juang, Philo and Oki, Hidekazu and Wang, Yong and Martonosi, Margaret and Peh, Li Shiuan and Rubenstein, Daniel,
+\newblock {\em Energy-efficient Computing for Wildlife Tracking: Design Tradeoffs and Early Experiences with ZebraNet},
+\newblock in {\em ACM: SIGARCH Comput. Archit. News, Vol.30, No.5, December 2002, pp. 96--107}.
+
 
 
 
