@@ -283,16 +283,17 @@ To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach}
 PEGASIS is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
 
 
-%(In contrast,) Our approach ...
+In contrast, in our approach will a \gls{ch} be elected by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider "variables" such as battery level or number of nodes in the cluster.
+
 
 To increase the robustness of devices and lower power consumptions, ZebraNet \cite{zebranet} provides a low-power wireless system for position tracking of wildlife by using peer-to-peer network techniques. This reduces the researchers effort to manage the sensors and collecting logged data for their research. The radios on their devices also operates on different frequencies and have different bandwidth, range and other characteristics.
 
-
+A diversity to our approach is that ZebraNet stores multiple copies of the same data across multiple nodes while our apporach forwards the data to a ndoe
 %Compared to our approach, 
 %ZebraNet stores multiple copies of the same data across multiple nodes whilist our apporach forward the data to a node which is believed to have the best chance to access a base station..
 
 
-%"When network nodes have multiåle radios, the shortest path algorithm does not perform well. p.1 in paper
+%"When network nodes have multiple radios, the shortest path algorithm does not perform well". p.1 in paper
 
 
 \section{Data Collection/Aggregation in WSNs}
