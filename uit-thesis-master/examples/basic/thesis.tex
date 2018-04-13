@@ -259,10 +259,7 @@ Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks
 %\section{Routing Protocols in WSNs}
 \Gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
-%LEACH, PEGASIS, TEEN and APTEEN are different hierarchical protocols that has been proposed as solutions to this problem \cite{fuzzy_rule}\cite{tree_based}.
-
-\Gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
-
+To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
 
 %\begin{equation}
 %T(n) = \frac{P}{1-P\times(r \bmod \frac{1}{P})}
@@ -283,11 +280,23 @@ Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks
 
 \Gls{fleach} \cite{fuzzy_logic} \cite{ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
 
-PEGASIS is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive from and transmit to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
+PEGASIS is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
 
 
-%\section{Data Collection/Aggregation in WSNs}
+%(In contrast,) Our approach ...
 
+To increase the robustness of devices and lower power consumptions, ZebraNet \cite{zebranet} provides a low-power wireless system for position tracking of wildlife by using peer-to-peer network techniques. This reduces the researchers effort to manage the sensors and collecting logged data for their research. The radios on their devices also operates on different frequencies and have different bandwidth, range and other characteristics.
+
+
+%Compared to our approach, 
+%ZebraNet stores multiple copies of the same data across multiple nodes whilist our apporach forward the data to a node which is believed to have the best chance to access a base station..
+
+
+%"When network nodes have multiåle radios, the shortest path algorithm does not perform well. p.1 in paper
+
+
+\section{Data Collection/Aggregation in WSNs}
+Di Franscesco et. al. \cite{dataColl}
 
 
 
@@ -601,13 +610,13 @@ W. R. Heinzelman and A. Chandrakasan and H. Balakrishnan,
 \newblock {\em Energy-efficient communication protocol for wireless microsensor networks}, 2000,
 \newblock in {\em Proceedings of the 33rd Annual Hawaii International Conference on System Sciences, 10 pp. vol.2-}.
 
-%2 - ikke printet ut
+%2 - ikke printet ut/ikke i bruk
 \bibitem{leach_perf}
 K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
 \newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
 \newblock in {\em 2012 Seventh International Conference on Broadband, Wireless Computing, Communication and Applications, pp. 620-625}.
 
-%3
+%3 ikke i bruk
 \bibitem{fuzzy_rule}
 K. Gotefode and K. Kolhe,
 \newblock {\em Energy efficiency in wireless sensor network using Fuzzy rule and tree based routing protocol}, 2015,
@@ -619,7 +628,7 @@ Z. Han and J. Wu and J. Zhang and L. Liu and K. Tian,
 \newblock {\em A General Self-Organized Tree-Based Energy-Balance Routing Protocol for Wireless Sensor Network}, 2014,
 \newblock in {\em IEEE Transactions on Nuclear Science Vol.61, Nr.2, pp. 732-740}.
 
-%5
+%5 ikke i bruk
 \bibitem{routing_survey}
 J. N. Al-Karaki and A. E. Kamal,
 \newblock {\em Routing techniques in wireless sensor networks: a survey}, 2004,
@@ -631,7 +640,7 @@ S. Lindsey and C. S. Raghavendra,
 \newblock {\em PEGASIS: Power-efficient gathering in sensor information systems}, 2002,
 \newblock in {\em Proceedings, IEEE Aerospace Conference Vol.3, pp. 3-1125-3-1130}.
 
-%7 - ikke skrevet ut
+%7 - ikke skrevet ut/ ikke i bruk
 \bibitem{atyp_routing}
 X. Liu,
 \newblock {\em Atypical Hierarchical Routing Protocols for Wireless Sensor Networks: A Review}, 2015,
@@ -655,7 +664,7 @@ Maryam Sabet and Hamid Reza Naji,
 \newblock {\em A decentralized energy efficient hierarchical cluster-based routing algorithm for wireless sensor networks}, 2015,
 \newblock in {\em AEU - International Journal of Electronics and Communications Vol.69, Nr.5, pp. 790 - 799}.
 
-%11
+%11 ikke i bruk
 \bibitem{rout_prot_survey}
 Shio Kumar Singh, M P Singh and D K Singh,
 \newblock {\em Routing Protocols in Wireless Sensor Networks – 
@@ -668,7 +677,7 @@ W. B. Heinzelman and A. P. Chandrakasan and H. Balakrishnan,
 \newblock {\em An application-specific protocol architecture for wireless microsensor networks},
 \newblock in {\em IEEE Transactions on Wireless Communications Vol.1, No.4, October 2002, pp. 660-670}.
 
-%13
+%13 ikke i bruk
 \bibitem{demers}
 Demers, Alan and Greene, Dan and Hauser, Carl and Irish, Wes and Larson, John and Shenker, Scott and Sturgis, Howard and Swinehart, Dan and Terry, Doug,
 \newblock {\em Epidemic algorithms for replicated database maintenance},
@@ -686,11 +695,17 @@ M. Tong and M. Tang,
 \newblock {\em LEACH-B: An Improved LEACH Protocol for Wireless Sensor Network},
 \newblock in {\em J2010 6th International Conference on Wireless Communications Networking and Mobile Computing (WiCOM), 2010, pp. 1-4}.
 
-%16
+%16 ikke i bruk
 \bibitem{zebranet}
 Juang, Philo and Oki, Hidekazu and Wang, Yong and Martonosi, Margaret and Peh, Li Shiuan and Rubenstein, Daniel,
 \newblock {\em Energy-efficient Computing for Wildlife Tracking: Design Tradeoffs and Early Experiences with ZebraNet},
 \newblock in {\em ACM: SIGARCH Comput. Archit. News, Vol.30, No.5, December 2002, pp. 96--107}.
+
+%17 ikke i bruk
+\bibitem{dataColl}
+Di Francesco, Mario and Das, Sajal K. and Anastasi, Giuseppe,
+\newblock {\em Data Collection in Wireless Sensor Networks with Mobile Elements: A Survey},
+\newblock in {\em ACM Trans. Sen. Netw., Vol.8, No.1, August 2011, pp. 7:1--7:31}.
 
 
 
