@@ -31,6 +31,7 @@
 \newacronym{leach}{LEACH}{Low-Energy Adaptive Clustering Hierarchy}
 \newacronym{fleach}{F-LEACH}{Fuzzy-LEACH}
 \newacronym{gbcp}{GBCP}{Gossip-based communication protocol}
+\newacronym{pegasis}{PEGASIS}{Power-efficient gathering in sensor information systems}
 
 
 \newglossaryentry{thesis}
@@ -276,13 +277,12 @@ A resemblance between the two approaches is that neither of them consider a node
 In contrast to \gls{fleach} will our approach elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider "variables" such as battery level or number of nodes in the cluster.
 
 
-PEGASIS is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
-
-As mentioned earlier, 
+\Gls{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
 
 To increase the robustness of devices and lower power consumptions, ZebraNet \cite{zebranet} provides a low-power wireless system for position tracking of wildlife by using peer-to-peer network techniques. This reduces the researchers effort to manage the sensors and collecting logged data for their research. The radios on their devices also operates on different frequencies and have different bandwidth, range and other characteristics.
 
 A diversity to our approach is that ZebraNet stores multiple copies of the same data across multiple nodes while our approach forwards the data to a node
+
 %Compared to our approach, 
 %ZebraNet stores multiple copies of the same data across multiple nodes whilist our apporach forward the data to a node which is believed to have the best chance to access a base station..
 
@@ -297,13 +297,13 @@ A diversity to our approach is that ZebraNet stores multiple copies of the same 
 %\section{Gossip-based Protocols}
 Gossip-based protocols, or epidemic protocols, are popular protocols due to their ability to reliably pass information among a large set on interconnected nodes. Jelasity et al. \cite{gbsampling} provide a \gls{gbcp} where each node have peers to gossip with in a large-scale distributed system \cite{demers}. These nodes can quickly join and leave the network at any given point of time. The general principle of their framework is that every node (1) maintains a relatively small local membership table that provides a partial view of all nodes and (2) periodically refreshes the table using a gossiping procedure.
 
-The difference between \gls{gbcp} and our approach is that our approach does not use a gossip protocol to update its table of nodes, but instead relies on the communication with other nodes to know about the election of a new \gls{ch}, who \gls{ch} is and when a node should accumulate data and send it to the \gls{ch}.
+The difference between \gls{gbcp} and our approach is that our approach does not use a gossip protocol to update its table of nodes, but instead relies on the communication with other nodes to know about the election of a new \gls{ch}, which of the node is the \gls{ch} and when a node should accumulate data and send it to the \gls{ch}.
 
 
 \chapter{Architecture}
 %Tell it clean/neat. Abstractions, functionalities
 
-This chapter describes the architecture of the system. The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in \ref{fig:architecture}.
+This chapter describes the architecture of the system. The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in \ref{fig:architecture} (or \ref{fig:architecture3}?).
 
 \begin{figure}
 \centering
@@ -312,6 +312,13 @@ This chapter describes the architecture of the system. The main functionality ca
 \label{fig:architecture}
 \end{figure}
 
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{arch3.png}
+\caption{Figure shows the architecture of the system.}
+\label{fig:architecture3}
+\end{figure}
 
 \section{Node Lookup Service} \label{sec:nodeLS}
 The lookup service is responsible for storing a list of all previous discovered nodes and their address.
@@ -350,7 +357,6 @@ This request forwards a nodes data to the next node in the path to the leader. I
 
 \chapter{Design}
 %Server, p2p, protocols..
-
 In this chapter we will look at the design of the system and present the design of each component of the architecture. Figure \ref{fig:design} shows how the cluster network may appear (in the system). Nodes are connected to other nearby nodes represented by arrows and together they form a cluster network.
 
 \begin{figure}
@@ -374,28 +380,28 @@ Broadcast is limited due to a radio range limitations where only nodes that are 
 \end{figure}
 
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{contactNewNeighbour.png}
-\caption{Figure show how new nodes (purple) contacts their neighbours.}
-\label{fig:contactNeighbour}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{contactNewNeighbour.png}
+%\caption{Figure show how new nodes (purple) contacts their neighbours.}
+%\label{fig:contactNeighbour}
+%\end{figure}
 
 
 %\section{Maintenance Of Known Nodes}
 \section{Cluster Head Election}
 A \gls{ch} election may occur in two scenarios listed below.
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{leaderElection.png}
-\caption{Figure show how a \gls{ch} election is gossiped in the cluster.}
-\label{fig:leaderElection}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{leaderElection.png}
+%\caption{Figure show how a \gls{ch} election is gossiped in the cluster.}
+%\label{fig:leaderElection}
+%\end{figure}
 
 
-\subsection{New Node In Cluster Wants Election}
-See Figure \ref{fig:newNodeLeaderElection}.
+\subsection{New Node In Cluster Starts Election}
+When a new nodes has joined the cluster, it will start a new \gls{ch} election. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against it's own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the nodes neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the leader. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to leader only contain the node itself. Eventually a new \gls{ch} is elected and consistent in the whole cluster. A \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
 
 \begin{figure}
 \centering
@@ -405,8 +411,8 @@ See Figure \ref{fig:newNodeLeaderElection}.
 \end{figure}
 
 
-\subsection{Cluster Head Wants Election}
-See Figure \ref{fig:chWantsLeaderElection}.
+\subsection{Cluster Head Starts Election}
+When a \gls{ch} has accumulated data a certain times, it will start a new \gls{ch} election. Initially, the \gls{ch} will gossip a message to nodes the cluster to calculate a new \gls{ch}-score. Then it will the \gls{ch} start a new election and gossip this election to the other nodes. The nodes receiving this gossip message will start their leader-election as described in the section above. The election is illustrated in Figure \ref{fig:chWantsLeaderElection}.
 
 \begin{figure}
 \centering
@@ -415,6 +421,8 @@ See Figure \ref{fig:chWantsLeaderElection}.
 \label{fig:chWantsLeaderElection}
 \end{figure}
 
+
+\newpage
 
 \section{Accumulate Data}
 A node may at times forward data to another node in the cluster.
