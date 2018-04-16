@@ -387,6 +387,7 @@ Broadcast is limited due to a radio range limitations where only nodes that are 
 %\label{fig:contactNeighbour}
 %\end{figure}
 
+\newpage
 
 %\section{Maintenance Of Known Nodes}
 \section{Cluster Head Election}
@@ -425,7 +426,9 @@ When a \gls{ch} has accumulated data a certain times, it will start a new \gls{c
 \newpage
 
 \section{Accumulate Data}
-A node may at times forward data to another node in the cluster.
+A \gls{ch} will start a gathering of data by gossiping a message to nodes in the cluster, as seen in Figure \ref{fig:gatherData}. When a node receives this message it will send its data to the next node in the path to the \gls{ch}. When a node receive data from another node it will check if it's own data has been sent to the \gls{ch} or not by a fingerprint and a status. If it hasn't been sent earlier, the node will accumulate the received data with the data on the current node, and then send the data to the next node in the path to \gls{ch}. The \gls{ch} will accumulate all received data and store it.
+
+%A node may at times forward data to another node in the cluster.
 
 \begin{figure}
 \centering
