@@ -32,6 +32,8 @@
 \newacronym{fleach}{F-LEACH}{Fuzzy-LEACH}
 \newacronym{gbcp}{GBCP}{Gossip-based communication protocol}
 \newacronym{pegasis}{PEGASIS}{Power-efficient gathering in sensor information systems}
+\newacronym{gaf}{GAF}{Geographic Adaptive Fidelity}
+\newacronym{gear}{GEAR}{Geographic and Energy-Aware Routing}
 
 
 \newglossaryentry{thesis}
@@ -93,7 +95,7 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 
 %I want to express my sincerest gratitude to the \textit{Masterinos}. I would not have made it without you guys. 
 
-%I would also like to thanks my parents for encouraging me to take a higher education and supporting me through every decision. A great thanks to my boyfriend
+%I would also like to thanks my parents for encouraging me to take a higher education and supporting me through every decision. At last I would great thanks to my boyfriend
 \end{acknowledgement}
 
 \tableofcontents
@@ -187,61 +189,28 @@ This thesis is structured into X chapters including the introduction.
 
 
 
-\chapter{Routing Techniques in WSNs?}
-\textit{Som eget kapittel eller ha det under Related Work? Si noe om routing protocols som hierarchical (evt flat-based og location-based) og si noe om routing protocol operations som multipath (evt. query-based, QoS-based, coherent-based etc..)?}
-
-\textit{Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks, Holger Karl, Andreas Willig) kap. 11 som heter "Routing Protocols" som sier noe om gossiping, energ-efficient unicast, broadcast/multicast, geographic routing og mobile nodes..}
-
+\chapter{Routing Techniques in WSNs}
+%\textit{Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks, Holger Karl, Andreas Willig) kap. 11 som heter "Routing Protocols" som sier noe om gossiping, energ-efficient unicast, broadcast/multicast, geographic routing og mobile nodes..}
 
 \Gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
-%\cite{rout_prot_survey}
+%Book \cite{wsnbook}
+%paper \cite{routing_survey}
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=\textwidth]{taxonomy.png}
-%\caption{Figure showing taxonomy of routing protocols in WSNs.}
-%\label{fig:taxonomy}
-%\end{figure}
-
-%\section{Routing Protocols in WSNs}
-%\subsection{Flat-based Routing}
-%In flat-based routing...
-
-%\begin{itemize}
-%\item SPIN
-%\item Direct diffusion
-%\item Rumor routing
-%\item MCFA 
-%\item COUGAR
-%\item ACQUIRE
-%\item Energy-Aware routing
-%\end{itemize}
-
-
-%\subsection{Hierarchical Routing}
-%Hierarchical routing is a well know technique for network routing with special advantages related to scalability, efficient communication and energy-efficient routing in WSNs \cite{leach}\cite{leach_perf}.
+\section{Routing Protocols in WSNs}
+\subsection{Hierarchical Routing}
+Hierarchical routing, also called cluster-based routing, is a well know technique for network routing with special advantages related to scalability, efficient communication and lower energy consumption in WSNs. Each cluster in the hierarchical routing protocol have a special node which is responsible for coordinating data transmission between all nodes in the cluster \cite{leach, leach_perf, routing_survey}.
 
 %\textit{Hierarchical routing is an efficient way to lower energy consumption within a cluster, performing data aggregation and fusion in order to decrease the number of transmitted messages to the \gls{bs}.}
 
-%\begin{itemize}
-%\item LEACH
-%\item HEED
-%\item PEGASIS
-%\item TEEN/APTEEN
-%\end{itemize}
+Two approaches based on hierarchical routing are \gls{leach}\cite{leach} and \gls{pegasis}\cite{pegasis} which are described in Chapter \ref{chap:related_work}.
 
-%\subsection{Location-based Routing}
-%In location-based routing are the nodes addressed by means of their locations. The distance between neighboring nodes can for example be estimated on the basis of incoming signal strengths or the location of the nodes can be available by using \cite{routing_survey}. 
 
-%\begin{itemize}
-%\item GAF
-%\item GEAR
-%\item MFR, DIR, GEDIR
-%\item SPAN
-%\end{itemize}
+\subsection{Location-based Routing}
+In location-based routing, are nodes addressed based on their location. The distance between a node's and its neighbour can be estimated by incoming signal strengths, by GPS or via coordination among nodes \cite{routing_survey}. Two approaches are \gls{gaf}\cite{gaf} and \gls{gear}\cite{gear}.
 
-%\section{Routing Protocol Operations}
+
+\section{Routing Protocol Operations}
 %\subsection{Multipath Routing Protocol}
 %\subsection{Query-based Protocol Operation}
 %\subsection{Negotiation-based Protocol Operation}
@@ -249,7 +218,8 @@ This thesis is structured into X chapters including the introduction.
 %\subsection{Coherent-based Protocol Operation}
 
 
-\chapter{Related Work}
+
+\chapter{Related Work} \label{chap:related_work}
 %\section{Routing Protocols in WSNs}
 To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
 
@@ -272,7 +242,7 @@ A resemblance between the two approaches is that neither of them consider a node
 %P_{i}(t)=\min\left\{\frac{E_{i}(t)}{E_{total}(t)}k, 1\right\}
 %\end{equation}
 
-\Gls{fleach} \cite{fuzzy_logic} \cite{ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
+\Gls{fleach} \cite{fuzzy_logic, ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
 
 In contrast to \gls{fleach} will our approach elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider "variables" such as battery level or number of nodes in the cluster.
 
@@ -306,14 +276,14 @@ Technical idea
 \chapter{Architecture}
 %Tell it clean/neat. Abstractions, functionalities
 
-This chapter describes the architecture of the system. The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in Figure \ref{fig:architecture} (or \ref{fig:architecture3}?).
+This chapter describes the architecture of the system. The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in Figure \ref{fig:architecture3}.
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{architecture.png}
-\caption{Figure shows the architecture of the system.}
-\label{fig:architecture}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{architecture.png}
+%\caption{Figure shows the architecture of the system.}
+%\label{fig:architecture}
+%\end{figure}
 
 
 \begin{figure}
@@ -635,11 +605,11 @@ W. R. Heinzelman and A. Chandrakasan and H. Balakrishnan,
 \newblock {\em Energy-efficient communication protocol for wireless microsensor networks}, 2000,
 \newblock in {\em Proceedings of the 33rd Annual Hawaii International Conference on System Sciences, 10 pp. vol.2-}.
 
-%2 - ikke printet ut/ikke i bruk
-%\bibitem{leach_perf}
-%K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
-%\newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
-%\newblock in {\em 2012 Seventh International Conference on Broadband, Wireless Computing, Communication and Applications, pp. 620-625}.
+%2 - ikke printet ut
+\bibitem{leach_perf}
+K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
+\newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
+\newblock in {\em 2012 Seventh International Conference on Broadband, Wireless Computing, Communication and Applications, pp. 620-625}.
 
 %3 ikke i bruk
 %\bibitem{fuzzy_rule}
@@ -654,10 +624,10 @@ Z. Han and J. Wu and J. Zhang and L. Liu and K. Tian,
 \newblock in {\em IEEE Transactions on Nuclear Science Vol.61, Nr.2, pp. 732-740}.
 
 %5 ikke i bruk
-%\bibitem{routing_survey}
-%J. N. Al-Karaki and A. E. Kamal,
-%\newblock {\em Routing techniques in wireless sensor networks: a survey}, 2004,
-%\newblock in {\em IEEE Wireless Communications Vol.11, Nr.6, pp. 6-28}.
+\bibitem{routing_survey}
+J. N. Al-Karaki and A. E. Kamal,
+\newblock {\em Routing techniques in wireless sensor networks: a survey}, 2004,
+\newblock in {\em IEEE Wireless Communications Vol.11, Nr.6, pp. 6-28}.
 
 %6
 \bibitem{pegasis}
@@ -742,6 +712,25 @@ Jelasity, M\'{a}rk and Voulgaris, Spyros and Guerraoui, Rachid and Kermarrec, An
 Draves, Richard and Padhye, Jitendra and Zill, Brian,
 \newblock {\em Routing in Multi-radio, Multi-hop Wireless Mesh Networks},
 \newblock in {\em Proceedings of the 10th Annual International Conference on Mobile Computing and Networking, 2004, pp.114--128}.
+
+%20
+\bibitem{wsnbook}
+Holger Karl, Andreas Willig,
+\newblock {\em Protocols and Architectures for Wireless Sensor Networks},
+\newblock {John Wiley \& Sons, Ltd, 2006}.
+
+%21
+\bibitem{gaf}
+Xu, Ya and Heidemann, John and Estrin, Deborah,
+\newblock {\em Geography-informed Energy Conservation for Ad Hoc Routing},
+\newblock in {\em MobiCom '01: Proceedings of the 7th Annual International Conference on Mobile Computing and Networking, 2001, pp.70--84}.
+
+%22
+\bibitem{gear}
+Yu, Yan and Govindan, Ramesh and Estrin, Deborah,
+\newblock {\em Geographical and Energy Aware Routing: a recursive data dissemination protocol for wireless sensor networks},
+\newblock in {\em UCLA Computer Science Department Technical Report, Vol.463, 2001}.
+
 
 
 
