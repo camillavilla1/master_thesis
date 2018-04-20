@@ -194,9 +194,6 @@ This thesis is structured into X chapters including the introduction.
 
 \Gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
-%Book \cite{wsnbook}
-%paper \cite{routing_survey}
-
 \section{Routing Protocols in WSNs}
 \subsection{Hierarchical Routing}
 Hierarchical routing, also called cluster-based routing, is a well know technique for network routing with special advantages related to scalability, efficient communication and lower energy consumption in WSNs. Each cluster in the hierarchical routing protocol have a special node which is responsible for coordinating data transmission between all nodes in the cluster \cite{leach, leach_perf, routing_survey}.
@@ -210,13 +207,12 @@ Two approaches based on hierarchical routing are \gls{leach}\cite{leach} and \gl
 In location-based routing, are nodes addressed based on their location. The distance between a node's and its neighbour can be estimated by incoming signal strengths, by GPS or via coordination among nodes \cite{routing_survey}. Two approaches are \gls{gaf}\cite{gaf} and \gls{gear}\cite{gear}.
 
 
-\section{Routing Protocol Operations}
-%\subsection{Multipath Routing Protocol}
-%\subsection{Query-based Protocol Operation}
-%\subsection{Negotiation-based Protocol Operation}
-%\subsection{QoS-based Protocol Operation}
-%\subsection{Coherent-based Protocol Operation}
+\section{Flood And Gossiping Protocol}
+\subsection{Flooding Protocol}
+The simplest forwarding rule is to flood the network. In flooding, a node sends a packet received to all its neighbours expect the neighbours which sent the packet until the packet arrives at the destination or maximum number of hops for the packet is reached. Its biggest drawback is that protocol is not an energy efficient protocol and is not designed for sensor networks \cite{wsnbook}.
 
+\subsection{Gossiping Protocol}
+Gossiping is a modified version of flooding attempting to correct some of its drawback. In gossiping, a node with updated data will contact an arbitrary node. However, it is possible that the contacted node was updated by another node and in that case may not spreading the update any further \cite{dsbook}.
 
 
 \chapter{Related Work} \label{chap:related_work}
@@ -297,7 +293,7 @@ This chapter describes the architecture of the system. The main functionality ca
 The lookup service is responsible for storing a list of all previous discovered nodes and their address. %Hvordan forlkare at det er en egen service som "simulaerer" range??
 
 \section{Discovery Of Other Nodes} \label{sec:discON}
-Each node can only discover nodes within a possible??? range. Figure \ref{fig:broadcast_range} shows how a possible??? range of a node may be discovered. When a new node in the network has been discovered, meta-data about the node such as address be stored locally on the device in the cluster.
+Each node can only discover other nodes within a simulated radio range. Figure \ref{fig:broadcast_range} shows how a simulated radio range of a node may be discovered. When a new node in the network has been discovered, meta-data about the node such as address be stored locally on the device in the cluster.
 
 \section{Incoming Network Requests}
 A node may receive incoming requests from other nodes in the network. The request handler will handle the request based on the type of request. The types of requests a node may receive are listed below.
@@ -731,7 +727,11 @@ Yu, Yan and Govindan, Ramesh and Estrin, Deborah,
 \newblock {\em Geographical and Energy Aware Routing: a recursive data dissemination protocol for wireless sensor networks},
 \newblock in {\em UCLA Computer Science Department Technical Report, Vol.463, 2001}.
 
-
+%23
+\bibitem{dsbook}
+Tanenbaum, Andrew S. and Steen, Maarten van,
+\newblock {\em Distributed Systems: Principles and Paradigms (2Nd Edition)},
+\newblock {Prentice-Hall, Inc., 2014}.
 
 
 
