@@ -117,7 +117,7 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 \textit{The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes[10]. The \gls{coat} is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020[10].}
 
 
-\Gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
+\glsfirst{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
 
 %\Gls{wsn}s main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem  is that the BS can be far away from the sensor node and the sensor node will die due to energy consumption.
 
@@ -146,8 +146,10 @@ Observation Unit Processes executing on PCs and/or Raspberry Pi.
 \section{Contributions}
 The dissertation makes the following contributions:
 \begin{itemize}
-\item A
-\item B
+\item An introduction to \gls{wsn}s and routing techniques in \gls{wsn}s.
+\item An implementation and description of a system ...
+\item An evaluation of the system.
+\item Thoughts on future work and further improvements to the current system.
 \end{itemize}
 
 \section{Assumptions}
@@ -192,7 +194,18 @@ This thesis is structured into X chapters including the introduction.
 \chapter{Routing Techniques in WSNs}
 %\textit{Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks, Holger Karl, Andreas Willig) kap. 11 som heter "Routing Protocols" som sier noe om gossiping, energ-efficient unicast, broadcast/multicast, geographic routing og mobile nodes..}
 
-\Gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
+\gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
+
+\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{wsn.png}
+\caption{Figure shows an example of a \gls{wsn} architecture.}
+\label{fig:wsn}
+\end{figure}
+
+%\newpage
 
 \section{Routing Protocols in WSNs}
 \subsection{Hierarchical Routing}
@@ -247,7 +260,7 @@ In contrast to \gls{fleach} will our approach elect a \gls{ch} by the nodes in t
 
 To increase the robustness of devices and lower power consumptions, ZebraNet \cite{zebranet} provides a low-power wireless system for position tracking of wildlife by using peer-to-peer network techniques. This reduces the researchers effort to manage the sensors and collecting logged data for their research. The radios on their devices also operates on different frequencies and have different bandwidth, range and other characteristics.
 
-A diversity to our approach is that ZebraNet stores multiple copies of the same data across multiple nodes while our approach forwards the data to a node
+A diversity to our approach is that ZebraNet stores multiple copies of the same data across multiple nodes while our approach forwards the data to the next node in the path to leader.
 
 %Compared to our approach, 
 %ZebraNet stores multiple copies of the same data across multiple nodes whilist our apporach forward the data to a node which is believed to have the best chance to access a base station..
@@ -513,7 +526,7 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 \section{Experimental Design}
 %\begin{table}[]
 %\centering
-%\label{my-label}
+%\label{tabel}
 %\begin{tabular}{|l|l|}
 %\hline
 %\textbf{Parameter}       & \textbf{Value} \\ \hline
@@ -534,28 +547,40 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 %Det gjør det lettere for leseren å henge med. 
 
 \subsection{CPU Measurements}
+%psutil - Percent
 \subsection{Memory Measurements}
+%Return statistics about system memory usage.
+%psutil - VirtualMemory -  RAM used by programs: mem Percent, used memory
 \subsection{Network (Socket) Usage}
+%psutil - ConnectionPid - Return a list of network connections opened by a process. 
+%\subsection{Process Connections Measurements}
+%psutil - Process 
 \subsection{Network Lifetime?}
 
 
 \section{Results}
 %What does the results say?
+In this section we will discuss the results of the testing described in the sections above.
+
 \subsection{CPU Usage}
 \subsection{Memory Usage}
 \subsection{Network Usage}
+%\subsection{Process Connections Measurements}
 \subsection{Network Lifetime?}
+
 
 
 \chapter{Discussion}
 %Idea, arch, design, results, other solutions, "arch has scale issue"..
-
 This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with..
-
 
 \section{Availability of nodes in the system}
 %When a node wants to join the cluster, should it ask the CH or should it join eitherway.. What if CH is sleeping (or busy) so that it's not reachable, or that nodes in the path to CH are sleeping (then how to contact CH?)..
 
+%Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
+
+%What if nodes are regulary off/sleep, how to know which one is ch? ask neighbour, and each election have an id/timestamp to check if this is the last election.. Could be that there have been multiple ch electins while node has been asleep so the neighbour node have not the right ch according to other nodes..
+%global clock so each node knows when to awake to send data to ch or leader election, etc..?
 
 \section{Cluster Head Election}
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
@@ -566,11 +591,16 @@ This chapter discusses our approach, experience, how we solved the problem and w
 
 %"Being a clusster head is much more energy intensive than eing a non-cluster head node. if the clulster heads where chosen a priori adn fied through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
 
+%Gossiping: max number of steps/hops when gossipiing to avoid flooding and overhead.. reduce nodes energy level etc..
+%When to elect new leader?
+
 \subsection{Cluster Head Calculation/Rating}
 %now random number, to approve and make it more realistic: number of nodes between CH and node, power left on device, bandwidth, prior history, traffic on node..
 
 \section{Path To Leader}
 %avoid flooding
+%minimize path to leader
+
 \section{Data Transmission}
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
 
@@ -578,7 +608,7 @@ This chapter discusses our approach, experience, how we solved the problem and w
 \subsection{Data Accumulation}
 
 \section{Base Station Access}
-
+%how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
 \chapter{Conclusion}
 In this thesis, we have implemented a system/prototype...
 
