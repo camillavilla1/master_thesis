@@ -336,7 +336,7 @@ This request forwards a nodes data to the next node in the path to the leader. I
 %\section{Base Station Access}
 %CH should access BS..?
 
-\section{Data Gathering?}
+\section{Data Accumulation/Gathering?}
 
 
 \chapter{Design}
@@ -470,8 +470,7 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 \label{fig:broadcast_simulation}
 \end{figure}
 
-\section{Data Transmission}
-\subsection{Cluster Head Election}
+\section{Cluster Head Election}
 %Leader election takes time to stabilize because of gossiping..
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes ost likely OFF.. 
 %Gossip-based peer sampling - acm - mark jelasity \cite{gbsampling}
@@ -480,6 +479,9 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 %Djikstra shortest path - Eclidean distance..
 
 %\cite{multiradio}: The goal of the metric is to choose a high-throughput path between  a source  and  a  destination
+
+
+\section{Data Transmission}
 
 \section{Data Accumulation}
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
