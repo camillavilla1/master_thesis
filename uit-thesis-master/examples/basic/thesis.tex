@@ -462,7 +462,7 @@ The system is implemented in the open source programming language GO 1.9.3\footn
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
 
-The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a range or not, as seen in Figure \ref{fig:broadcast_range}.
+The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. 
 
 \begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
@@ -485,8 +485,10 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 %Gossip-based peer sampling - acm - mark jelasity \cite{gbsampling}
 
 \section{Minimize Path To Leader}
+
 Finiding a path to the \gls{ch} is based on Dijkstra algorithm to find the shortest path between two nodes \cite{dijkstra}.
-%Dijkstra shortest path
+
+%network traffic, nodes energy/battery, 
 
 %\cite{multiradio}: The goal of the metric is to choose a high-throughput path between a source and a destination.
 
