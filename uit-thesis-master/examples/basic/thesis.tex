@@ -34,6 +34,7 @@
 \newacronym{pegasis}{PEGASIS}{Power-efficient gathering in sensor information systems}
 \newacronym{gaf}{GAF}{Geographic Adaptive Fidelity}
 \newacronym{gear}{GEAR}{Geographic and Energy-Aware Routing}
+\newacronym{tcp}{TCP}{Transmission Control Protocol}
 
 
 \newglossaryentry{thesis}
@@ -125,13 +126,13 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 \textit{The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes[10]. The \gls{coat} is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020[10].}
 
 
-\glsfirst{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
+\gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
 
 %\Gls{wsn}s main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem  is that the BS can be far away from the sensor node and the sensor node will die due to energy consumption.
 
 %It is beneficial to make these sensors as cheap and energy-efficient as possible.
 
-\textit{This thesis presents the architecture, design and implementation of a peer observation that can observe and accumulate data from in-situ observation units.}
+\textit{This thesis presents the architecture, design and implementation of a peer observation that can observe and accumulate data from in-situ \glsfirst{ou}s.}
 
 \section{Motivation}
 The motivation behind this project is...
@@ -145,10 +146,9 @@ The motivation behind this project is...
 %\end{itemize}
 
 
-The purpose is to fetch and accumulate data observed by observation units for further use.
+The purpose is to fetch and accumulate data observed by \gls{ou}s  for further use.
 
-The observation units to be used for the prototype comprises
-Observation Unit Processes executing on PCs and/or Raspberry Pi.
+%The observation units to be used for the prototype comprises Observation Unit Processes executing on PCs and/or Raspberry Pi.
 
 
 \section{Contributions}
@@ -454,14 +454,15 @@ A \gls{ch} will start a gathering of data by gossiping a message to nodes in the
 This chapter will elaborate on how we implemented the system, general implementation requirements, issues and choices. 
 %We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. The nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network.
 
 %\section{Simulator}
 %It is not feasible to have nodes out in the Arctic Tundra (like ZebraNet..) at such an early stage. This implementation simulates a real-life environment where nodes can 
 
 \section{Distance To Other Nodes In The Network}
+A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
 
-The formula \ref{eq:distance} is used to calculate the range between two points in a two-dimentional coordinate map and is used to see if a node is within a range or not, as seen in Figure \ref{fig:broadcast_range}.
+The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a range or not, as seen in Figure \ref{fig:broadcast_range}.
 
 \begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
@@ -469,7 +470,7 @@ d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
 
 %node attempt to connect..
 
-Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup service where the nodes position is calculated and nodes in range is returned to the node. At last, the node will try to connect to the reachable nodes.
+Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup service where the nodes position is calculated and nodes in the simulated radio range is returned to the node. At last, the node will try to connect to the reachable nodes.
 
 \begin{figure}
 \centering
@@ -480,13 +481,14 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 
 \section{Cluster Head Election}
 %Leader election takes time to stabilize because of gossiping..
-%Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes ost likely OFF.. 
+%Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
 %Gossip-based peer sampling - acm - mark jelasity \cite{gbsampling}
 
 \section{Minimize Path To Leader}
-%Djikstra shortest path - Eclidean distance..
+Finiding a path to the \gls{ch} is based on Dijkstra algorithm to find the shortest path between two nodes \cite{dijkstra}.
+%Dijkstra shortest path
 
-%\cite{multiradio}: The goal of the metric is to choose a high-throughput path between  a source  and  a  destination
+%\cite{multiradio}: The goal of the metric is to choose a high-throughput path between a source and a destination.
 
 
 \section{Data Transmission}
@@ -499,6 +501,7 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 %mediated = try to bring to an agreement
 
 The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes.
+
 \begin{lstlisting}[frame=single,caption={Small Go program showing how mutexes are used when updating a map},language=C]
 /*DBStation is a strucure that contains 
 a map that store data at leader*/
@@ -772,6 +775,12 @@ Yu, Yan and Govindan, Ramesh and Estrin, Deborah,
 Tanenbaum, Andrew S. and Steen, Maarten van,
 \newblock {\em Distributed Systems: Principles and Paradigms (2Nd Edition)},
 \newblock {Prentice-Hall, Inc., 2014}.
+
+%24
+\bibitem{dijkstra}
+Dijkstra, E. W.,
+\newblock {\em A note on two problems in connexion with graphs},
+\newblock in {\em Numerische Mathematik, Vol.1, No.1, December 1959, pp.269--271}.
 
 
 
