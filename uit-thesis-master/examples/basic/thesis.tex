@@ -358,10 +358,12 @@ In this chapter we will look at the design of the system and present the design 
 \label{fig:design}
 \end{figure}
 
+\newpage
+
 \section{Discovery Of Other Nodes}
 \subsection{Broadcasting}
 When a new node start, it will contact the node lookup service to discover other nodes in the network. The node will then initiate a broadcast.
-Broadcast is limited due to a radio range limitations where only nodes that are within this range will receive the broadcast, shown in Figure \ref{fig:broadcast_range}. \textit{Node 1} will only reach \textit{node 5} and \textit{node 7}.
+Broadcast is limited due to a radio range limitation where only nodes that are within this range will receive the broadcast, shown in Figure \ref{fig:broadcast_range}. \textit{Node 1} will only reach \textit{node 5} and \textit{node 7}.
 
 
 \begin{figure}
@@ -484,9 +486,12 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
 %Gossip-based peer sampling - acm - mark jelasity \cite{gbsampling}
 
-\section{Minimize Path To Leader}
+%A demo of Dijkstra's algorithm based on Euclidean distance.
 
-Finiding a path to the \gls{ch} is based on Dijkstra algorithm to find the shortest path between two nodes \cite{dijkstra}.
+\section{Minimize Path To Leader}
+Since \gls{ch} elections are gossiped from all nodes, can each node receive multiple gossip's per \gls{ch} election and some paths will be longer than others. In order to minimize the path to the \gls{ch}, will a node when receiving an election compare its existing path to the one received \cite{dijkstra}.
+
+%Finiding a path to the \gls{ch} is based on Dijkstra algorithm to find the shortest path between two nodes \cite{dijkstra}.
 
 %network traffic, nodes energy/battery, 
 
