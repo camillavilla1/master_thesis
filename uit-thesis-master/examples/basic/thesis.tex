@@ -465,7 +465,7 @@ This chapter will elaborate on how we implemented the system, general implementa
 
 The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. The nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network.
 
-It is not suitable to have nodes deployed in the Arctic Tundra at such an development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size, as Table \ref{tab:simTable} show. 
+It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width, as Table \ref{tab:simTable} show. 
 
 \begin{table}[]
 \centering
@@ -483,7 +483,7 @@ Node broadcast width     & 100            \\ \hline
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
 
-The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. 
+The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. The two points to be calculated is the node itself together with all the running nodes in the network.
 
 \begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
@@ -499,6 +499,11 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 \caption{Broadcast simulation}
 \label{fig:broadcast_simulation}
 \end{figure}
+
+\section{Connect To Neighbours}
+A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Right now will every node be able to connect with their neighbours unless a node is unavailable. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the leader decide weather the new node can connect to the neighbour or not. 
+
+% CH elect if node can join cluster or not...?
 
 \section{Cluster Head Election}
 %Leader election takes time to stabilize because of gossiping..
@@ -526,9 +531,12 @@ Since \gls{ch} elections are gossiped from all nodes, can each node receive mult
 \section{Data Accumulation}
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
 
-%Maps are not concurrent, need locks to prevent deadlock.. Or use a implementation of concurrent-map..
+%fabricated data 
 
 %mediated = try to bring to an agreement
+
+%FP to identify msg/data
+
 Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
 This especially arise in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes as illustrated in Listing \ref{test}.
 
@@ -628,6 +636,10 @@ This chapter discusses our approach, experience, how we solved the problem and w
 
 %What if nodes are regulary off/sleep, how to know which one is ch? ask neighbour, and each election have an id/timestamp to check if this is the last election.. Could be that there have been multiple ch electins while node has been asleep so the neighbour node have not the right ch according to other nodes..
 %global clock so each node knows when to awake to send data to ch or leader election, etc..?
+
+%Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
+
+% CH elect if node can join cluster or not...?
 
 \section{Cluster Head Election}
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
