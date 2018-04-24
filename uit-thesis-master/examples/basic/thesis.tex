@@ -198,7 +198,6 @@ This thesis is structured into X chapters including the introduction.
 
 
 
-
 \chapter{Routing Techniques in WSNs}
 %\textit{Har også fra WSN-bok ("Protocols and Architectures for Wireless Sensor Networks, Holger Karl, Andreas Willig) kap. 11 som heter "Routing Protocols" som sier noe om gossiping, energ-efficient unicast, broadcast/multicast, geographic routing og mobile nodes..}
 
@@ -384,7 +383,7 @@ Broadcast is limited due to a radio range limitation where only nodes that are w
 \newpage
 
 %\section{Maintenance Of Known Nodes}
-\section{Cluster Head Election}
+\section{Cluster Head Election} \label{des:chElection}
 A \gls{ch} election may occur in two scenarios listed below.
 
 %\begin{figure}
@@ -396,7 +395,7 @@ A \gls{ch} election may occur in two scenarios listed below.
 
 
 \subsection{New Node In Cluster Starts Election}
-When a new node has joined the cluster, it will start a new \gls{ch} election. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against their own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the node's neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the leader. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to leader only contain the node itself. Eventually a new \gls{ch} is elected and consistent in the whole cluster. A \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
+When a new node has joined the cluster, it will start a new \gls{ch} election. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against their own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the node's neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the leader. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to leader only contain the node itself. Eventually a new \gls{ch} is elected by all the nodes and the \gls{ch}-election result will be consistent in the whole cluster. An example of a \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
 
 \begin{figure}
 \centering
@@ -405,9 +404,10 @@ When a new node has joined the cluster, it will start a new \gls{ch} election. I
 \label{fig:newNodeLeaderElection}
 \end{figure}
 
+\newpage 
 
 \subsection{Cluster Head Starts Election}
-When a \gls{ch} has accumulated data a certain times, it will start a new \gls{ch} election. Initially, the \gls{ch} will gossip a message to nodes the cluster to calculate a new \gls{ch}-score. Then it will the \gls{ch} start a new election and gossip this election to the other nodes. The nodes receiving this gossip message will start their leader-election as described in the section above. The election is illustrated in Figure \ref{fig:chWantsLeaderElection}.
+When a \gls{ch} has accumulated data a certain times, it will start a new \gls{ch} election. Initially, the \gls{ch} will gossip a message to nodes the cluster to calculate a new \gls{ch}-score. Then will the \gls{ch} start a new election and gossip this election to the other nodes. The nodes receiving this gossip message will start their leader-election as described in the section above. The election is illustrated in Figure \ref{fig:chWantsLeaderElection}.
 
 \begin{figure}
 \centering
@@ -420,22 +420,29 @@ When a \gls{ch} has accumulated data a certain times, it will start a new \gls{c
 \newpage
 
 \section{Data Accumulation}
-A \gls{ch} will start a gathering of data by gossiping a message to nodes in the cluster, as seen in Figure \ref{fig:gatherData}. When a node receives this message it will send its data to the next node in the path to the \gls{ch} as Figure \ref{fig:sendData} shows. When a node receive data from another node it will check if it's own data has been sent to the \gls{ch} or not by a fingerprint and a status. If it hasn't been sent earlier, the node will accumulate the received data with the data on the current node, and then send the data to the next node in the path to \gls{ch}. The \gls{ch} will accumulate all received data and store it.
+A \gls{ch} will start gathering data by gossiping a message to nodes in the cluster, illustrated as the red arrows shown in Figure \ref{fig:gaterSendData}. When a node receives this message it will send its data to the next node in the path to the \gls{ch} as Figure \ref{fig:gaterSendData} shows. When a node receive data from another node it will check if it's own data has been sent to the \gls{ch} or not by a fingerprint and a status. If it hasn't been sent earlier, the node will accumulate the received data with the data on the current node, and then send the data to the next node in the path to \gls{ch}. The \gls{ch} will accumulate all received data and store it.
 
 %A node may at times forward data to another node in the cluster.
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{gatherData.png}
-\caption{Figure show how nodes get an request for sending data to the leader.}
-\label{fig:gatherData}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{gatherData.png}
+%\caption{Figure show how nodes get an request for sending data to the leader.}
+%\label{fig:gatherData}
+%\end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{sendData.png}
+%\caption{Figure show how a node sends its data to the leader through the nodes the path.}
+%\label{fig:sendData}
+%\end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{sendData.png}
-\caption{Figure show how a node sends its data to the leader through the nodes the path.}
-\label{fig:sendData}
+\includegraphics[width=\textwidth]{gatherSendData1.png}
+\caption{Figure show how \gls{ch} gossips a GET-data request and how  nodes sends their data to the leader through the nodes in the path.}
+\label{fig:gaterSendData}
 \end{figure}
 
 %\section{Base Station Access?}
@@ -458,8 +465,20 @@ This chapter will elaborate on how we implemented the system, general implementa
 
 The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. The nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network.
 
-%\section{Simulator}
-%It is not feasible to have nodes out in the Arctic Tundra (like ZebraNet..) at such an early stage. This implementation simulates a real-life environment where nodes can 
+It is not suitable to have nodes deployed in the Arctic Tundra at such an development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size, as Table \ref{tab:simTable} show. 
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter}       & \textbf{Value} \\ \hline
+Number of nodes          & 100            \\ \hline
+Network grid size        & 500 x 500      \\ \hline
+Node broadcast width     & 100            \\ \hline
+\end{tabular}
+\caption{Parameters of simulation}
+\label{tab:simTable}
+\end{table}
 
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
@@ -487,7 +506,12 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 %Gossip-based peer sampling - acm - mark jelasity \cite{gbsampling}
 
 %A demo of Dijkstra's algorithm based on Euclidean distance.
-A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. The \gls{ch} election algorithm is based on the Bully algorithm where the node node with the highest ID number is selected to be the leader. Our approach do not use the node with highest ID number, but use the node with highest score between 0 and 1.
+A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
+The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the leader. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
+
+%As previously described in Section \ref{des:chElection}...
+
+%Approach have several improvements discused (further) in Chapter/Section XX...
 
 \section{Minimize Path To Leader}
 Since \gls{ch} elections are gossiped from all nodes, can each node receive multiple gossip's per \gls{ch} election and some paths will be longer than others. In order to minimize the path to the \gls{ch}, will a node when receiving an election compare its existing path to the one received \cite{dijkstra}.
@@ -505,12 +529,14 @@ Since \gls{ch} elections are gossiped from all nodes, can each node receive mult
 %Maps are not concurrent, need locks to prevent deadlock.. Or use a implementation of concurrent-map..
 
 %mediated = try to bring to an agreement
+Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
+This especially arise in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes as illustrated in Listing \ref{test}.
 
-The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes.
 
-\begin{lstlisting}[frame=single,caption={Small Go program showing how mutexes are used when updating a map},language=C]
+\begin{lstlisting} [frame=single,caption={Small Go program showing how mutexes are used when updating a map},language=C, label={test}]
+
 /*DBStation is a strucure that contains 
-a map that store data at leader*/
+  a map that store data at CH */
 var DBStation struct {
 	sync.Mutex
 	BSdatamap map[uint32][]byte
@@ -518,14 +544,14 @@ var DBStation struct {
 
 func sendDataToLeaderHandler() {
 	DBStation.Lock()
-	defer DataBaseStation.Unlock()
+	defer DBStation.Unlock()
 	
 	...
-	
-	DBStation.BSdatamap[sData.FP] = receivedData
+	/*Update map in key FingerPrint
+	  with received data */
+	DBStation.BSdatamap[FingerPrint] = receivedData
 }
 \end{lstlisting}
-
 
 \section{Data Transmission?}
 
@@ -615,12 +641,13 @@ This chapter discusses our approach, experience, how we solved the problem and w
 %Gossiping: max number of steps/hops when gossipiing to avoid flooding and overhead.. reduce nodes energy level etc..
 %When to elect new leader?
 
-\subsection{Cluster Head Calculation/Rating}
+\subsection{Cluster Head Calculation}
 %now random number, to approve and make it more realistic: number of nodes between CH and node, power left on device, bandwidth, prior history, traffic on node..
 
 \section{Path To Leader}
 %avoid flooding
 %minimize path to leader
+%multiple leaders - multiple paths.. replication etc...?
 
 \section{Data Transmission}
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
