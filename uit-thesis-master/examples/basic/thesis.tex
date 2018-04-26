@@ -420,7 +420,7 @@ When a \gls{ch} has accumulated data a certain times, it will start a new \gls{c
 \newpage
 
 \section{Data Accumulation}
-A \gls{ch} will start gathering data by gossiping a message to nodes in the cluster, illustrated as the red arrows shown in Figure \ref{fig:gaterSendData}. When a node receives this message it will send its data to the next node in the path to the \gls{ch} as Figure \ref{fig:gaterSendData} shows. When a node receive data from another node it will check if it's own data has been sent to the \gls{ch} or not by a fingerprint and a status. If it hasn't been sent earlier, the node will accumulate the received data with the data on the current node, and then send the data to the next node in the path to \gls{ch}. The \gls{ch} will accumulate all received data and store it.
+A \gls{ch} will start gathering data by gossiping a message to nodes in the cluster, illustrated as the red arrows shown in Figure \ref{fig:gaterSendData}. When a node receives this message it will send its data to the next node in the path to the \gls{ch} as Figure \ref{fig:gaterSendData} shows. When a node receive data from another node it will check if it's own data has been sent to the \gls{ch} or not by a fingerprint and a status. If it hasn't been sent earlier, the node will accumulate the received data with its own data, and then send the data to the next node in the path to \gls{ch}. The \gls{ch} will accumulate all received data and store it.
 
 %A node may at times forward data to another node in the cluster.
 
@@ -463,7 +463,7 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 This chapter will elaborate on how we implemented the system, general implementation requirements, issues and choices. 
 %We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. The nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}} and the nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was a practical choice because we were familiar with the language from previous projects, its developed for making concurrent mechanisms easy and to get the most out of multicore and networked machines and offers multiple different libraries.
 
 It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width, as Table \ref{tab:simTable} show. 
 
@@ -493,7 +493,7 @@ d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
 
 Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup service where the node's position is calculated and nodes within the simulated radio range is returned to the node. At last, the node will try to connect to the reachable nodes.
 
-\begin{figure}
+\begin{figure} [!b]
 \centering
 \includegraphics[width=\textwidth]{broadcast_simulation.png}
 \caption{Broadcast simulation}
@@ -501,7 +501,8 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 \end{figure}
 
 \section{Connect To Neighbours}
-A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Right now will every node be able to connect with their neighbours unless a node is unavailable. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the leader decide weather the new node can connect to the neighbour or not. 
+A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Right now, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the leader decide whether the new node can connect to the neighbour or not. 
+%This approach is discussed further in Section/Chapter ..
 
 % CH elect if node can join cluster or not...?
 
@@ -513,10 +514,11 @@ A node will only be able to connect to another node in the network if the node a
 %A demo of Dijkstra's algorithm based on Euclidean distance.
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
 The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the leader. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
-
+Our apporach have several improvements discussed further in Section \ref{disc:ch_election}. 
 %As previously described in Section \ref{des:chElection}...
 
-%Approach have several improvements discused (further) in Chapter/Section XX...
+%Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
+
 
 \section{Minimize Path To Leader}
 Since \gls{ch} elections are gossiped from all nodes, can each node receive multiple gossip's per \gls{ch} election and some paths will be longer than others. In order to minimize the path to the \gls{ch}, will a node when receiving an election compare its existing path to the one received \cite{dijkstra}.
@@ -540,8 +542,16 @@ Since \gls{ch} elections are gossiped from all nodes, can each node receive mult
 Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
 This especially arise in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes as illustrated in Listing \ref{test}.
 
+\newpage
 
 \begin{lstlisting} [frame=single,caption={Small Go program showing how mutexes are used when updating a map},language=C, label={test}]
+
+/*SensorData is data from "sensors" on the OU*/
+type SensorData struct {
+	ID          uint32
+	Fingerprint uint32
+	Data        []byte
+}
 
 /*DBStation is a strucure that contains 
   a map that store data at CH */
@@ -551,13 +561,23 @@ var DBStation struct {
 }
 
 func sendDataToLeaderHandler() {
+	var rd SensorData
+	
 	DBStation.Lock()
 	defer DBStation.Unlock()
 	
-	...
+	(...)
+	
+	err := json.Unmarshal(body, &sData); 
+	if err != nil {
+		panic(err)
+	}
+	
+	(...)
+	
 	/*Update map in key FingerPrint
 	  with received data */
-	DBStation.BSdatamap[FingerPrint] = receivedData
+	DBStation.BSdatamap[rd.Fingerprint] = rd.Data
 }
 \end{lstlisting}
 
@@ -633,6 +653,8 @@ This chapter discusses our approach, experience, how we solved the problem and w
 %When a node wants to join the cluster, should it ask the CH or should it join eitherway.. What if CH is sleeping (or busy) so that it's not reachable, or that nodes in the path to CH are sleeping (then how to contact CH?)..
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
+%do not wanna ping to often - flood network?
+%how to know if node is dead or just sleeping
 
 %What if nodes are regulary off/sleep, how to know which one is ch? ask neighbour, and each election have an id/timestamp to check if this is the last election.. Could be that there have been multiple ch electins while node has been asleep so the neighbour node have not the right ch according to other nodes..
 %global clock so each node knows when to awake to send data to ch or leader election, etc..?
@@ -640,6 +662,8 @@ This chapter discusses our approach, experience, how we solved the problem and w
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
 
 % CH elect if node can join cluster or not...?
+
+%Distance, Power, Availability (Power-Management, Scheduled downtime - repairs etc., network overload)...
 
 \section{Cluster Head Election}
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
@@ -653,8 +677,22 @@ This chapter discusses our approach, experience, how we solved the problem and w
 %Gossiping: max number of steps/hops when gossipiing to avoid flooding and overhead.. reduce nodes energy level etc..
 %When to elect new leader?
 
-\subsection{Cluster Head Calculation}
-%now random number, to approve and make it more realistic: number of nodes between CH and node, power left on device, bandwidth, prior history, traffic on node..
+%Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
+
+
+\subsection{Cluster Head Calculation} \label{disc:ch_election}
+At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To approve this approach and make it more realistic, we could have used several sub-factors listed below:
+
+%now random number, to approve and make it more realistic: 
+
+\begin{itemize}
+\item Number of nodes between a node and \gls{ch}
+\item Number of neighbours for the node
+\item Power left on node
+\item Bandwidth - WiFi, LoRaWan\footnote{\url{https://lora-alliance.org/about-lorawan}}, cable/Ethernet?
+\item Prior history
+\item Traffic on node
+\end{itemize}
 
 \section{Path To Leader}
 %avoid flooding
@@ -665,7 +703,10 @@ This chapter discusses our approach, experience, how we solved the problem and w
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
 
 %How to gather data? Receive a GET-post from BS or someone else telling the CH to accumulate/gather data or gather data periodically? How does a BS send a GET-request to CH?? The CH could not be in range of the BS, so maybe send to a node in range and forward msg all the way to CH.. But again, what if some nodes are sleeping to save battery? The CH will then not receive the msg..
+
 \subsection{Data Accumulation}
+%How much memory does a node have?  Have priorities on data such that data with high priority is stored longer or sent first.. Delete low poriority data if full memory..
+
 
 \section{Base Station Access}
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
