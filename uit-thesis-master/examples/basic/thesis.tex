@@ -288,18 +288,24 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 \chapter{Idea}
 Technical idea
 
+Decentralied - centralized
+
+P2P
+
+hva er veien, ikke hvilken vei..
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{architecture.png}
+\caption{Figure shows the architecture of the system.}
+\label{fig:architecture}
+\end{figure}
+
 
 \chapter{Architecture}
 %Tell it clean/neat. Abstractions, functionalities
 
 This chapter describes the architecture of the system. The main functionality can be divided into 3 sub-sections: a nodes lookup service, discovery of other nodes and incoming network requests. The architecture of the system is presented in Figure \ref{fig:architecture3}.
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=\textwidth]{architecture.png}
-%\caption{Figure shows the architecture of the system.}
-%\label{fig:architecture}
-%\end{figure}
 
 
 \begin{figure}
@@ -538,18 +544,19 @@ Since \gls{ch} elections are gossiped from all nodes, can each node receive mult
 %mediated = try to bring to an agreement
 
 %FP to identify msg/data
-When a \gls{ch} creates a request for gathering data, will it contain an ID used for identification. Since the request is gossiped to all nodes in the cluster, a node will most likely receive the same message multiple times, but only need to forward its data once. If a node have not received a request with a specific ID, it will gossip the message to its neighbours and then send its data to the next neighbour in the path to \gls{ch}. Otherwise, the node will just ignore the request.
+
+Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes. When a \gls{ch} creates a request for gathering data, will it contain an ID used for identification. Since the request is gossiped to all nodes in the cluster, a node will most likely receive the same message multiple times, but only need to forward its data once. If a node have not received a request with a specific ID, it will gossip the message to its neighbours and then send its data to the next neighbour in the path to \gls{ch}. Otherwise, the node will just ignore the request.
 
 When a node needs to send data, it will create a request containing the received request-ID from the \gls{ch}, the data to be sent together with a fingerprint and a path to the leader. 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 The path to the leader is a list containing the addresses for the nodes between the sender and the \gls{ch}.
 
 %Fingerprint to identify data and ID to identify packet/msg.. Boolean variable - accumulated..
 
-Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
-This especially arise in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes as illustrated in Listing \ref{test}.
+As mentioned previous can each node receive multiple requests from different neighbouring nodes.
+%Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
+This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes as illustrated in Listing \ref{test}.
 
 \newpage
 
