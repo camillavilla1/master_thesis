@@ -124,7 +124,7 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 
 \chapter{Introduction}
 \textbf{FRA CAPSTONE:}
-\textit{The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes[10]. The \gls{coat} is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020[10].}
+\textit{The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes \cite{coat2016}. The \gls{coat} is a long-term research project developed by five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020[10].}
 
 
 \gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
@@ -413,7 +413,7 @@ Broadcast is limited due to a radio range limitation where only nodes that are w
 \newpage
 
 %\section{Maintenance Of Known Nodes}
-\section{Cluster Head Election} \label{des:chElection}
+\section{Cluster Head Election} \label{des:ch_election}
 A \gls{ch} election may occur in two scenarios listed below.
 
 %\begin{figure}
@@ -536,7 +536,7 @@ A node will only be able to connect to another node in the network if the node a
 
 % CH elect if node can join cluster or not...?
 
-\section{Cluster Head Election}
+\section{Cluster Head Election} \label{imp:ch_election}
 %Leader election takes time to stabilize because of gossiping..
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
 %Gossip-based peer sampling - acm - mark jelasity \cite{gbsampling}
@@ -545,7 +545,9 @@ A node will only be able to connect to another node in the network if the node a
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
 The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the leader. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
 Our apporach have several improvements discussed further in Section \ref{disc:ch_election}. 
-%As previously described in Section \ref{des:chElection}...
+%As previously described in Section \ref{des:ch_election}...
+
+Avoid flooding network by having ID to check.. do not gossip data which is similar..
 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
@@ -719,22 +721,29 @@ In the current approach can a node connect to nearby nodes and be a part of a cl
 
 Another interference with having a \gls{ch} take the decision is that the \gls{ch} may be unavailable because it's sleeping or if it's unreachable because nodes in the path to the \gls{ch} are sleeping or unavailable due to e.g. saving battery. 
 
+%Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
+
 A solution to this problem is to ping neighbouring nodes regularly to check if neighbours are alive or not, or to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
-%Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
 %do not wanna ping to often - flood network?
+However, pinging other nodes frequently will eventually flood the network...
+
+
 %how to know if node is dead or just sleeping
 
+
 \subsection{Node Waking Up After Sleeping}
-What if a node is regularly/often sleeping or off? How to know which one is \gls{ch}?
 %What if nodes are regulary off/sleep, how to know which one is ch? ask neighbour, and each election have an id/timestamp to check if this is the last election.. Could be that there have been multiple ch electins while node has been asleep so the neighbour node have not the right ch according to other nodes..
 %global clock so each node knows when to awake to send data to ch or leader election, etc..?
 
+%Right now: no timestamp or regulation.. If node down, it will send its data to the node he think is the leader, but that is not all bad because data will be send do the leader/gather eventually anyways.. Maybe next round or something.. but improvement: have timestamps or global clock - vector clock..
 
-%Distance, Power, Availability (Power-Management, Scheduled downtime - repairs etc., network overload)...
+What if a node is regularly/often sleeping or off? How to know which one is \gls{ch}?
+
 
 
 \section{Head Election}
+%Distance, Power, Availability (Power-Management, Scheduled downtime - repairs etc., network overload)...
 
 \subsection{Cluster Head Calculation} \label{disc:ch_election}
 At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To approve this approach and make it more realistic, we could have used several sub-factors listed below:
@@ -744,7 +753,7 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 \begin{itemize}
 \item Number of nodes between a node and \gls{ch}
 \item Number of neighbours for the node
-\item Access to \gls{bs}?
+\item Access to \gls{bs}
 \item Power left on node
 \item Bandwidth - WiFi, LoRaWan\footnote{\url{https://lora-alliance.org/about-lorawan}}, cable/Ethernet?
 \item Prior history
@@ -759,11 +768,15 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 
 %Gossiping is an excellent way to rapidly spread information among a large number of nodes using only local information. There is no central component where information is coordinated. However, it cannot guarantee that all nodes will receive the information \cite{demers}. One of the main advantages of a gossip based algorithm is its ability to scale.
 
+The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to rapidly spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
+
 %To avoid flooding the network (too much), each msg have an ID so that a node can check if it has received the same message before (+ if the leader number is similar). If it as been received earlier, the node doesn't need to forward the message because it has likely forwarded the message in an earlier gossip.
 
-%"Being a clusster head is much more energy intensive than eing a non-cluster head node. if the clulster heads where chosen a priori adn fied through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
+To avoid flooding the network, each message sent between nodes have and ID so the node can check if it has received the same message before. If the node have received the message earlier, the node doesn't need to forward the message because it has forwarded the message in an earlier gossip, as described earlier in Section \ref{imp:ch_election}.
 
-%Gossiping: max number of steps/hops when gossipiing to avoid flooding and overhead.. reduce nodes energy level etc..
+%"Being a cluster head is much more energy intensive than eing a non-cluster head node. if the clulster heads where chosen a priori adn fied through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
+
+%Gossiping: max number of steps/hops when gossiping to avoid flooding and overhead.. reduce nodes energy level etc..
 %When to elect new leader?
 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
@@ -796,10 +809,14 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 In this thesis, we have implemented a system/prototype...
 
 Our experiments showed that the system ...
+
+
 \chapter{Future Work}
+%\gls{ch} election
+%access to bs - 
 
 \chapter{Appendix}
-
+%Readme
 
 \backmatter
 
@@ -808,145 +825,153 @@ Our experiments showed that the system ...
 \newpage{}
 
 \begin{thebibliography}{9}
+
 %1
+\bibitem{coat2016}
+Åshild Ø. Pedersen, A. Stien, E. Soininen, and R. A. Ims,
+\newblock {\em Climate-ecological observatory for arctic tundra-status 2016}, Mars 2016,
+\newblock in {\em  Fram Forum 2016, pages 36-43.}
+%\newblock {\em \url{http://www.framsenteret.no/getfile.php/2435814.1574.xyxruwywpp/FinalPDF_COAT.pdf}}.
+
+%2
 \bibitem{leach}
 W. R. Heinzelman and A. Chandrakasan and H. Balakrishnan,
 \newblock {\em Energy-efficient communication protocol for wireless microsensor networks}, 2000,
 \newblock in {\em Proceedings of the 33rd Annual Hawaii International Conference on System Sciences, 10 pp. vol.2-}.
 
-%2 - ikke printet ut
+%3 - ikke printet ut
 \bibitem{leach_perf}
 K. Latif and M. Jaffar and N. Javaid and M. N. Saqib and U. Qasim and Z. A. Khan,
 \newblock {\em Performance Analysis of Hierarchical Routing Protocols in Wireless Sensor Networks}, 2012,
 \newblock in {\em 2012 Seventh International Conference on Broadband, Wireless Computing, Communication and Applications, pp. 620-625}.
 
-%3 ikke i bruk
+%4 ikke i bruk
 %\bibitem{fuzzy_rule}
 %K. Gotefode and K. Kolhe,
 %\newblock {\em Energy efficiency in wireless sensor network using Fuzzy rule and tree based routing protocol}, 2015,
 %\newblock in {\em 2015 International Conference on Energy Systems and Applications, pp. 712-717}.
 
-%4
+%5
 \bibitem{tree_based}
 Z. Han and J. Wu and J. Zhang and L. Liu and K. Tian,
 \newblock {\em A General Self-Organized Tree-Based Energy-Balance Routing Protocol for Wireless Sensor Network}, 2014,
 \newblock in {\em IEEE Transactions on Nuclear Science Vol.61, Nr.2, pp. 732-740}.
 
-%5 ikke i bruk
+%6 ikke i bruk
 \bibitem{routing_survey}
 J. N. Al-Karaki and A. E. Kamal,
 \newblock {\em Routing techniques in wireless sensor networks: a survey}, 2004,
 \newblock in {\em IEEE Wireless Communications Vol.11, Nr.6, pp. 6-28}.
 
-%6
+%7
 \bibitem{pegasis}
 S. Lindsey and C. S. Raghavendra,
 \newblock {\em PEGASIS: Power-efficient gathering in sensor information systems}, 2002,
 \newblock in {\em Proceedings, IEEE Aerospace Conference Vol.3, pp. 3-1125-3-1130}.
 
-%7 - ikke skrevet ut/ ikke i bruk
+%8 - ikke skrevet ut/ ikke i bruk
 %\bibitem{atyp_routing}
 %X. Liu,
 %\newblock {\em Atypical Hierarchical Routing Protocols for Wireless Sensor Networks: A Review}, 2015,
 %\newblock in {\em IEEE Sensors Journal Vol.15, Nr.10, pp. 5372-5383}.
 
-%8
+%9
 \bibitem{fuzzy_logic}
 A. K. Mishra and R. Kumar and J. Singh,
 \newblock {\em A review on fuzzy logic based clustering algorithms for wireless sensor networks}, 2015,
 \newblock in {\em 2015 International Conference on Futuristic Trends on Computational Analysis and Knowledge Management (ABLAZE), pp. 489-494}.
 
-%9
+%10
 \bibitem{ch_fuzzy}
 Indranil Gupta and D. Riordan and Srinivas Sampalli,
 \newblock {\em Cluster-head election using fuzzy logic for wireless sensor networks}, 2005,
 \newblock in {\em 3rd Annual Communication Networks and Services Research Conference (CNSR'05), pp. 255-260}.
 
-%10
+%11
 \bibitem{dec_cb_alg}
 Maryam Sabet and Hamid Reza Naji,
 \newblock {\em A decentralized energy efficient hierarchical cluster-based routing algorithm for wireless sensor networks}, 2015,
 \newblock in {\em AEU - International Journal of Electronics and Communications Vol.69, Nr.5, pp. 790 - 799}.
 
-%11 ikke i bruk
+%12 ikke i bruk
 %\bibitem{rout_prot_survey}
 %Shio Kumar Singh, M P Singh and D K Singh,
 %\newblock {\em Routing Protocols in Wireless Sensor Networks – A Survey }, 2010,
 %\newblock in {\em International Journal of Computer Science \& Engineering Survey (IJCSES) Vol.1, No.2, November 2010, pp. 63-83}.
 
-%12
+%13
 \bibitem{leach_c}
 W. B. Heinzelman and A. P. Chandrakasan and H. Balakrishnan,
 \newblock {\em An application-specific protocol architecture for wireless microsensor networks},
 \newblock in {\em IEEE Transactions on Wireless Communications Vol.1, No.4, October 2002, pp. 660-670}.
 
-%13 ikke i bruk
+%14
 \bibitem{demers}
 Demers, Alan and Greene, Dan and Hauser, Carl and Irish, Wes and Larson, John and Shenker, Scott and Sturgis, Howard and Swinehart, Dan and Terry, Doug,
 \newblock {\em Epidemic algorithms for replicated database maintenance},
 \newblock in {\em ACM: Proceedings of the Sixth Annual ACM Symposium on Principles of Distributed Computing, 1987, pp. 1--12}.
 
-%14
+%15
 \bibitem{leach_e}
 Chen, Bai and Zhang, Yaxiao and Li, Yuxian and Hao, Xiao-Chen and Fang, Yan,
 \newblock {\em A Clustering Algorithm of Cluster-head Optimization for Wireless Sensor Networks Based on Energy},
 \newblock in {\em Journal of Information and Computational Science, Vol.8, 2011}.
 
-%15
+%16
 \bibitem{leach_b}
 M. Tong and M. Tang,
 \newblock {\em LEACH-B: An Improved LEACH Protocol for Wireless Sensor Network},
 \newblock in {\em J2010 6th International Conference on Wireless Communications Networking and Mobile Computing (WiCOM), 2010, pp. 1-4}.
 
-%16 ikke i bruk
+%17 ikke i bruk
 \bibitem{zebranet}
 Juang, Philo and Oki, Hidekazu and Wang, Yong and Martonosi, Margaret and Peh, Li Shiuan and Rubenstein, Daniel,
 \newblock {\em Energy-efficient Computing for Wildlife Tracking: Design Tradeoffs and Early Experiences with ZebraNet},
 \newblock in {\em ACM: SIGARCH Comput. Archit. News, Vol.30, No.5, December 2002, pp. 96--107}.
 
-%17 ikke i bruk
+%18 ikke i bruk
 %\bibitem{dataColl}
 %Di Francesco, Mario and Das, Sajal K. and Anastasi, Giuseppe,
 %\newblock {\em Data Collection in Wireless Sensor Networks with Mobile Elements: A Survey},
 %\newblock in {\em ACM Trans. Sen. Netw., Vol.8, No.1, August 2011, pp. 7:1--7:31}.
 
-%18 ikke i bruk
+%19 ikke i bruk
 \bibitem{gbsampling}
 Jelasity, M\'{a}rk and Voulgaris, Spyros and Guerraoui, Rachid and Kermarrec, Anne-Marie and van Steen, Maarten,
 \newblock {\em Gossip-based Peer Sampling},
 \newblock in {\em ACM Trans. Comput. Syst., Vol.25, No.3, August 2007}.
 
-%19 ikke i bruk
+%20 ikke i bruk
 \bibitem{multiradio}
 Draves, Richard and Padhye, Jitendra and Zill, Brian,
 \newblock {\em Routing in Multi-radio, Multi-hop Wireless Mesh Networks},
 \newblock in {\em Proceedings of the 10th Annual International Conference on Mobile Computing and Networking, 2004, pp.114--128}.
 
-%20
+%21
 \bibitem{wsnbook}
 Holger Karl, Andreas Willig,
 \newblock {\em Protocols and Architectures for Wireless Sensor Networks},
 \newblock {John Wiley \& Sons, Ltd, 2006}.
 
-%21
+%22
 \bibitem{gaf}
 Xu, Ya and Heidemann, John and Estrin, Deborah,
 \newblock {\em Geography-informed Energy Conservation for Ad Hoc Routing},
 \newblock in {\em MobiCom '01: Proceedings of the 7th Annual International Conference on Mobile Computing and Networking, 2001, pp.70--84}.
 
-%22
+%23
 \bibitem{gear}
 Yu, Yan and Govindan, Ramesh and Estrin, Deborah,
 \newblock {\em Geographical and Energy Aware Routing: a recursive data dissemination protocol for wireless sensor networks},
 \newblock in {\em UCLA Computer Science Department Technical Report, Vol.463, 2001}.
 
-%23
+%24
 \bibitem{dsbook}
 Tanenbaum, Andrew S. and Steen, Maarten van,
 \newblock {\em Distributed Systems: Principles and Paradigms (2Nd Edition)},
 \newblock {Prentice-Hall, Inc., 2014}.
 
-%24
+%25
 \bibitem{dijkstra}
 Dijkstra, E. W.,
 \newblock {\em A note on two problems in connexion with graphs},
