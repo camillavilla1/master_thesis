@@ -726,8 +726,8 @@ Another interference with having a \gls{ch} take the decision is that the \gls{c
 A solution to this problem is to ping neighbouring nodes regularly to check if neighbours are alive or not, or to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
 %do not wanna ping to often - flood network?
-However, pinging other nodes frequently will eventually flood the network...
 
+%However, pinging other nodes frequently will eventually flood the network..
 
 %how to know if node is dead or just sleeping
 
@@ -742,8 +742,16 @@ What if a node is regularly/often sleeping or off? How to know which one is \gls
 
 
 
-\section{Head Election}
+\section{Cluster Head Election}
 %Distance, Power, Availability (Power-Management, Scheduled downtime - repairs etc., network overload)...
+
+%"Being a cluster head is much more energy intensive than being a non-cluster head node. if the cluster heads where chosen a priori and died through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
+
+Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability.
+
+To avoid this problem, will our approach not chose \gls{ch}s a prior. but instead have a leader election algorithm to possibly rotate the \gls{ch}.
+%\textbf{possibly/perchance} \textbf{rullere/rotate}
+
 
 \subsection{Cluster Head Calculation} \label{disc:ch_election}
 At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To approve this approach and make it more realistic, we could have used several sub-factors listed below:
@@ -762,22 +770,20 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
 
+%\subsection{Eventual Cluster Head Election Consistency?}
 
 \subsection{Gossip Information Between Nodes}
-%Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
-
-%Gossiping is an excellent way to rapidly spread information among a large number of nodes using only local information. There is no central component where information is coordinated. However, it cannot guarantee that all nodes will receive the information \cite{demers}. One of the main advantages of a gossip based algorithm is its ability to scale.
-
 The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to rapidly spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
-
-%To avoid flooding the network (too much), each msg have an ID so that a node can check if it has received the same message before (+ if the leader number is similar). If it as been received earlier, the node doesn't need to forward the message because it has likely forwarded the message in an earlier gossip.
 
 To avoid flooding the network, each message sent between nodes have and ID so the node can check if it has received the same message before. If the node have received the message earlier, the node doesn't need to forward the message because it has forwarded the message in an earlier gossip, as described earlier in Section \ref{imp:ch_election}.
 
-%"Being a cluster head is much more energy intensive than eing a non-cluster head node. if the clulster heads where chosen a priori adn fied through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
+Another approach to avoid flooding the network and reduce nodes energy level is to limit the number of hops when gossiping to other nodes.
 
-%Gossiping: max number of steps/hops when gossiping to avoid flooding and overhead.. reduce nodes energy level etc..
+
+\subsection{When To Elect A New Cluster Head}
 %When to elect new leader?
+
+\subsection{Remember Previous Leader?}
 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
@@ -799,6 +805,12 @@ To avoid flooding the network, each message sent between nodes have and ID so th
 %How much memory does a node have?  Have priorities on data such that data with high priority is stored longer or sent first.. Delete low poriority data if full memory..
 
 %Vector clocks..
+
+
+\section{Cluster Head Election and Data Accumulation simultaneously?}
+%Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
+
+%The current approach provides an eventual consistency when electing a new \gls{ch}.
 
 
 \section{Base Station Access}
