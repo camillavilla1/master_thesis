@@ -297,7 +297,6 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 %Technical idea
 
 %Unstructured p2p network..
-
 %Multi-hop communication (not single-hop)
 
 %(Unstructured peer-to-peer networks do not impose a particular structure on the overlay network by design, but rather are formed by nodes that randomly form connections to each other. (Gnutella, Gossip, and Kazaa are examples of unstructured P2P protocols), the role of all peers in the network is the same, unstructured networks are highly robust in the face of high rates of "churn"—that is, when large numbers of peers are frequently joining and leaving the network
@@ -307,16 +306,15 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 %hva er veien, ikke hvilken vei..
 
-The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes connect to nearby nodes and create clusters. Using a unstructured network would be efficient to use when large number of nodes are frequently joining and leaving the network since its highly robust in the face of high rates of churn.
+The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using a unstructured network would be efficient to use when large number of nodes are frequently joining and leaving the network since its highly robust in the face of high rates of churn.
 
-The role of all peers in the network is the same except that there would be at least one node which will gather data for further use, also called a \gls{ch}. As a result of Since there would be nodes which have more important roles in the network, the network structure will be more partially centralized than decentralized.
+In a partially centralized network are the role of all peers the same except of some nodes that assume a more important role. These nodes are called \gls{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network by sub-factors discussed in Section \ref{disc:ch_election}.
+
 All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a a \gls{ch} or e.g. a \gls{dao} Store.
 
 Since it is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to as similar to a real-life environment.
 
- The technical idea is shown in Figure \ref{fig:idea}.
-
-
+The technical idea is shown in Figure \ref{fig:idea}.
 
 \begin{figure}
 \centering
