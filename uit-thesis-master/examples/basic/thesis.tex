@@ -36,6 +36,7 @@
 \newacronym{gear}{GEAR}{Geographic and Energy-Aware Routing}
 \newacronym{tcp}{TCP}{Transmission Control Protocol}
 \newacronym{p2p}{P2P}{Peer-To-Peer}
+\newacronym{dao}{DAO}{Distributed Arctic Observation}
 
 
 \newglossaryentry{thesis}
@@ -301,17 +302,20 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 %(Unstructured peer-to-peer networks do not impose a particular structure on the overlay network by design, but rather are formed by nodes that randomly form connections to each other. (Gnutella, Gossip, and Kazaa are examples of unstructured P2P protocols), the role of all peers in the network is the same, unstructured networks are highly robust in the face of high rates of "churn"—that is, when large numbers of peers are frequently joining and leaving the network
 
-%Decentralized - centralized
-
-%Decentralized - no single point of failure. but coordinators can crash..
-
-%Partially centralized - supernodes act as local central indexes, some nodes assume a more important role
+%Decentralized- no single point of failure. but coordinators can crash..
+%Centralized - Partially centralized: supernodes act as local central indexes, some nodes assume a more important role
 
 %hva er veien, ikke hvilken vei..
 
-The technical idea behind the system is that it should be a decentralized unstructured \gls{p2p} system  where nodes connect to nearby nodes and create clusters. The role of all peers in the network is the same except that there would be at least one node which will gather data for further use, also called a \gls{ch}. The technical idea is shown in Figure \ref{fig:idea}.
+The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes connect to nearby nodes and create clusters. Using a unstructured network would be efficient to use when large number of nodes are frequently joining and leaving the network since its highly robust in the face of high rates of churn.
+
+The role of all peers in the network is the same except that there would be at least one node which will gather data for further use, also called a \gls{ch}. As a result of Since there would be nodes which have more important roles in the network, the network structure will be more partially centralized than decentralized.
+All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a a \gls{ch} or e.g. a \gls{dao} Store.
 
 Since it is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to as similar to a real-life environment.
+
+ The technical idea is shown in Figure \ref{fig:idea}.
+
 
 
 \begin{figure}
@@ -807,7 +811,7 @@ Another approach to avoid flooding the network and reduce nodes energy level is 
 %Vector clocks..
 
 
-\section{Cluster Head Election and Data Accumulation simultaneously?}
+\section{Simultaneously CH Election And Data Accumulation}
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
 
 %The current approach provides an eventual consistency when electing a new \gls{ch}.
