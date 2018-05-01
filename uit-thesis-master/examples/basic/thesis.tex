@@ -603,15 +603,14 @@ func sendDataToLeaderHandler() {
 
 \newpage
 
-\section{Simultaneously CH Election And Data Accumulation}
-To avoid having a \gls{ch} election occur simultaneously as a data accumulation, are these functionalities implemented to execute in  rounds. 
+\section{Concurrent CH Election And Data Accumulation}
+To avoid having a \gls{ch} election occur concurrently as a data accumulation, are these functionalities scheduled to execute.
+Firstly, the \gls{ch} election will execute until the election result is consistent in all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After 'X' times gathering data will the \gls{ch} start a new \gls{ch} election. 
 
-First elect leader, then after a while gather data 'X' times before electing a new leader and so on...
-
-approach and improvements are discussed in Section \ref{disc:simult_el_acc}.
+%First elect leader, then after a while gather data 'X' times before electing a new leader and so on...
+If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
 
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
-
 
 %\section{Base Station Access}
 
@@ -805,10 +804,10 @@ When election, flood the network with updates ensuring eventual consistency...
 \section{Prioritization Of Data?}
 %Critical, non-ciritcal data?
 
-\section{Simultaneously CH Election And Data Accumulation} \label{disc:simult_el_acc}
-%Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
+\section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
+The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of leaders and paths to leaders before all nodes have an consistent leader election.
 
-%The current approach provides an eventual consistency when electing a new \gls{ch}.
+%Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
 
 
 \section{Base Station Access}
@@ -827,6 +826,13 @@ Our experiments showed that the system ...
 \chapter{Future Work}
 %\gls{ch} election
 %access to bs - 
+
+\begin{itemize}
+\item \gls{ch} election
+\item Access to BS
+\item Approach for nodes observing other nodes..
+\item Multiple Super \gls{ou}s that accumulates data..
+\end{itemize}
 
 \chapter{Appendix}
 %Readme
