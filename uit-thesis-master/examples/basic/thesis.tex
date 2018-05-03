@@ -481,20 +481,8 @@ This chapter will elaborate on how we implemented the system, general implementa
 
 The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}} and the nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was a practical choice because we were familiar with the language from previous projects, its developed for making concurrent mechanisms easy and to get the most out of multicore and networked machines, and offers multiple different libraries.
 
-It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width, as Table \ref{tab:simTable} show. 
+It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width.
 
-\begin{table}[]
-\centering
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Parameter}       & \textbf{Value} \\ \hline
-Number of nodes          & 100            \\ \hline
-Network grid size        & 500 x 500      \\ \hline
-Node broadcast width     & 100            \\ \hline
-\end{tabular}
-\caption{Parameters of simulation}
-\label{tab:simTable}
-\end{table}
 
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
@@ -615,6 +603,7 @@ If a \gls{ch} election and a data gathering happens concurrently, there may be i
 %\section{Base Station Access}
 
 
+
 \chapter{Evaluation}
 This chapter describes the experimental setup and metrics used to evaluate the implemented system.
 
@@ -629,22 +618,8 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 \end{itemize}
 
 
-\section{Experimental Design}
-%\begin{table}[]
-%\centering
-%\label{tabel}
-%\begin{tabular}{|l|l|}
-%\hline
-%\textbf{Parameter}       & \textbf{Value} \\ \hline
-%No. of nodes             & 100            \\ \hline
-%Network size             & 500 x 500      \\ \hline
-%Node broadcast width     & 100            \\ \hline
-%\end{tabular}
-%\caption{Parameters of simulation}
-%\end{table}
-
+\section{Experimental Design} \label{eva:exp_des}
 %How did we do the experiments?
-
 %For hvert eksperiment bør du prøve å få fram: 
 %- hva ønsker du å finne ut? 
 %- hvordan måler du + hva måler du? 
@@ -652,25 +627,65 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 %- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
 %Det gjør det lettere for leseren å henge med. 
 
-\subsection{CPU Measurements}
-%psutil - Percent
-We measure the total CPU usage for one/multiple core(s).. 
+
+%Since it is crucial that the performance cost of running the system is kept to a minimum since it's aimed to execute on small, low-power devices.
+%Hvor lenge?? Hvor ofte går testen?
+
+All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is (executing) one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
+
+Table \ref{tab:simTable} show. 
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter}       & \textbf{Value} \\ \hline
+Number of nodes          & 100            \\ \hline
+Network grid size        & 500 x 500      \\ \hline
+Node broadcast width     & 100            \\ \hline
+\end{tabular}
+\caption{Parameters of simulation}
+\label{tab:simTable}
+\end{table}
+
+
+
+\subsection{Memory Measurements} \label{eva:mem_measure}
+%needs to be relatively low to enable the device to functi as normal..
+We measure the memory usage to discover/observe/see . 
+
 
 \begin{itemize}
-\item Psutil - percent
+\item \textbf{Psutil - VirtualMemory:} Return statistics about system memory usage.
+	\begin{itemize}
+	\item \textbf{UsedPercent:} Percentage of RAM used by programs
+	\item \textbf{Total:} Total amount of RAM on this system
+	\item \textbf{Used:} RAM used by programs
+	\end{itemize}	
 \end{itemize}
 
 
-\subsection{Memory Measurements}
-%Return statistics about system memory usage.
-%psutil - VirtualMemory -  RAM used by programs: mem Percent, used memory
+\subsection{CPU Measurements} \label{eva:cpu_measure}
+We measure the total CPU usage for 4 cores to discover/observe/see . 
 
 
-\subsection{Network (Socket) Usage}
+\begin{itemize}
+\item \textbf{Psutil - Percent:} calculates the percentage of CPU used either per CPU or combined.
+\end{itemize}
+
+
+\subsection{Network (Socket) Usage} \label{eva:net_measure}
 %psutil - ConnectionPid - Return a list of network connections opened by a process. 
 %\subsection{Process Connections Measurements}
 %psutil - Process 
-The system relies heavily on network usage and communication between nodes so it is important to measure process connections to keep it to a minimum.
+%The system relies heavily on network usage and communication between nodes so it is important to measure process connections to keep it to a minimum.
+
+
+\begin{itemize}
+\item \textbf{Psutil - Processes:} ???? Process returns a slice of pointers to Process structs for all currently running processes.
+\item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process.
+\end{itemize}
+
 
 
 \subsection{Network Lifetime?}
@@ -680,11 +695,12 @@ The system relies heavily on network usage and communication between nodes so it
 %What does the results say?
 In this section we will discuss the results of the testing described in the sections above.
 
-\subsection{CPU Usage}
 \subsection{Memory Usage}
+\subsection{CPU Usage}
 \subsection{Network Usage}
 %\subsection{Process Connections Measurements}
 \subsection{Network Lifetime?}
+
 
 
 
