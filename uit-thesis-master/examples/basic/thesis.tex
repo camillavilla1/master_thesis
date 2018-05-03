@@ -210,7 +210,7 @@ This thesis is structured into X chapters including the introduction.
 
 \gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
 
-\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may/will die due to energy consumption. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
+\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require for more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
 \begin{figure}
 \centering
@@ -246,8 +246,8 @@ Gossiping is a modified version of flooding attempting to correct some of its dr
 %\section{Routing Protocols in WSNs}
 To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
 
-In diversity, will nodes in our approach first connect to a cluster and then start a \gls{ch} election rather than elect a \gls{ch} first and then nodes joining the cluster. %This is described further in Section/Chapter \ref{xx}.
-A resemblance between the two approaches is that neither of them consider a nodes energy level when calculating the \gls{ch}.
+In contrast, will nodes in our approach first connect to a cluster and then start a \gls{ch} election rather than elect a \gls{ch} first and then nodes joining the cluster. %This is described further in Section/Chapter \ref{xx}.
+A resemblance between the two approaches is that neither of them consider a node's energy level when calculating the \gls{ch}.
 %\begin{equation}
 %T(n) = \frac{P}{1-P\times(r \bmod \frac{1}{P})}
 %\end{equation}
@@ -267,7 +267,7 @@ A resemblance between the two approaches is that neither of them consider a node
 
 \Gls{fleach} \cite{fuzzy_logic, ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
 
-In contrast to \gls{fleach} will our approach elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider "variables" such as battery level or number of nodes in the cluster.
+In contrast to \gls{fleach}, our approach will elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider "variables" such as battery level or number of nodes in the cluster.
 
 
 \Gls{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
@@ -327,7 +327,7 @@ The technical idea is shown in Figure \ref{fig:idea}.
 \chapter{Architecture}
 %Tell it clean/neat. Abstractions, functionalities
 
-This chapter describes the architecture of the system. The main functionality can be divided into 4 sub-sections: a nodes lookup service, discovery of other nodes, data accumulation and incoming network requests. The architecture of the system is presented in Figure \ref{fig:architecture3}.
+This chapter describes the architecture of the system. The main functionality can be divided into 4 sub-sections: a nodes lookup service, discovery of other nodes, data accumulation and incoming- and outgoing network requests. The architecture of the system is presented in Figure \ref{fig:architecture3}.
 
 
 \begin{figure}
@@ -338,31 +338,31 @@ This chapter describes the architecture of the system. The main functionality ca
 \end{figure}
 
 \section{Node Lookup Service} \label{sec:nodeLS}
-The lookup service is responsible for storing a list of all previous discovered nodes and their address. %Hvordan forlkare at det er en egen service som "simulaerer" range??
+The lookup service is responsible for storing all previous discovered nodes and their address. This lookup service is responsible for detecting which nodes that are in range for other nodes and return this result to a corresponding node. 
+
+%Hvordan forlkare at det er en egen service som "simulaerer" range??
 
 
 \section{Discovery Of Other Nodes} \label{sec:discON}
-Each node can only discover other nodes within a simulated radio range. Figure \ref{fig:broadcast_range} shows how a simulated radio range of a node may be discovered. When a new node in the network has been discovered, meta-data about the node such as address be stored locally on the device in the cluster.
+Each node can only discover other nodes within a simulated radio range. Figure \ref{fig:broadcast_range} shows how a simulated radio range of a node may be discovered. When a new node in the network has been discovered, meta-data about the node such as address be stored locally on the node in the cluster.
 
 
 \section{Data Accumulation}
 A node will accumulate data received from another node if its data hasn't been sent to the \gls{ch}. A \gls{ch} will gather data from nodes in order to provide the accumulated data to a \gls{bs} for further use.
 
 
-\section{Incoming Network Requests}
+\section{Incoming And Outgoing Network Requests}
 A node may receive incoming requests from other nodes in the network. The request handler will handle the request based on the type of request. The types of requests a node may receive are listed below.
 
 \subsection{Connect To Neighbours}
-When a node receive a list of neighbours in range from the lookup service, it will try to connect to the neighbours that are within the nodes range. It will only connect to the neighbour node if it receives a OK-message.
+When a node receive a list of neighbours in range from the lookup service, it will try to connect to the neighbours that are within the nodes range. It will only connect to the neighbour node if it receives a OK-message, i.e. the node is allowed to connect.
 
 \subsubsection{Receive OK From Neighbours}
 When a node receives a OK-message it will connect itself to the neighbour. The neighbour will also then be connected to the new node.
 
 \subsection{Cluster Head Election Request}
-A node may receive a \gls{ch} election request when a node has joined the cluster.
-
-\subsubsection{Cluster Head Election Request}
 When a node receives a \gls{ch} election request it will perform a leader election and forward the result to it's neigbours which will do a leader election as well.
+A node may receive a \gls{ch} election request when a node has joined the cluster.
 
 \subsubsection{Cluster Head Election Calculation Request}
 If there is a leader in the cluster already and a new election should be proposed, a \gls{ch} election calculation request is sent from the leader. Nodes receiving this request will calculate their \gls{ch} election number. %This is explained further in Section xx.
@@ -427,7 +427,7 @@ A \gls{ch} election may occur in two scenarios listed below.
 
 
 \subsection{New Node In Cluster Starts Election}
-When a new node has joined the cluster, it will start a new \gls{ch} election. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against their own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the node's neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the leader. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to leader only contain the node itself. Eventually a new \gls{ch} is elected by all the nodes and the \gls{ch}-election result will be consistent in the whole cluster. An example of a \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
+When a new node has joined the cluster, it will start a new \gls{ch} election based on the Bully algorithm. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against their own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the node's neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the leader. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to leader only contain the node itself. Eventually a new \gls{ch} is elected by all the nodes and the \gls{ch}-election result will be consistent in the whole cluster. An example of a \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
 
 \begin{figure}
 \centering
@@ -439,7 +439,7 @@ When a new node has joined the cluster, it will start a new \gls{ch} election. I
 \newpage 
 
 \subsection{Cluster Head Starts Election}
-When a \gls{ch} has accumulated data a certain times, it will start a new \gls{ch} election. Initially, the \gls{ch} will gossip a message to nodes the cluster to calculate a new \gls{ch}-score. Then will the \gls{ch} start a new election and gossip this election to the other nodes. The nodes receiving this gossip message will start their leader-election as described in the section above. The election is illustrated in Figure \ref{fig:chWantsLeaderElection}.
+When a \gls{ch} has accumulated data 'X' times, it will start a new \gls{ch} election. Initially, the \gls{ch} will gossip a message to nodes the cluster to calculate a new \gls{ch}-score. Then will the \gls{ch} start a new election and gossip this election to the other nodes. The nodes receiving this gossip message will start their leader-election as described in the section above. The election is illustrated in Figure \ref{fig:chWantsLeaderElection}.
 
 \begin{figure}
 \centering
