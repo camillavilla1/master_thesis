@@ -736,12 +736,8 @@ In the current approach can a node connect to nearby nodes and be a part of a cl
 Another interference with having a \gls{ch} take the decision is that the \gls{ch} may be unavailable because it's sleeping or if it's unreachable because nodes in the path to the \gls{ch} are sleeping or unavailable due to e.g. saving battery. 
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
-
-A solution to this problem is to ping neighbouring nodes regularly to check if neighbours are alive or not, or to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
-
-%do not wanna ping to often - flood network?
-
-%However, pinging other nodes frequently will eventually flood the network..
+\subsection{Ping Neighbours}
+A solution to this problem is to ping neighbouring nodes frequently to check if neighbours are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution is to only ping neighbours if there is a need for communcation between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
 %how to know if node is dead or just sleeping
 
