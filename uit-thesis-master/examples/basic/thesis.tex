@@ -548,7 +548,7 @@ The data is a fabricated byte array with a fingerprint that is the hashed value 
 \subsection{CH Data Accumulation}
 As mentioned previous can each node receive multiple requests from different neighbouring nodes.
 %Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
-This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes as illustrated in Listing \ref{test}.
+This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
 
 \newpage
 
@@ -633,7 +633,9 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is (executing) one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
-Table \ref{tab:simTable} show. 
+%Ran with a second's/10th?? measurement interval, system execute normally over X minutes..
+
+simulation shown in Table \ref{tab:simTable}. 
 
 \begin{table}
 \centering
@@ -666,7 +668,7 @@ We measure the memory usage to discover/observe/see .
 
 
 \subsection{CPU Measurements} \label{eva:cpu_measure}
-We measure the total CPU usage for 4 cores to discover/observe/see . 
+We measure the total CPU usage for 4 cores to discover/observe/see how much computational power is needed to execute the program. 
 
 
 \begin{itemize}
@@ -679,6 +681,9 @@ We measure the total CPU usage for 4 cores to discover/observe/see .
 %\subsection{Process Connections Measurements}
 %psutil - Process 
 %The system relies heavily on network usage and communication between nodes so it is important to measure process connections to keep it to a minimum.
+
+%NUmber of open sockets represent the nymber of communication channels that a device has open at any given point, like discovery request, forwarding and leader election..
+
 
 
 \begin{itemize}
