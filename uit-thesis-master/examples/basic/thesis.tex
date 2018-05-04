@@ -750,6 +750,7 @@ A solution to this problem is to ping neighbouring nodes frequently to check if 
 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
+At the current approach, there is no timestamp or regulation for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will forward its data to the, most likely, old leader. However, this isn't a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
 
 What if a node is regularly/often sleeping or off? How to know which one is \gls{ch}?
 
