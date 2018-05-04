@@ -596,7 +596,9 @@ To avoid having a \gls{ch} election occur concurrently as a data accumulation, a
 Firstly, the \gls{ch} election will execute until the election result is consistent in all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After 'X' times gathering data will the \gls{ch} start a new \gls{ch} election. 
 
 %First elect leader, then after a while gather data 'X' times before electing a new leader and so on...
-If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
+If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. 
+
+Our approach to a solution to this interference is to have the two functionalies divided into different phases similar to \gls{leach} \cite{leach}. Timers are implemented to stall the next phase by making the system sleep until the timer is ended. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
 
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
 
@@ -722,7 +724,7 @@ This chapter discusses our approach, experience, how we solved the problem and w
 
 % CH elect if node can join cluster or not...
 
-In the current approach can a node connect to nearby nodes and be a part of a cluster without any restrictions. Another approach would be that when a node receives a request from a new node, it will forward the request to the \gls{ch} which would take the decision if the new node can connect to the cluster or not. However, making a \gls{ch} take this decision could be \textbf{problematic} because the \gls{ch} need to know information about the whole network or at least its own cluster and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} may consider are listed below:
+In the current approach can a node connect to nearby nodes and be a part of a cluster without any restrictions. Another approach would be that when a node receives a request from a new node, it will forward the request to the \gls{ch} which would take the decision if the new node can connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} need to know information about the whole network or at least its own cluster and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} may consider are listed below:
 
 \begin{itemize}
 \item Number of nodes per cluster
@@ -762,14 +764,12 @@ What if a node is regularly/often sleeping or off? How to know which one is \gls
 
 %"Being a cluster head is much more energy intensive than being a non-cluster head node. if the cluster heads where chosen a priori and died through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
 
-Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability.
-
-To avoid this problem, will our approach not chose \gls{ch}s a prior. but instead have a leader election algorithm to possibly rotate the \gls{ch}.
+Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior. but instead have a leader election algorithm to possibly rotate the \gls{ch}.
 %\textbf{possibly/perchance} \textbf{rullere/rotate}
 
 
 \subsection{Cluster Head Calculation} \label{disc:ch_election}
-At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To approve this approach and make it more realistic, we could have used several sub-factors listed below:
+At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic, we could have used several sub-factors listed below:
 
 %now random number, to approve and make it more realistic: 
 
@@ -778,7 +778,7 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 \item Number of neighbours for the node
 \item Access to \gls{bs}
 \item Power left on node
-\item Bandwidth - WiFi, LoRaWan\footnote{\url{https://lora-alliance.org/about-lorawan}}, cable/Ethernet?
+\item Bandwidth - WiFi, LoRaWan\footnote{\url{https://lora-alliance.org/about-lorawan}}, Ethernet
 \item Prior history
 \item Network traffic on node
 \end{itemize}
@@ -790,19 +790,24 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 \subsection{Gossip Information Between Nodes}
 The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to rapidly spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
 
-To avoid flooding the network, each message sent between nodes have and ID so the node can check if it has received the same message before. If the node have received the message earlier, the node doesn't need to forward the message because it has forwarded the message in an earlier gossip, as described earlier in Section \ref{imp:ch_election}.
+To avoid flooding the network, each message sent between nodes have an ID so the node can check if it has received the same message before. If the node have received the message earlier, the node doesn't need to forward the message because it has forwarded the message in an earlier gossip, as described in Section \ref{imp:ch_election}.
 
-Another approach to avoid flooding the network and reduce nodes energy level is to limit the number of hops when gossiping to other nodes.
-
-When election, flood the network with updates ensuring eventual consistency...
+Another approach to avoid flooding the network and reduce nodes energy level is to limit the number of hops when gossiping to other nodes. To avoid this flooding can each packet have a hop count and every time a packet hops, its hop count increment. When a packet's hop counts equals a hop limit, the packet will be discarded. Flooding the network with updates as the current approach does, ensures eventual consistency.
+ 
 
 \subsection{When To Elect A New Cluster Head}
 %When to elect new leader?
+Current approach starts a new \gls{ch} election when the \gls{ch} have accumulated data 'X' times.
+Other approaches, mentioned in \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
+%every other = annenhver
 
-\subsection{Remember Previous Leader?}
 
+\section{Remember Previous Leader?}
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
+
+\section{Multiple Leaders?}
+%multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 
 
 \section{Path To Leader}
@@ -811,13 +816,12 @@ When election, flood the network with updates ensuring eventual consistency...
 %multiple leaders - multiple paths.. replication etc...?
 
 
-\section{Data Transmission}
+\section{Data Accumulation}
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
 
 %How to gather data? Receive a GET-post from BS or someone else telling the CH to accumulate/gather data or gather data periodically? How does a BS send a GET-request to CH?? The CH could not be in range of the BS, so maybe send to a node in range and forward msg all the way to CH.. But again, what if some nodes are sleeping to save battery? The CH will then not receive the msg..
 
-
-\subsection{Data Accumulation}
+%\subsection{Data Accumulation}
 %How much memory does a node have?  Have priorities on data such that data with high priority is stored longer or sent first.. Delete low poriority data if full memory..
 
 %Vector clocks..
@@ -827,6 +831,7 @@ When election, flood the network with updates ensuring eventual consistency...
 
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
 The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of leaders and paths to leaders before all nodes have an consistent leader election.
+
 
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
 
