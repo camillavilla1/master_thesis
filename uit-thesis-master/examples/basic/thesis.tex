@@ -635,38 +635,39 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is (executing) one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
-%Ran with a second's/10th?? measurement interval, system execute normally over X minutes..
+The experiments are ran with a \textbf{5/10} second's measurement interval and system execute around X minutes. The experiments are done executing 50 and 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. 
 
-simulation shown in Table \ref{tab:simTable}. 
+%\begin{table}
+%\centering
+%\begin{tabular}{|l|l|}
+%\hline
+%\textbf{Parameter}       & \textbf{Value} \\ \hline
+%Number of nodes          & 100            \\ \hline
+%Network grid size        & 500 x 500      \\ \hline
+%Node broadcast width     & 50             \\ \hline
+%\end{tabular}
+%\caption{Parameters of simulation}
+%\label{tab:simTable}
+%\end{table}
 
-\begin{table}
+\begin{table}[]
 \centering
-\begin{tabular}{|l|l|}
+\begin{tabular}{|l|l|l|}
 \hline
-\textbf{Parameter}       & \textbf{Value} \\ \hline
-Number of nodes          & 100            \\ \hline
-Network grid size        & 500 x 500      \\ \hline
-Node broadcast width     & 100            \\ \hline
+\textbf{Parameter}   & \multicolumn{2}{c|}{\textbf{Value}} \\ \hline
+No. of nodes         & 50               & 100              \\ \hline
+Network grid size         & \multicolumn{2}{l|}{500 x 500}  \\ \hline
+Node broadcast width & \multicolumn{2}{c|}{50}             \\ \hline
 \end{tabular}
 \caption{Parameters of simulation}
 \label{tab:simTable}
 \end{table}
 
 
-
 \subsection{Memory Measurements} \label{eva:mem_measure}
 %needs to be relatively low to enable the device to functi as normal..
 We measure the memory usage to discover/observe/see . 
 
-
-\begin{itemize}
-\item \textbf{Psutil - VirtualMemory:} Return statistics about system memory usage.
-	\begin{itemize}
-	\item \textbf{UsedPercent:} Percentage of RAM used by programs
-	\item \textbf{Total:} Total amount of RAM on this system
-	\item \textbf{Used:} RAM used by programs
-	\end{itemize}	
-\end{itemize}
 
 
 \subsection{CPU Measurements} \label{eva:cpu_measure}
