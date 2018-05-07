@@ -357,7 +357,7 @@ A node may receive incoming requests from other nodes in the network. The reques
 \subsection{Connect To Neighbours}
 When a node receive a list of neighbours in range from the lookup service, it will try to connect to the neighbours that are within the nodes range. It will only connect to the neighbour node if it receives a OK-message, i.e. the node is allowed to connect.
 
-\subsubsection{Receive OK From Neighbours}
+%\subsubsection{Receive OK From Neighbours}
 When a node receives a OK-message it will connect itself to the neighbour. The neighbour will also then be connected to the new node.
 
 \subsection{Cluster Head Election Request}
@@ -589,6 +589,7 @@ func sendDataToLeaderHandler() {
 }
 \end{lstlisting}
 
+
 \newpage
 
 \section{Concurrent CH Election And Data Accumulation}
@@ -698,6 +699,10 @@ We measure the total CPU usage for 4 cores to discover/observe/see how much comp
 
 \subsection{Network Lifetime?}
 
+\subsection{Number Of Sends To Neighbours}
+\subsection{Number Of Sends To Cluster Head}
+\subsection{Cluster Head Count}
+
 
 \section{Results}
 %What does the results say?
@@ -708,6 +713,9 @@ In this section we will discuss the results of the testing described in the sect
 \subsection{Network Usage}
 %\subsection{Process Connections Measurements}
 \subsection{Network Lifetime?}
+\subsection{Number Of Sends To Neighbours}
+\subsection{Number Of Sends To Cluster Head}
+\subsection{Cluster Head Count}
 
 
 
