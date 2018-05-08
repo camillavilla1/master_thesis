@@ -636,7 +636,9 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is (executing) one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
-The experiments are ran with a \textbf{5/10} second's measurement interval and system execute around X minutes. The experiments are done executing 50 and 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. 
+The experiments are ran with a \textbf{1/5/10} second's measurement interval and system execute around X minutes. The experiments are done executing 50 and 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. 
+
+Communication between nodes, gossiping \gls{ch} election and storing and accumulating data..
 
 %\begin{table}
 %\centering
@@ -666,8 +668,8 @@ Node broadcast width & \multicolumn{2}{c|}{50}             \\ \hline
 
 
 \subsection{Memory Measurements} \label{eva:mem_measure}
-%needs to be relatively low to enable the device to functi as normal..
-We measure the memory usage to discover/observe/see . 
+%needs to be relatively low to enable the device to function as normal..
+We measure the memory usage to discover/observe/see how much memory is consumed when executing the program. The memory 
 
 
 
@@ -691,7 +693,7 @@ We measure the total CPU usage for 4 cores to discover/observe/see how much comp
 
 
 \begin{itemize}
-\item \textbf{Psutil - Processes:} ???? Process returns a slice of pointers to Process structs for all currently running processes.
+%\item \textbf{Psutil - Processes:} ???? Process returns a slice of pointers to Process structs for all currently running processes.
 \item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process.
 \end{itemize}
 
