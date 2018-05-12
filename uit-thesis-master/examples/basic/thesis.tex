@@ -634,38 +634,38 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 %Since it is crucial that the performance cost of running the system is kept to a minimum since it's aimed to execute on small, low-power devices.
 %Hvor lenge?? Hvor ofte går testen?
 
-All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is (executing) one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
+All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is executing one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
-The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 50 and 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution will the nodes in the system communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
+The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution will the nodes in the system communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
-Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph..
+Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
 
 
-%\begin{table}
-%\centering
-%\begin{tabular}{|l|l|}
-%\hline
-%\textbf{Parameter}       & \textbf{Value} \\ \hline
-%Number of nodes          & 100            \\ \hline
-%Network grid size        & 500 x 500      \\ \hline
-%Node broadcast width     & 50             \\ \hline
-%\end{tabular}
-%\caption{Parameters of simulation}
-%\label{tab:simTable}
-%\end{table}
-
-\begin{table}[]
+\begin{table}
 \centering
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|l|}
 \hline
-\textbf{Parameter}   & \multicolumn{2}{c|}{\textbf{Value}} \\ \hline
-No. of nodes         & 50               & 100              \\ \hline
-Network grid size         & \multicolumn{2}{l|}{500 x 500}  \\ \hline
-Node broadcast width & \multicolumn{2}{c|}{50}             \\ \hline
+\textbf{Parameter}       & \textbf{Value} \\ \hline
+Number of nodes          & 100            \\ \hline
+Network grid size        & 500 x 500      \\ \hline
+Node broadcast width     & 50             \\ \hline
 \end{tabular}
 \caption{Parameters of simulation}
 \label{tab:simTable}
 \end{table}
+
+%\begin{table}[]
+%\centering
+%\begin{tabular}{|l|l|l|}
+%\hline
+%\textbf{Parameter}   & \multicolumn{2}{c|}{\textbf{Value}} \\ \hline
+%No. of nodes         & 50               & 100              \\ \hline
+%Network grid size         & \multicolumn{2}{l|}{500 x 500}  \\ \hline
+%Node broadcast width & \multicolumn{2}{c|}{50}             \\ \hline
+%\end{tabular}
+%\caption{Parameters of simulation}
+%\label{tab:simTable}
+%\end{table}
 
 
 \subsection{Memory Measurements} \label{eva:mem_measure}
@@ -710,6 +710,9 @@ Total CPU usage percent... - similar for all nodes
 
 
 \section{Results}
+%There is reason to think that (this implementation)...
+%A thing to mention, is that ...
+
 %What does the results say?
 In this section we will discuss the results of the testing described in the sections above.
 
@@ -726,6 +729,9 @@ In this section we will discuss the results of the testing described in the sect
 
 
 \chapter{Discussion}
+%There is reason to think that (this implementation)...
+%A thing to mention, is that ...
+
 %Idea, arch, design, results, other solutions, "arch has scale issue"..
 This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with..
 
@@ -850,10 +856,10 @@ The current approach provides an eventual consistency when electing a new \gls{c
 \section{Base Station Access}
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
 
-\section{Scalability}
+\section{Scalability?}
 scale with partially centralized network.. how about multiple leaders to load balance work and maybe shorter path for nodes to leaders..
 
-
+\section{CAP Theorem?}
 \chapter{Conclusion}
 In this thesis, we have implemented a system/prototype...
 
