@@ -15,6 +15,23 @@
 % Lorem ipsum
 %\usepackage{lipsum}
 
+
+\usepackage{listings-golang} % import this package after listings
+\usepackage{color}
+
+\lstset{ % add your own preferences
+    frame=single,
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\color{purple}\ttfamily,
+    commentstyle=\color{blue},
+    numbers=left,
+    numbersep=5pt,
+    showstringspaces=false, 
+    stringstyle=\color{blue},
+    tabsize=4,
+    language=Golang % this is it !
+}
+
 \makeglossaries
 
 % Add external glossaryentries
@@ -483,6 +500,7 @@ The system is implemented in the open source programming language GO 1.9.3\footn
 
 It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width.
 
+Note to self: Every node have batterytime.. eventually dies, ch battery decrease more than regular node..
 
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
@@ -554,15 +572,15 @@ This especially occur in the \gls{ch} when collecting data from the nodes in the
 
 \begin{lstlisting} [frame=single,caption={Small Go program showing how mutexes are used when updating a map by CH},language=C, label={test}]
 
-/*SensorData is data from "sensors" on the OU*/
+/*SensorData is data from "sensors" on the OU */
 type SensorData struct {
 	ID          uint32
 	Fingerprint uint32
 	Data        []byte
 }
 
-/*DBStation is a strucure that contains 
-  a map that store data at CH */
+/* DBStation is a strucure that contains 
+   a map that store data at CH */
 var DBStation struct {
 	sync.Mutex
 	BSdatamap map[uint32][]byte
@@ -620,6 +638,8 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 \item Ubuntu 17.04 64-bit with gcc V6.3.0 compiler and GO 1.9.3
 \end{itemize}
 
+
+The testing environment in our system is built with gopsutil, a psutil for Golang \cite{golangPsutil}. We use gopsutil to measure CPU, memory, network and process connections. Each experiment is described further in the next sections.
 
 \section{Experimental Design} \label{eva:exp_des}
 %How did we do the experiments?
@@ -1040,6 +1060,12 @@ Dijkstra, E. W.,
 \newblock in {\em Numerische Mathematik, Vol.1, No.1, December 1959, pp.269--271}.
 
 
+%26
+\bibitem{golangPsutil}
+W. Shirou,
+\newblock {\em gopsutil: psutil for golang},
+\newblock in {\em GitHub: GitHub repository},
+\newblock {\url{https://github.com/shirou/gopsutil}}, last commit={ \textit{57f370e}}.
 
 \end{thebibliography}
 
