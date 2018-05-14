@@ -639,7 +639,7 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 \end{itemize}
 
 
-The testing environment in our system is built with gopsutil, a psutil for Golang \cite{golangPsutil}. We use gopsutil to measure CPU, memory, network and process connections. Each experiment is described further in the next sections.
+The testing environment in our system is built with gopsutil, a psutil for Golang \cite{golangPsutil}. We use gopsutil to measure CPU, memory, network and process connections. Each experiment is described further in Section \ref{eva:exp_des}.
 
 \section{Experimental Design} \label{eva:exp_des}
 %How did we do the experiments?
@@ -651,15 +651,24 @@ The testing environment in our system is built with gopsutil, a psutil for Golan
 %Det gjør det lettere for leseren å henge med. 
 
 
-%Since it is crucial that the performance cost of running the system is kept to a minimum since it's aimed to execute on small, low-power devices.
-%Hvor lenge?? Hvor ofte går testen?
-
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is executing one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
-The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution will the nodes in the system communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
+The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
-Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
+Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average which is displayed in the graphs.
 
+A leader accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
+
+\begin{itemize}
+\item After 2 accumulations
+\item After 4 accumulations
+\item After 6 accumulations
+\item After a random accumulation between 1 and 6.
+\end{itemize}
+
+%Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
+%For each time interval (500 millisecond), the average value was calculated to limit the 
+%Test were/was conducted X times for each time period in order to obtain the average values...
 
 \begin{table}
 \centering
@@ -689,16 +698,20 @@ Node broadcast width     & 50             \\ \hline
 
 
 \subsection{Memory Measurements} \label{eva:mem_measure}
-%needs to be relatively low to enable the device to function as normal..
-We measure the memory usage to discover/observe/see how much memory is consumed when executing the program. The memory usage 
+%discover/observe/see
+We measure the memory utilities to examine how much memory is consumed when executing the program. The memory utilities measured, is the total percentage of RAM used by the program, and not for individual nodes/processes.
+Measuring the memory is essential because it needs to be relatively low to be able to make the device function as normal in a real-life environment/scenario.
 
-Total memory usage percent... - similar for all nodes
+\begin{itemize}
+\item \textbf{Psutil - VirtualMemoryStat - UsedPercent:} percentage of RAM used by programs.
+\end{itemize}
+
 
 
 \subsection{CPU Measurements} \label{eva:cpu_measure}
-We measure the total CPU usage for 4 cores to discover/observe/see how much computational power is needed to execute the program. 
+We measure the total CPU usage for the computers 4 cores combined to examine how much computational power is needed to execute the program. This means that the CPU usage is similar for all nodes/processes in the experiment.
+This as well, is important to keep at a minimum due to execution on devices in real-life environment to avoid draining the battery.
 
-Total CPU usage percent... - similar for all nodes
 
 \begin{itemize}
 \item \textbf{Psutil - Percent:} calculates the percentage of CPU used either per CPU or combined.
@@ -709,24 +722,30 @@ Total CPU usage percent... - similar for all nodes
 %psutil - ConnectionPid - Return a list of network connections opened by a process. 
 %\subsection{Process Connections Measurements}
 %psutil - Process 
-%The system relies heavily on network usage and communication between nodes so it is important to measure process connections to keep it to a minimum.
 
-%NUmber of open sockets represent the nymber of communication channels that a device has open at any given point, like discovery request, forwarding and leader election..
-
-
+Measuring the process connection is important since the system relies on network usage and communication between nodes and it is important to keep it to a minimum. The number of communication channels are represents by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch} election, forwarding- and data accumulation.
 
 \begin{itemize}
-%\item \textbf{Psutil - Processes:} ???? Process returns a slice of pointers to Process structs for all currently running processes.
 \item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process.
 \end{itemize}
 
 
-
-\subsection{Network Lifetime?}
+%\subsection{Network Lifetime?}
 
 \subsection{Number Of Sends To Neighbours}
+We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
+
+
 \subsection{Number Of Sends To Cluster Head}
+Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a send request to a \gls{ch}.
+
+
 \subsection{Cluster Head Count}
+We also measure how many times nodes have been \gls{ch} at each time interval.
+
+\subsection{Cluster Head receives packages}
+At last we measure how many times a \gls{ch} receives data from other nodes in the network.
+
 
 
 \section{Results}
@@ -737,13 +756,58 @@ Total CPU usage percent... - similar for all nodes
 In this section we will discuss the results of the testing described in the sections above.
 
 \subsection{Memory Usage}
+
+Figure \ref{fig:memChart}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Memchart.png}
+\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
+\label{fig:memChart}
+\end{figure}
+
+
 \subsection{CPU Usage}
-\subsection{Network Usage}
+\subsection{Network (Socket) Usage}
+
+%wave pattern - high = lots of connections.. average between 100 nodes.. similar to cpu utilization..
+
+Figure \ref{fig:netconnChart}. 
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{netconnChart.png}
+\caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
+\label{fig:netconnChart}
+\end{figure}
+
 %\subsection{Process Connections Measurements}
-\subsection{Network Lifetime?}
+%\subsection{Network Lifetime?}
 \subsection{Number Of Sends To Neighbours}
+%Figure \ref{fig:sendsChart}.
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{sendsChart.png}
+%\caption{Figure shows average number of sends to a nodes neighbours with different accumulation intervals (500 milliseconds).}
+%\label{fig:sendsChart}
+%\end{figure}
+
+
 \subsection{Number Of Sends To Cluster Head}
+Figure \ref{fig:sendschChart}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{sendschChart.png}
+\caption{Figure shows average number of sends to a \gls{ch} with different accumulation intervals (500 milliseconds).}
+\label{fig:sendschChart}
+\end{figure}
+
+
 \subsection{Cluster Head Count}
+
+\subsection{Cluster Head receives packages}
 
 
 
