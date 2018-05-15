@@ -613,7 +613,7 @@ func sendDataToLeaderHandler() {
 
 \newpage
 
-\section{Concurrent CH Election And Data Accumulation}
+\section{Concurrent CH Election And Data Accumulation} \label{sec:conc_events}
 To avoid having a \gls{ch} election occur concurrently as a data accumulation, are these functionalities scheduled to execute.
 Firstly, the \gls{ch} election will execute until the election result is consistent in all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After gathering data according to the accumulation interval, will the \gls{ch} start a new \gls{ch} election. 
 
@@ -657,7 +657,7 @@ All experiments were conducted on a computer, described in the section \ref{eva:
 
 The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
-Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average which is displayed in the graphs.
+Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average value which is displayed in the graphs.
 
 A \gls{ch} accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
 
@@ -725,7 +725,7 @@ This as well, is important to keep at a minimum due to execution on devices in r
 %\subsection{Process Connections Measurements}
 %psutil - Process 
 
-Measuring the process connection is important since the system relies on network usage and communication between nodes and it is important to keep it to a minimum. The number of communication channels are represents by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch} election, forwarding- and data accumulation.
+Measuring the process connection is important since the system relies on network usage and communication between nodes and it is important to keep it to a minimum. The number of communication channels are represented by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch} election, forwarding- and data accumulation.
 
 \begin{itemize}
 \item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process.
@@ -739,15 +739,14 @@ We measure number of sends to neighbours to observe the average of sends between
 
 
 \subsection{Number Of Sends To Cluster Head}
-Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a send request to a \gls{ch}.
+Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
 
 \subsection{Cluster Head Count}
-We also measure how many times nodes have been \gls{ch}s at each time interval.
+We also measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval.
 
-\subsection{Cluster Head receives packages}
-At last we measure how many times a \gls{ch} receives data from other nodes in the network.
-
+\subsection{Cluster Head Receives Packages}
+At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}
 
 
 \section{Results}
@@ -808,8 +807,10 @@ Figure \ref{fig:sendschChart}.
 
 
 \subsection{Cluster Head Count}
+%Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene..
 
-\subsection{Cluster Head receives packages}
+
+\subsection{Cluster Head Receives Packages}
 
 
 
@@ -830,7 +831,7 @@ This chapter discusses our approach, experience, how we solved the problem and w
 
 % CH elect if node can join cluster or not...
 
-In the current approach can a node connect to nearby nodes and be a part of a cluster without any restrictions. Another approach would be that when a node receives a request from a new node, it will forward the request to the \gls{ch} which would take the decision if the new node can connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} need to know information about the whole network or at least its own cluster and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} may consider are listed below:
+In the current approach can a node connect to nearby nodes and be a part of a cluster without any restrictions. In our first approach would a node when receiving a request from a new node, forward the request to the \gls{ch} which would take the decision if the new node could connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} need to know information about the whole network or at least its own cluster and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} may consider are listed below:
 
 \begin{itemize}
 \item Number of nodes per cluster
@@ -843,7 +844,7 @@ Another interference with having a \gls{ch} take the decision is that the \gls{c
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
 \subsection{Ping Neighbours}
-A solution to this problem is to ping neighbouring nodes frequently to check if neighbours are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution is to only ping neighbours if there is a need for communcation between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
+A solution to this problem is to ping neighbouring nodes frequently to check if neighbours are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
 %how to know if node is dead or just sleeping
 
@@ -867,11 +868,11 @@ What if a node is regularly/often sleeping or off? How to know which one is \gls
 
 %"Being a cluster head is much more energy intensive than being a non-cluster head node. if the cluster heads where chosen a priori and died through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
 
-Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior. but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
+Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
 %\textbf{possibly/perchance} \textbf{rullere/rotate}
 
 
-\subsection{Cluster Head Calculation} \label{disc:ch_election}
+\subsection{Cluster Head Calculation} \label{ssec:ch_election}
 At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic, we could have used several sub-factors listed below:
 
 %now random number, to approve and make it more realistic: 
@@ -900,18 +901,23 @@ Another approach to avoid flooding the network and reduce nodes energy level is 
 
 \subsection{When To Elect A New Cluster Head}
 %When to elect new leader?
-Current approach starts a new \gls{ch} election when the \gls{ch} have accumulated data 'X' times.
-Other approaches, mentioned in \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
+Current approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times.
+%Current approach starts a new \gls{ch} election when the \gls{ch} have accumulated data 'X' times.
+Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
 %every other = annenhver
+
+The current approach is similar to \gls{leach} in means of different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issues when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
 
 
 \section{Remember Previous Cluster Head}
+%Another solution to the 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
 
 \section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
-
+Current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of "work/processing" for the \gls{ch} and the path may be long for some nodes.
+A solution to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely will the \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified/efficient/capable to become \gls{ch}... 
 
 \section{Path To Cluster Head}
 %avoid flooding
@@ -929,7 +935,7 @@ Other approaches, mentioned in \ref{chap:related_work}, have multiple phases dur
 
 %Vector clocks..
 
-\section{Prioritization Of Data?}
+\subsection{Prioritization Of Data?}
 %Critical, non-ciritcal data?
 
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
