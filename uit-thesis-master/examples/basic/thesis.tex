@@ -325,7 +325,7 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using a unstructured network would be efficient to use when large number of nodes are frequently joining and leaving the network since its highly robust in the face of high rates of churn.
 
-In a partially centralized network are the role of all peers the same except of some nodes that assume a more important role. These nodes are called \gls{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network by sub-factors discussed in Section \ref{disc:ch_election}.
+In a partially centralized network are the role of all peers the same except of some nodes that assume a more important role. These nodes are called \gls{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network by sub-factors discussed in Section \ref{ssec:ch_election}.
 
 All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a a \gls{ch} or e.g. a \gls{dao} Store.
 
@@ -534,7 +534,7 @@ A node will only be able to connect to another node in the network if the node a
 %A demo of Dijkstra's algorithm based on Euclidean distance.
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
 The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
-Our apporach have several improvements discussed further in Section \ref{disc:ch_election}. 
+Our approach have several improvements discussed further in Section \ref{ssec:ch_election}. 
 
 To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the \gls{ch} haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
 
@@ -565,10 +565,11 @@ When a node needs to send data, it will create a request containing the received
 The data is a fabricated byte array with a fingerprint that is the hashed value of the data. The fingerprint will make it easier to identify the numerous data on each node. The data will also have a boolean tag which is used to check whether the data has been accumulated or not.
 
 \subsection{CH Data Accumulation}
-A \gls{ch} accumulates data after a given time interval to avoid concurrent events with e.g. a \gls{ch} election. The \gls{ch} will also accumulate data 'X' times before it broadcasts a new \gls{ch} calculation and eventually a \gls{ch} election.
+A \gls{ch} accumulates data after a given time interval to avoid concurrent events with e.g. a \gls{ch} election. 
+When a \gls{ch} starts a gathering of data, the node will chose a value between 1 and 6 which indicates how many times it should gather data before it eventual sends out a new \gls{ch} election.
 
 
-As mentioned previous can each node receive multiple requests from different neighbouring nodes.
+As mentioned previous can each node receive multiple requests from different neighbour nodes.
 This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
 
 \newpage
@@ -849,7 +850,7 @@ A solution to this problem is to ping neighbouring nodes frequently to check if 
 %how to know if node is dead or just sleeping
 
 
-\subsection{Node Waking Up After Sleeping}
+\subsection{Node Waking Up After Sleeping/Being Unavailable}
 %What if nodes are regulary off/sleep, how to know which one is ch? ask neighbour, and each election have an id/timestamp to check if this is the last election.. Could be that there have been multiple ch electins while node has been asleep so the neighbour node have not the right ch according to other nodes..
 %global clock so each node knows when to awake to send data to ch or leader election, etc..?
 
@@ -857,10 +858,9 @@ A solution to this problem is to ping neighbouring nodes frequently to check if 
 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
-At the current approach, there is no timestamp or regulation for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will forward its data to the, most likely, old \gls{ch}. However, this isn't a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
+%multiple solutions: ask neighbours, hvis ulike svar, tell hvilket svar som det er flest av, ha timestamp pa election
 
-What if a node is regularly/often sleeping or off? How to know which one is \gls{ch}?
-
+At the current approach, there is no timestamp or regulation for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will most likely forward its data to the old \gls{ch}. However, this isn't necessary a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
 
 
 \section{Cluster Head Election}
@@ -898,7 +898,7 @@ To avoid flooding the network, each message sent between nodes have an ID so the
 
 Another approach to avoid flooding the network and reduce nodes energy level is to limit the number of hops when gossiping to other nodes. To avoid this flooding can each packet have a hop count and every time a packet hops, its hop count increment. When a packet's hop counts equals a hop limit, the packet will be discarded. Flooding the network with updates as the current approach does, ensures eventual consistency.
  
-
+ 
 \subsection{When To Elect A New Cluster Head}
 %When to elect new leader?
 Current approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times.
@@ -917,7 +917,7 @@ The current approach is similar to \gls{leach} in means of different phases for 
 \section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 Current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of "work/processing" for the \gls{ch} and the path may be long for some nodes.
-A solution to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely will the \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified/efficient/capable to become \gls{ch}... 
+A solution to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely will the \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified/efficient/capable to become \gls{ch}s are equivalent/have the same "...", the node should probably choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than needed/necessary.
 
 \section{Path To Cluster Head}
 %avoid flooding
