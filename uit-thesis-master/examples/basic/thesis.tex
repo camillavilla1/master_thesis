@@ -760,14 +760,14 @@ In this section we will discuss the results of the testing described in the sect
 
 \subsection{Memory Usage}
 
-Figure \ref{fig:memChart}
+%Figure \ref{fig:memChart}
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{Memchart.png}
-\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
-\label{fig:memChart}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{Memchart.png}
+%\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
+%\label{fig:memChart}
+%\end{figure}
 
 
 \subsection{CPU Usage}
@@ -775,14 +775,14 @@ Figure \ref{fig:memChart}
 
 %wave pattern - high = lots of connections.. average between 100 nodes.. similar to cpu utilization..
 
-Figure \ref{fig:netconnChart}. 
+%Figure \ref{fig:netconnChart}. 
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{netconnChart.png}
-\caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
-\label{fig:netconnChart}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{netconnChart.png}
+%\caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
+%\label{fig:netconnChart}
+%\end{figure}
 
 %\subsection{Process Connections Measurements}
 %\subsection{Network Lifetime?}
@@ -798,14 +798,14 @@ Figure \ref{fig:netconnChart}.
 
 
 \subsection{Number Of Sends To Cluster Head}
-Figure \ref{fig:sendschChart}.
+%Figure \ref{fig:sendschChart}.
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{sendschChart.png}
-\caption{Figure shows average number of sends to a \gls{ch} with different accumulation intervals (500 milliseconds).}
-\label{fig:sendschChart}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{sendschChart.png}
+%\caption{Figure shows average number of sends to a \gls{ch} with different accumulation intervals (500 milliseconds).}
+%\label{fig:sendschChart}
+%\end{figure}
 
 
 \subsection{Cluster Head Count}
@@ -911,9 +911,9 @@ Improvements??
 
 \section{Remember Previous Cluster Head}
 %Another solution to the 
-Should remember old leader.. or old leader should know that it has been a leader and have data to be sent to the bs..
+%Should remember old leader.. or old leader should know that it has been a leader and have data to be sent to the bs..
 
-remember CH status so data can be sent to BS/drone...
+%remember CH status so data can be sent to BS/drone...
 
 
 \section{Multiple Cluster Heads}
@@ -955,9 +955,12 @@ The current approach provides an eventual consistency when electing a new \gls{c
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
 
 \section{Scalability?}
-scale with partially centralized network.. how about multiple \gls{ch} to load balance work and maybe shorter path for nodes to leaders..
+Note to self: scale with partially centralized network.. how about multiple \gls{ch} to load balance work and maybe shorter path for nodes to leaders..
 
 \section{CAP Theorem?}
+Note to self: evt bygge det litt inn i teksten..
+
+
 \chapter{Conclusion}
 In this thesis, we have implemented a system/prototype...
 
