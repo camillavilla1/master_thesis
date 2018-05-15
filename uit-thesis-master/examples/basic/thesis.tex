@@ -378,18 +378,18 @@ When a node receive a list of neighbours in range from the lookup service, it wi
 When a node receives a OK-message it will connect itself to the neighbour. The neighbour will also then be connected to the new node.
 
 \subsection{Cluster Head Election Request}
-When a node receives a \gls{ch} election request it will perform a leader election and forward the result to it's neigbours which will do a leader election as well.
+When a node receives a \gls{ch} election request it will perform a \gls{ch} election and forward the result to it's neigbours which will do a \gls{ch} election as well.
 A node may receive a \gls{ch} election request when a node has joined the cluster.
 
 \subsubsection{Cluster Head Election Calculation Request}
-If there is a leader in the cluster already and a new election should be proposed, a \gls{ch} election calculation request is sent from the leader. Nodes receiving this request will calculate their \gls{ch} election number. %This is explained further in Section xx.
+If there is a \gls{ch} in the cluster already and a new election should be proposed, a \gls{ch} election calculation request is sent from the leader. Nodes receiving this request will calculate their \gls{ch} election number. %This is explained further in Section xx.
 
 \subsection{Data Transmission}
-\subsubsection{Notify Neighbours About Sending Data To Leader}
-A node may receive a request that it should send its data to the leader. This request is forwarded to the nodes neighbour and so on.
+\subsubsection{Notify Neighbours About Sending Data To Cluster Head}
+A node may receive a request that it should send its data to the \gls{ch}. This request is forwarded to the nodes neighbour and so on.
 
-\subsubsection{Send Data To Leader}
-This request forwards a nodes data to the next node in the path to the leader. If the nodes data receiving this requests isn't sent to the leader of the cluster, will the data be accumulated with the received data and then forwarded to the next node.
+\subsubsection{Send Data To Cluster Head}
+This request forwards a nodes data to the next node in the path to the \gls{ch}. If the nodes data receiving this requests isn't sent to the leader of the cluster, will the data be accumulated with the received data and then forwarded to the next node.
 
 %\section{Base Station Access}
 %CH should access BS..?
@@ -444,12 +444,12 @@ A \gls{ch} election may occur in two scenarios listed below.
 
 
 \subsection{New Node In Cluster Starts Election}
-When a new node has joined the cluster, it will start a new \gls{ch} election based on the Bully algorithm. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against their own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the node's neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the leader. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to leader only contain the node itself. Eventually a new \gls{ch} is elected by all the nodes and the \gls{ch}-election result will be consistent in the whole cluster. An example of a \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
+When a new node has joined the cluster, it will start a new \gls{ch} election based on the Bully algorithm. It will calculate it's own \gls{ch}-score and gossip the score to its neighbours. The neighbours will then start a \gls{ch} election comparing the received \gls{ch}-score against their own \gls{ch}-score. The result of the \gls{ch} election will then be gossiped to the node's neighbours with either the received \gls{ch}-score or the nodes own \gls{ch}-score. The gossiped message also contains a path to the \gls{ch}. The node append its own address to the path if the received \gls{ch}-score won the election, otherwise will the path to \gls{ch} only contain the node itself. Eventually a new \gls{ch} is elected by all the nodes and the \gls{ch}-election result will be consistent in the whole cluster. An example of a \gls{ch} election is shown in Figure \ref{fig:newNodeLeaderElection}.
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.3]{newNodeLeaderElection.png}
-\caption{Figure show how a new node starts a leader election.}
+\caption{Figure show how a new node starts a \gls{ch} election.}
 \label{fig:newNodeLeaderElection}
 \end{figure}
 
@@ -461,7 +461,7 @@ When a \gls{ch} has accumulated data 'X' times, it will start a new \gls{ch} ele
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{LeaderNewLeaderElection2.png}
-\caption{Figure show how a \gls{ch} starts a leader election.}
+\caption{Figure show how a \gls{ch} starts a \gls{ch} election.}
 \label{fig:chWantsLeaderElection}
 \end{figure}
 
@@ -523,7 +523,7 @@ Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup servic
 \end{figure}
 
 \section{Connect To Neighbours}
-A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Right now, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the leader decide whether the new node can connect to the neighbour or not. Improvements to this approach is discussed in Section \ref{disc:conn_neighbours}.
+A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Right now, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the \gls{ch} decide whether the new node can connect to the neighbour or not. Improvements to this approach is discussed in Section \ref{disc:conn_neighbours}.
 
 
 \section{Cluster Head Election} \label{imp:ch_election}
@@ -533,13 +533,16 @@ A node will only be able to connect to another node in the network if the node a
 
 %A demo of Dijkstra's algorithm based on Euclidean distance.
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
-The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the leader. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
+The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
 Our apporach have several improvements discussed further in Section \ref{disc:ch_election}. 
 
-To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the leader haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
+To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the \gls{ch} haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
+
+\subsection{Cluster Head Calculation}
+To make the network more realistic in terms of battery lifetime and the capability to become a \gls{ch}, each node will receive a \gls{ch} calculation before an election if the \gls{ch} election is started by a \gls{ch}. This is to simulate that the nodes characteristics may change during execution and that a node that was highly capable to be a \gls{ch} before may not be efficient in the next \gls{ch} election.
 
 
-\section{Minimize Path To Leader}
+\section{Minimize Path To Cluster Head}
 Since \gls{ch} elections are gossiped from all nodes, can each node receive multiple gossip's per \gls{ch} election and some paths will be longer than others. In order to minimize the path to the \gls{ch}, will a node when receiving an election compare its existing path to the one received \cite{dijkstra}.
 
 %Finiding a path to the \gls{ch} is based on Dijkstra algorithm to find the shortest path between two nodes \cite{dijkstra}.
@@ -554,18 +557,18 @@ Since \gls{ch} elections are gossiped from all nodes, can each node receive mult
 
 %mediated = try to bring to an agreement
 
-%Fingerprint to identify data and ID to identify packet/msg.. Boolean variable - accumulated..
-
 \subsection{Node Data Accumulation}
 Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes. When a \gls{ch} creates a request for gathering data, will it contain an ID used for identification. Since the request is gossiped to all nodes in the cluster, a node will most likely receive the same message multiple times, but only need to forward its data once. If a node have not received a request with a specific ID, it will gossip the message to its neighbours and then send its data to the next neighbour in the path to \gls{ch}. Otherwise, the node will just ignore the request.
 
-When a node needs to send data, it will create a request containing the received request-ID from the \gls{ch}, the data to be sent together with a fingerprint and a path to the leader. The path to the leader is a list containing the addresses for the nodes between the sender and the \gls{ch}.
+When a node needs to send data, it will create a request containing the received request-ID from the \gls{ch}, the data to be sent together with a fingerprint and a path to the \gls{ch}. The path to the \gls{ch} is a list containing the addresses for the nodes between the sender and the \gls{ch}.
 
 The data is a fabricated byte array with a fingerprint that is the hashed value of the data. The fingerprint will make it easier to identify the numerous data on each node. The data will also have a boolean tag which is used to check whether the data has been accumulated or not.
 
 \subsection{CH Data Accumulation}
+A \gls{ch} accumulates data after a given time interval to avoid concurrent events with e.g. a \gls{ch} election. The \gls{ch} will also accumulate data 'X' times before it broadcasts a new \gls{ch} calculation and eventually a \gls{ch} election.
+
+
 As mentioned previous can each node receive multiple requests from different neighbouring nodes.
-%Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes.
 This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
 
 \newpage
@@ -612,7 +615,7 @@ func sendDataToLeaderHandler() {
 
 \section{Concurrent CH Election And Data Accumulation}
 To avoid having a \gls{ch} election occur concurrently as a data accumulation, are these functionalities scheduled to execute.
-Firstly, the \gls{ch} election will execute until the election result is consistent in all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After 'X' times gathering data will the \gls{ch} start a new \gls{ch} election. 
+Firstly, the \gls{ch} election will execute until the election result is consistent in all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After gathering data according to the accumulation interval, will the \gls{ch} start a new \gls{ch} election. 
 
 %First elect leader, then after a while gather data 'X' times before electing a new leader and so on...
 If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. 
@@ -650,14 +653,13 @@ The testing environment in our system is built with gopsutil, a psutil for Golan
 %- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
 %Det gjør det lettere for leseren å henge med. 
 
-
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is executing one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
 The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
 Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average which is displayed in the graphs.
 
-A leader accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
+A \gls{ch} accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
 
 \begin{itemize}
 \item After 2 accumulations
@@ -741,7 +743,7 @@ Besides measuring number of sends to neighbours, we measured number of sends to 
 
 
 \subsection{Cluster Head Count}
-We also measure how many times nodes have been \gls{ch} at each time interval.
+We also measure how many times nodes have been \gls{ch}s at each time interval.
 
 \subsection{Cluster Head receives packages}
 At last we measure how many times a \gls{ch} receives data from other nodes in the network.
@@ -854,7 +856,7 @@ A solution to this problem is to ping neighbouring nodes frequently to check if 
 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
-At the current approach, there is no timestamp or regulation for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will forward its data to the, most likely, old leader. However, this isn't a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
+At the current approach, there is no timestamp or regulation for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will forward its data to the, most likely, old \gls{ch}. However, this isn't a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
 
 What if a node is regularly/often sleeping or off? How to know which one is \gls{ch}?
 
@@ -865,7 +867,7 @@ What if a node is regularly/often sleeping or off? How to know which one is \gls
 
 %"Being a cluster head is much more energy intensive than being a non-cluster head node. if the cluster heads where chosen a priori and died through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
 
-Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior. but instead have a leader election algorithm to possibly rotate the \gls{ch}.
+Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior. but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
 %\textbf{possibly/perchance} \textbf{rullere/rotate}
 
 
@@ -903,15 +905,15 @@ Other approaches, mentioned in \ref{chap:related_work}, have multiple phases dur
 %every other = annenhver
 
 
-\section{Remember Previous Leader?}
+\section{Remember Previous Cluster Head}
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
 
 
-\section{Multiple Leaders?}
+\section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 
 
-\section{Path To Leader}
+\section{Path To Cluster Head}
 %avoid flooding
 %minimize path to leader
 %multiple leaders - multiple paths.. replication etc...?
@@ -931,7 +933,7 @@ Other approaches, mentioned in \ref{chap:related_work}, have multiple phases dur
 %Critical, non-ciritcal data?
 
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
-The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of leaders and paths to leaders before all nodes have an consistent leader election.
+The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of \gls{ch}s and paths to \gls{ch} before all nodes have an consistent \gls{ch} election.
 
 
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
@@ -941,7 +943,7 @@ The current approach provides an eventual consistency when electing a new \gls{c
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
 
 \section{Scalability?}
-scale with partially centralized network.. how about multiple leaders to load balance work and maybe shorter path for nodes to leaders..
+scale with partially centralized network.. how about multiple \gls{ch} to load balance work and maybe shorter path for nodes to leaders..
 
 \section{CAP Theorem?}
 \chapter{Conclusion}
