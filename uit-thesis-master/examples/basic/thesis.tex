@@ -496,11 +496,12 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 This chapter will elaborate on how we implemented the system, general implementation requirements, issues and choices. 
 %We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}} and the nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was a practical choice because we were familiar with the language from previous projects, its developed for making concurrent mechanisms easy and to get the most out of multicore and networked machines, and offers multiple different libraries.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}} and the nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was a practical choice because we were familiar with the language from previous projects, it's developed for making concurrent mechanisms easy and to get the most out of multicore and networked machines, and offers multiple different libraries.
+
+Our system is implemented as a combination between hierarchical and location-based routing together with multi-hop routing. Each node in the network have a limited battery lifetime and during execution will the node be drained for battery causing the node to eventually die. A \gls{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
 
 It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width.
 
-Note to self: Every node have batterytime.. eventually dies, ch battery decrease more than regular node..
 
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
@@ -819,9 +820,10 @@ Figure \ref{fig:sendschChart}.
 \chapter{Discussion}
 %There is reason to think that (this implementation)...
 %A thing to mention, is that ...
+%One can assume
 
 %Idea, arch, design, results, other solutions, "arch has scale issue"..
-This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with..
+This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with.
 
 \section{Availability of nodes in the system}
 %ambigious - tvetydig, open to more than one intepretation
@@ -845,7 +847,7 @@ Another interference with having a \gls{ch} take the decision is that the \gls{c
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
 \subsection{Ping Neighbours}
-A solution to this problem is to ping neighbouring nodes frequently to check if neighbours are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
+An improvement to this problem is to ping neighbouring nodes frequently to check if neighbours are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
 %how to know if node is dead or just sleeping
 
@@ -864,10 +866,6 @@ At the current approach, there is no timestamp or regulation for when the \gls{c
 
 
 \section{Cluster Head Election}
-%Distance, Power, Availability (Power-Management, Scheduled downtime - repairs etc., network overload)...
-
-%"Being a cluster head is much more energy intensive than being a non-cluster head node. if the cluster heads where chosen a priori and died through the system lifetime, these nodes would quickly use up their limited energy. Once the CH runs out of energy, it is no longer operational, and all the nodes that belong to the cluster lose communcation ability."
-
 Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
 %\textbf{possibly/perchance} \textbf{rullere/rotate}
 
@@ -906,20 +904,28 @@ Current approach starts a new \gls{ch} election in two scenarios: either when a 
 Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
 %every other = annenhver
 
-The current approach is similar to \gls{leach} in means of different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issues when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
+The current approach is similar to \gls{leach} in means of different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
 
+Improvements??
+%node have stats= acc/LE.. if one, the other can not happen..?
 
 \section{Remember Previous Cluster Head}
 %Another solution to the 
-%Should remember old leader.. or old leader should know that it has been a leader and have data to be sendt to the bs..
+Should remember old leader.. or old leader should know that it has been a leader and have data to be sent to the bs..
+
+remember CH status so data can be sent to BS/drone...
 
 
 \section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 Current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of "work/processing" for the \gls{ch} and the path may be long for some nodes.
-A solution to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely will the \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified/efficient/capable to become \gls{ch}s are equivalent/have the same "...", the node should probably choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than needed/necessary.
+An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely will the \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent/have the same "...", the node should probably choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than needed/necessary.
+
+Multiple leaders - replication of data?
 
 \section{Path To Cluster Head}
+One advantage with the current approach is that the \gls{ch} election will chose the shortest path from a node to the \gls{ch} to avoid flooding the network with requests. The idea to use the shortest path \cite{dijkstra}, is presumably not beneficial to change in any approach. However, it may be that some nodes in a path to the \gls{ch} have a limited battery lifetime and therefor should not be in a path to the \gls{ch}. This is a corner case which will be difficult to give a right answer to since the paths and nodes can occur in many different scenarios.
+
 %avoid flooding
 %minimize path to leader
 %multiple leaders - multiple paths.. replication etc...?
@@ -939,7 +945,7 @@ A solution to this is to introduce multiple leaders to load balance work and may
 %Critical, non-ciritcal data?
 
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
-The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of \gls{ch}s and paths to \gls{ch} before all nodes have an consistent \gls{ch} election.
+The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of \gls{ch}s and paths to \gls{ch} before all nodes have an consistent \gls{ch} election, as mentioned in Section \ref{sec:conc_events}.
 
 
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
@@ -963,10 +969,10 @@ Our experiments showed that the system ...
 %access to bs - 
 
 \begin{itemize}
-\item \gls{ch} election
+\item \gls{ch} election/calculation, multiple leaders to load balance and replication(?)
 \item Access to BS
-\item Approach for nodes observing other nodes..
 \item Multiple Super \gls{ou}s that accumulates data..
+\item Approach for nodes observing other nodes..
 \end{itemize}
 
 \chapter{Appendix}
