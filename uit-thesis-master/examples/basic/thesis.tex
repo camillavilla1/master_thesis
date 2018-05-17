@@ -227,7 +227,7 @@ This thesis is structured into X chapters including the introduction.
 
 \gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
 
-\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require for more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
+\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
 \begin{figure}
 \centering
@@ -248,20 +248,20 @@ Two approaches based on hierarchical routing are \gls{leach}\cite{leach} and \gl
 
 
 \subsection{Location-based Routing}
-In location-based routing, are nodes addressed based on their location. The distance between a node's and its neighbour can be estimated by incoming signal strengths, by GPS or via coordination among nodes \cite{routing_survey}. Two approaches are \gls{gaf}\cite{gaf} and \gls{gear}\cite{gear}.
+In location-based routing, nodes are addressed based on their location. The distance between a node and its neighbour can be estimated by incoming signal strengths, by GPS or via coordination among nodes \cite{routing_survey}. Two approaches are \gls{gaf}\cite{gaf} and \gls{gear}\cite{gear}.
 
 
 \section{Flood And Gossiping Protocol}
 \subsection{Flooding Protocol}
-The simplest forwarding rule is to flood the network. In flooding, a node sends a packet received to all its neighbours expect the neighbours which sent the packet until the packet arrives at the destination or maximum number of hops for the packet is reached. Its biggest drawback is that protocol is not an energy efficient protocol and is not designed for sensor networks \cite{wsnbook}.
+The simplest forwarding rule is to flood the network. In flooding, a node sends a packet received to all its neighbours expept the neighbours which sent the packet until the packet arrives at the destination or maximum number of hops for the packet is reached. Its biggest drawback is thatyhe protocol is not an energy efficient protocol and is not designed for sensor networks \cite{wsnbook}.
 
 \subsection{Gossiping Protocol}
-Gossiping is a modified version of flooding attempting to correct some of its drawback. In gossiping, a node with updated data will contact an arbitrary node. However, it is possible that the contacted node was updated by another node and in that case may not spreading the update any further \cite{dsbook}.
+Gossiping is a modified version of flooding attempting to correct some of its drawbacks. In gossiping, a node with updated data will contact an arbitrary node with updated information. However, it is possible that the contacted node was updated by another node and in that case may not spreading the update any further \cite{dsbook}.
 
 
 \chapter{Related Work} \label{chap:related_work}
 %\section{Routing Protocols in WSNs}
-To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
+To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \glsfirst{bs} or \glsfirst{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}.
 
 In contrast, will nodes in our approach first connect to a cluster and then start a \gls{ch} election rather than elect a \gls{ch} first and then nodes joining the cluster. %This is described further in Section/Chapter \ref{xx}.
 A resemblance between the two approaches is that neither of them consider a node's energy level when calculating the \gls{ch}.
@@ -323,15 +323,18 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 %hva er veien, ikke hvilken vei..
 
-The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using a unstructured network would be efficient to use when large number of nodes are frequently joining and leaving the network since its highly robust in the face of high rates of churn.
+The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to  when a large number of nodes are frequently joining and leaving the network since its highly robust/\textbf{low cost} in the face of high rates of churn.
 
-In a partially centralized network are the role of all peers the same except of some nodes that assume a more important role. These nodes are called \gls{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network by sub-factors discussed in Section \ref{ssec:ch_election}.
+The node lookup service in Figure \ref{chap:idea} should provide a functionality for nodes to discover other nodes. Together the nodes It may occur that the network will be partitioned into multiple clusters due to nodes not reaching each other.
 
-All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a a \gls{ch} or e.g. a \gls{dao} Store.
 
-Since it is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to as similar to a real-life environment.
+In a partially centralized network, the role of all peers are the same except of some nodes that assume a more important role. These nodes are called \glsfirst{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network decided by multiple sub-factors. 
 
-The technical idea is shown in Figure \ref{fig:idea}.
+!!!\
+All nodes should be able to observe data observed by other nodes and to gradually accumulate data and to \gls{ou}s being a a \gls{ch} or e.g. a \gls{dao} Store.
+
+It is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to. 
+The technical idea is shown in Figure \ref{fig:idea}. 
 
 \begin{figure}
 \centering
@@ -339,6 +342,20 @@ The technical idea is shown in Figure \ref{fig:idea}.
 \caption{Figure shows the architecture of the system.}
 \label{fig:idea}
 \end{figure}
+
+
+\subsubsection{Node Lookup Serivce}
+The node lookup service in Figure \ref{chap:idea} should provide a functionality for nodes to discover other nodes.
+
+\subsubsection{Clusters}
+The clusters are created when nodes contact the node lookup service and contact reachable nodes. Each cluster will have a leader, also called a \glsfirst{ch}.
+
+\subsubsection{Observation Unit}
+
+
+\subsubsection{Data Accumulation}
+
+
 
 
 \chapter{Architecture}
@@ -493,20 +510,23 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 \chapter{Implementation}
 %Threads, data structures, language
 
-This chapter will elaborate on how we implemented the system, general implementation requirements, issues and choices. 
+This chapter will elaborate implementation of the system, general implementation requirements, issues and choices. 
 %We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}} and the nodes communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was a practical choice because we were familiar with the language from previous projects, it's developed for making concurrent mechanisms easy and to get the most out of multicore and networked machines, and offers multiple different libraries.
+!!! Fa frem at hver node er en unik prosess...
 
-Our system is implemented as a combination between hierarchical and location-based routing together with multi-hop routing. Each node in the network have a limited battery lifetime and during execution will the node be drained for battery causing the node to eventually die. A \gls{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
 
-It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environments where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as a unique process and they communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and offers multiple different libraries.
+
+Each node in the network has a limited battery lifetime and during execution the node's battery will be drained causing the node to eventually die. A \gls{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
+
+It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environment where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width.
 
 
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
 
-The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. The two points to be calculated is the node itself together with all the running nodes in the network.
+The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. The two points to be calculated is the position of the node itself together with the positions of all the running nodes in the network.
 
 \begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
@@ -514,17 +534,17 @@ d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
 
 %node attempt to connect..
 
-Figure \ref{fig:broadcast_simulation} shows how a node contact the lookup service where the node's position is calculated and nodes within the simulated radio range is returned to the node. At last, the node will try to connect to the reachable nodes.
+Figure \ref{fig:broadcast_simulation} shows how a node contacts. The lookup service computes the node's position. Nodes within the simulated radio range is returned to the node. Finally, the node will try to connect to the these nodes.
 
 \begin{figure} [!b]
 \centering
-\includegraphics[width=\textwidth]{broadcast_simulation.png}
+\includegraphics[width=\textwidth]{broadcast_simulation_kopi.png}
 \caption{Broadcast simulation}
 \label{fig:broadcast_simulation}
 \end{figure}
 
 \section{Connect To Neighbours}
-A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Right now, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the \gls{ch} decide whether the new node can connect to the neighbour or not. Improvements to this approach is discussed in Section \ref{disc:conn_neighbours}.
+A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Presently, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the \gls{ch} decide whether the new node can connect to the neighbour or not. Improvements to this approach is discussed in Section \ref{disc:conn_neighbours}.
 
 
 \section{Cluster Head Election} \label{imp:ch_election}
@@ -534,17 +554,17 @@ A node will only be able to connect to another node in the network if the node a
 
 %A demo of Dijkstra's algorithm based on Euclidean distance.
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
-The \gls{ch} election algorithm is based on the Bully algorithm where the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
+The \gls{ch} election algorithm is based on the Bully algorithm \cite{bully} where typically the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score by choosing a random value between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
 Our approach have several improvements discussed further in Section \ref{ssec:ch_election}. 
 
 To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the \gls{ch} haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
 
 \subsection{Cluster Head Calculation}
-To make the network more realistic in terms of battery lifetime and the capability to become a \gls{ch}, each node will receive a \gls{ch} calculation before an election if the \gls{ch} election is started by a \gls{ch}. This is to simulate that the nodes characteristics may change during execution and that a node that was highly capable to be a \gls{ch} before may not be efficient in the next \gls{ch} election.
+To make the system more realistic in terms of battery lifetime and the capability to become a \gls{ch}, each node will receive a\gls{ch} computation request before an election if the \gls{ch} election is started by a \gls{ch}. This approach assumes that all nodes are possible candidates to become \gls{ch}s. This is to simulate that the nodes characteristics may change during execution and that a node that was highly capable to be a \gls{ch} before may not be efficient in the next \gls{ch} election.
 
 
 \section{Minimize Path To Cluster Head}
-Since \gls{ch} elections are gossiped from all nodes, can each node receive multiple gossip's per \gls{ch} election and some paths will be longer than others. In order to minimize the path to the \gls{ch}, will a node when receiving an election compare its existing path to the one received \cite{dijkstra}.
+Since \gls{ch} elections are gossiped from all nodes, each node can receive multiple gossips per \gls{ch} election and some paths will be longer than others. In order to minimize the path to the \gls{ch}, a node will when receive an election, compare its existing path to the one received \cite{dijkstra} and choose the shortest path to be its path to the leader.
 
 %Finiding a path to the \gls{ch} is based on Dijkstra algorithm to find the shortest path between two nodes \cite{dijkstra}.
 
@@ -559,19 +579,24 @@ Since \gls{ch} elections are gossiped from all nodes, can each node receive mult
 %mediated = try to bring to an agreement
 
 \subsection{Node Data Accumulation}
-Since all nodes run concurrently and independently, can each node receive multiple requests from different neighbouring nodes. When a \gls{ch} creates a request for gathering data, will it contain an ID used for identification. Since the request is gossiped to all nodes in the cluster, a node will most likely receive the same message multiple times, but only need to forward its data once. If a node have not received a request with a specific ID, it will gossip the message to its neighbours and then send its data to the next neighbour in the path to \gls{ch}. Otherwise, the node will just ignore the request.
+Since all nodes run concurrently and independently, each node can receive multiple requests from different neighbouring nodes. When a \gls{ch} creates a request for gathering data will the request contain an ID used for identification. Since the request is gossiped to all nodes in the cluster, a node will most likely receive the same message multiple times, but only need to forward its data once. If a node have not received a request with a specific ID, it will gossip the message to its neighbours and then send its data to the next neighbour in the path to \gls{ch}. Otherwise, the node will just ignore the request.
 
 When a node needs to send data, it will create a request containing the received request-ID from the \gls{ch}, the data to be sent together with a fingerprint and a path to the \gls{ch}. The path to the \gls{ch} is a list containing the addresses for the nodes between the sender and the \gls{ch}.
 
-The data is a fabricated byte array with a fingerprint that is the hashed value of the data. The fingerprint will make it easier to identify the numerous data on each node. The data will also have a boolean tag which is used to check whether the data has been accumulated or not.
+%JM: hva skjer hvis en node feiler eller blir borte? restart av melding?
+
+The data is a fabricated byte array with a fingerprint that is the hashed value of the data. The fingerprint will make it easier to identify the numerous data on each node. The data will also have a boolean tag which is used to check whether the data has been accumulated or not. 
+%JM: endrer det hash?
 
 \subsection{CH Data Accumulation}
-A \gls{ch} accumulates data after a given time interval to avoid concurrent events with e.g. a \gls{ch} election. 
-When a \gls{ch} starts a gathering of data, the node will chose a value between 1 and 6 which indicates how many times it should gather data before it eventual sends out a new \gls{ch} election.
+Otto: uklart why this statement is true? Why 6??
+
+\textbf{A \gls{ch} accumulates data after a given time interval to avoid concurrent events with e.g. a \gls{ch} election.} 
+When a \gls{ch} starts a gathering of data, the node will chose a value between one and six which indicates how many times it should gather data before it eventual sends out a new \gls{ch} election.
 
 
-As mentioned previous can each node receive multiple requests from different neighbour nodes.
-This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and wrote to from concurrent goroutines, the access must be compromised by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
+As mentioned previously, each node can receive multiple requests from different neighbour nodes.
+This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and written to from concurrent goroutines, the access must be \textbf{synchronized}/protected by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
 
 \newpage
 
@@ -616,13 +641,17 @@ func sendDataToLeaderHandler() {
 \newpage
 
 \section{Concurrent CH Election And Data Accumulation} \label{sec:conc_events}
-To avoid having a \gls{ch} election occur concurrently as a data accumulation, are these functionalities scheduled to execute.
-Firstly, the \gls{ch} election will execute until the election result is consistent in all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After gathering data according to the accumulation interval, will the \gls{ch} start a new \gls{ch} election. 
+To avoid having a \gls{ch} election occur concurrently as a data accumulation, the following functionalities are scheduled to execute.
+Firstly, the \gls{ch} election will execute until the election result is consistent between all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After gathering data according to the accumulation interval, will the \gls{ch} start a new \gls{ch} election. 
 
 %First elect leader, then after a while gather data 'X' times before electing a new leader and so on...
 If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. 
 
 Our approach to a solution to this interference is to have the two functionalies divided into different phases similar to \gls{leach} \cite{leach}. Timers are implemented to stall the next phase by making the system sleep until the timer is ended. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
+
+\textit{Otto: Forklar litt mer om fasene...}
+
+\textit{JM: kan du utvide dette til å virke uten failed nodes?}
 
 %If leader election occurs at the same time that a leader is gathering data, get EOF when broadcasting.. But does not stop/exit program..
 
@@ -823,7 +852,7 @@ In this section we will discuss the results of the testing described in the sect
 %One can assume
 
 %Idea, arch, design, results, other solutions, "arch has scale issue"..
-This chapter discusses our approach, experience, how we solved the problem and why we chose the solution we ended up with.
+This chapter discusses our approach, experiences, how we solved the problem and why we chose the solution we ended up with.
 
 \section{Availability of nodes in the system}
 %ambigious - tvetydig, open to more than one intepretation
@@ -834,7 +863,7 @@ This chapter discusses our approach, experience, how we solved the problem and w
 
 % CH elect if node can join cluster or not...
 
-In the current approach can a node connect to nearby nodes and be a part of a cluster without any restrictions. In our first approach would a node when receiving a request from a new node, forward the request to the \gls{ch} which would take the decision if the new node could connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} need to know information about the whole network or at least its own cluster and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} may consider are listed below:
+In the current approach a node can connect to nearby nodes and be a part of a cluster without any restrictions. In our first approach when a node received a request from a new node, would forward the request to the \gls{ch}. The \gls{ch} then determine if the new node is allowed connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} needs to know information about the whole network or at least its own cluster, and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} \textbf{may??} consider are:
 
 \begin{itemize}
 \item Number of nodes per cluster
@@ -847,7 +876,7 @@ Another interference with having a \gls{ch} take the decision is that the \gls{c
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
 \subsection{Ping Neighbours}
-An improvement to this problem is to ping neighbouring nodes frequently to check if neighbours are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
+An improvement to check if neighbours are alive or not, is to ping neighbouring nodes frequently to check if they are alive or not. However, pinging other nodes frequently will eventually flood the network. A better solution \textbf{which would reduce the communication ..,} is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
 %how to know if node is dead or just sleeping
 
@@ -862,16 +891,22 @@ An improvement to this problem is to ping neighbouring nodes frequently to check
 
 %multiple solutions: ask neighbours, hvis ulike svar, tell hvilket svar som det er flest av, ha timestamp pa election
 
-At the current approach, there is no timestamp or regulation for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will most likely forward its data to the old \gls{ch}. However, this isn't necessary a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
+At the current approach, there is no timestamp or schedule for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will most likely forward its data to the old \gls{ch}. However, this isn't necessary a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
+
+\textbf{Otto: expand last sentence.. "probably"}
 
 
 \section{Cluster Head Election}
-Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior would these nodes quickly use up their limited energy. Once a \gls{ch} is runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, will our approach not chose \gls{ch}s a prior, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
+!!! A prior?? explain..
+
+\textbf{Otto: how much more?}
+
+Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior, e.g. by a \gls{bs} without any knowledge about the network, the node would quickly use up its limited energy. Once a \gls{ch} runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, our approach will not chose \gls{ch}s a prior/\textbf{priori}, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
 %\textbf{possibly/perchance} \textbf{rullere/rotate}
 
 
 \subsection{Cluster Head Calculation} \label{ssec:ch_election}
-At the moment, the \gls{ch} election is simply based on which node has the highest score between 0 and 1. Despite the working approach, it does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic, we could have used several sub-factors listed below:
+Presently, the \gls{ch} election is based on which node has the highest score between 0 and 1. This \textbf{intellectually} simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve \textbf{HOW?????} this approach and make it more realistic, we could have used several sub-factors listed below:
 
 %now random number, to approve and make it more realistic: 
 
@@ -883,6 +918,7 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 \item Bandwidth - WiFi, LoRaWan\footnote{\url{https://lora-alliance.org/about-lorawan}}, Ethernet
 \item Prior history
 \item Network traffic on node
+\item Er det bare en function-endring eller er det også spørsmål om du har nødvendig info?
 \end{itemize}
 
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
@@ -890,7 +926,10 @@ At the moment, the \gls{ch} election is simply based on which node has the highe
 %\subsection{Eventual Cluster Head Election Consistency?}
 
 \subsection{Gossip Information Between Nodes}
-The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to rapidly spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
+!! Kommer kanskje an på hvordan vi gjør gossip
+
+
+The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to \textbf{rapidly} spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
 
 To avoid flooding the network, each message sent between nodes have an ID so the node can check if it has received the same message before. If the node have received the message earlier, the node doesn't need to forward the message because it has forwarded the message in an earlier gossip, as described in Section \ref{imp:ch_election}.
 
@@ -899,14 +938,16 @@ Another approach to avoid flooding the network and reduce nodes energy level is 
  
 \subsection{When To Elect A New Cluster Head}
 %When to elect new leader?
-Current approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times.
+The present approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times.
 %Current approach starts a new \gls{ch} election when the \gls{ch} have accumulated data 'X' times.
 Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
 %every other = annenhver
 
-The current approach is similar to \gls{leach} in means of different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
+The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
 
 Improvements??
+JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for å sende?
+
 %node have stats= acc/LE.. if one, the other can not happen..?
 
 \section{Remember Previous Cluster Head}
@@ -918,13 +959,13 @@ Improvements??
 
 \section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
-Current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of "work/processing" for the \gls{ch} and the path may be long for some nodes.
-An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely will the \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent/have the same "...", the node should probably choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than needed/necessary.
+The current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of work load for the \gls{ch}, and the path to the \gls{ch} can be long for some nodes.
+An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely \textbf{will the?????} \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent/have the same "...", the node should \textbf{probably - based on what do you propose this?} choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than needed/necessary.
 
 Multiple leaders - replication of data?
 
 \section{Path To Cluster Head}
-One advantage with the current approach is that the \gls{ch} election will chose the shortest path from a node to the \gls{ch} to avoid flooding the network with requests. The idea to use the shortest path \cite{dijkstra}, is presumably not beneficial to change in any approach. However, it may be that some nodes in a path to the \gls{ch} have a limited battery lifetime and therefor should not be in a path to the \gls{ch}. This is a corner case which will be difficult to give a right answer to since the paths and nodes can occur in many different scenarios.
+One advantage with the present approach is that the \gls{ch} election chose the shortest path from a node to the \gls{ch} to avoid flooding the network with requests. The idea to use the shortest path \cite{dijkstra}, is presumably not beneficial to change in any approach. However, it may be that some nodes in a path to the \gls{ch} have a limited battery lifetime and therefor should not be in a path to the \gls{ch}. This is a corner case which will be difficult to give a right answer to since the paths and nodes can occur in many different scenarios.
 
 %avoid flooding
 %minimize path to leader
@@ -1147,6 +1188,12 @@ W. Shirou,
 \newblock {\em gopsutil: psutil for golang},
 \newblock in {\em GitHub: GitHub repository},
 \newblock {\url{https://github.com/shirou/gopsutil}}, last commit={ \textit{57f370e}}.
+
+%27
+\bibitem{bully}
+H. Garcia-Molina,
+\newblock {\em Elections in a Distributed Computing System},
+\newblock in {\em IEEE Transactions on Computers, 1982, Vol.C-31, No.1, pp.48-59}.
 
 \end{thebibliography}
 
