@@ -78,6 +78,8 @@
     {\protect\numberline{\thechapter.\thedefinition}#1}\par%
 }
 
+\font\zerofont = cmsy7 at 9.3pt
+
 \begin{document}
 
 %:-------------------------- Frontpage ------------------------
@@ -511,22 +513,27 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 %Threads, data structures, language
 
 This chapter will elaborate implementation of the system, general implementation requirements, issues and choices. 
-%We will first look at some libraries used in this implementation, then we will take a look at ... At last, we will describe the ...
 
-!!! Fa frem at hver node er en unik prosess...
-
-
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as a unique process and they communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. This was because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and offers multiple different libraries.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries.
 
 Each node in the network has a limited battery lifetime and during execution the node's battery will be drained causing the node to eventually die. A \gls{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
 
-It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environment where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width.
+It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environment where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width, as shown in \ref{fig:broadcastNeighbour2}. The purple nodes are new nodes in the network and the purple arrows show connection between the new node and reachable nodes.
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.26]{contactNewNeighbour_3.png}
+\caption{Figure show how the network grid size in scale 10 x 10 and nodes broadcast width.}
+\label{fig:broadcastNeighbour2}
+\end{figure}
+
 
 
 \section{Distance To Other Nodes In The Network}
 A new node will contact the lookup service to discover other nodes in the network by sending a POST-request containing meta-data about itself such as address and position (\textit{x,y} coordinates).
 
-The distance formula \ref{eq:distance}, also called Euclidean distance, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. The two points to be calculated is the position of the node itself together with the positions of all the running nodes in the network.
+The distance formula \ref{eq:distance}, also called Euclidean distance \cite{euclidean}, is used to calculate the range between two points in a two-dimensional coordinate map and is used to see if a node is within a simulated radio range or not, as seen in Figure \ref{fig:broadcast_range}. The two points to be calculated is the position of the node itself together with the positions of all the running nodes in the network.
 
 \begin{equation} \label{eq:distance}
 d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
@@ -554,7 +561,7 @@ A node will only be able to connect to another node in the network if the node a
 
 %A demo of Dijkstra's algorithm based on Euclidean distance.
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
-The \gls{ch} election algorithm is based on the Bully algorithm \cite{bully} where typically the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score by choosing a random value between 0 and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
+The \gls{ch} election algorithm is based on the Bully algorithm \cite{bully} where typically the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score by choosing a random value between $\emptyset$ and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
 Our approach have several improvements discussed further in Section \ref{ssec:ch_election}. 
 
 To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the \gls{ch} haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
@@ -906,7 +913,7 @@ Being a \gls{ch} is much more energy intensive than being a regular cluster node
 
 
 \subsection{Cluster Head Calculation} \label{ssec:ch_election}
-Presently, the \gls{ch} election is based on which node has the highest score between 0 and 1. This \textbf{intellectually} simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve \textbf{HOW?????} this approach and make it more realistic, we could have used several sub-factors listed below:
+Presently, the \gls{ch} election is based on which node has the highest score between $\emptyset$ and 1. This \textbf{intellectually} simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve \textbf{HOW?????} this approach and make it more realistic, we could have used several sub-factors listed below:
 
 %now random number, to approve and make it more realistic: 
 
@@ -1194,6 +1201,15 @@ W. Shirou,
 H. Garcia-Molina,
 \newblock {\em Elections in a Distributed Computing System},
 \newblock in {\em IEEE Transactions on Computers, 1982, Vol.C-31, No.1, pp.48-59}.
+
+
+
+%28
+\bibitem{euclidean}
+H. Garcia-Molina,
+\newblock {\em Euclidean space, ed. (2001)[1994]},
+\newblock in {\em  Encyclopedia of Mathematics, Springer Science+Business Media B.V. / Kluwer Academic Publishers}.
+\newblock {URL: \url{http://www.encyclopediaofmath.org/index.php?title=Euclidean_space&oldid=38673}}.
 
 \end{thebibliography}
 
