@@ -300,10 +300,12 @@ A resemblance between the two approaches is that neither of them consider a node
 
 \Gls{fleach} \cite{fuzzy_logic, ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
 
-In contrast to \gls{fleach}, our approach will elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider "variables" such as battery level or number of nodes in the cluster.
+In contrast to \gls{fleach}, our approach will elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider sub-factors such as battery level or number of nodes in the cluster.
 
 
-\Gls{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbor. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}.
+\Gls{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbour. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node, or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}. The greedy algorithm assumes that all nodes have a global knowledge of the network for constructing the chain. Each node, except the end nodes, performs data aggregation with data received from its neighbours data and transmit that to its other neighbours.
+
+Our approach do not assume that all nodes have a global knowledge of the network and computing the chain or path is done in the same task as electing a leader....  \textbf{MER MER MER!!!}
 
 To increase the robustness of devices and lower power consumptions, ZebraNet \cite{zebranet} provides a low-power wireless system for position tracking of wildlife by using peer-to-peer network techniques. This reduces the researchers effort to manage the sensors and collecting logged data for their research. The radios on their devices also operates on different frequencies and have different bandwidth, range and other characteristics.
 
