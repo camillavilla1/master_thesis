@@ -150,7 +150,7 @@ The Arctic tundra in the far northern hemisphere is challenged by climate change
 
 %It is beneficial to make these sensors as cheap and energy-efficient as possible.
 
-\textit{This thesis presents the architecture, design, implementation and evaluation of a peer observation system that can observe and accumulate data from other peers in multiple clusters in the network.}
+This thesis presents the architecture, design, implementation and evaluation of a peer observation system that can observe and accumulate data from other peers in multiple clusters in the network.
 
 \section{Motivation}
 The motivation behind this project is...
@@ -166,16 +166,14 @@ The motivation behind this project is...
 
 The purpose is to fetch and accumulate data observed by \gls{ou}s  for further use.
 
-%The observation units to be used for the prototype comprises Observation Unit Processes executing on PCs and/or Raspberry Pi.
-
 
 \section{Contributions}
 The dissertation makes the following contributions:
 \begin{itemize}
 \item An introduction to \gls{wsn}s and routing techniques in \gls{wsn}s.
-\item An implementation and description of a system ...
+\item An implementation and description of a \gls{wsn} system...
 \item An evaluation of the system.
-\item Thoughts on future work and further improvements to the current system.
+\item Thoughts on further improvements to the current system and future work.
 \end{itemize}
 
 \section{Assumptions}
@@ -313,10 +311,6 @@ To increase the robustness of devices and lower power consumptions, ZebraNet \ci
 A diversity to our approach is that ZebraNet stores multiple copies of the same data across multiple nodes while our approach forwards the data to the next node in the path to leader. They've also deployed their sensors on zebras in a real-life environment. For us, it's not feasible to deploy sensors out in the real-life Arctic Tundra in such an early development.
 
 
-
-%"When network nodes have multiple radios, the shortest path algorithm does not perform well". p.1 in paper
-
-
 %\section{Gossip-based Protocols}
 Gossip-based protocols, or epidemic protocols, are popular protocols due to their ability to reliably pass information among a large set on interconnected nodes. Jelasity et al. \cite{gbsampling} provide a \glsfirst{gbcp} where each node have peers to gossip with in a large-scale distributed system \cite{demers}. These nodes can quickly join and leave the network at any given point of time. The general principle of their framework is that every node (1) maintains a relatively small local membership table that provides a partial view of all nodes and (2) periodically refreshes the table using a gossiping procedure.
 
@@ -326,6 +320,7 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 %\section{Data Collection/Aggregation in WSNs}
 %Di Franscesco et. al. \cite{dataColl}
 %Data aggregation is an essential operation in \gls{wsn}s and has emerged as a basic approach in order to reduce the number of transmissions of sensor nodes \cite{dataAgg}.
+
 
 
 \chapter{Idea} \label{chap:idea}
@@ -341,7 +336,7 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 %hva er veien, ikke hvilken vei..
 
-The technical idea behind the system is that it should be a partially centralized unstructured \glsfirst{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to a large number of nodes are frequently joining and leaving the network since it's highly low cost in the face of high rates of churn. The technical idea is shown in Figure \ref{fig:idea}. 
+The technical idea behind the system is that it should be a partially centralized unstructured \glsfirst{p2p} system where nodes, also called \glsfirst{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to a large number of nodes that are frequently joining and leaving the network since it's highly low cost in the face of high rates of churn. The technical idea is shown in Figure \ref{fig:idea}. 
 
 \begin{figure}
 \centering
@@ -351,13 +346,11 @@ The technical idea behind the system is that it should be a partially centralize
 \end{figure}
 
 
-The node lookup service in Figure \ref{chap:idea} should provide a functionality for nodes to discover other nodes. Together, the nodes creates a network of nodes. However, it may occur that the network will be partitioned into multiple clusters due to nodes not reaching each other.
+The node lookup service in Figure \ref{fig:idea} should provide a functionality for nodes to discover nearby nodes they can connect to. Together, the nodes creates a network of nodes. However, it may occur that the network will be partitioned into multiple clusters due to nodes not reaching each other.
 
 In a partially centralized network, the role of all peers are the same except of some nodes that assume a more important role. These nodes are called \glsfirst{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network decided by multiple sub-factors. The \gls{ch} nodes are the red nodes in Figure \ref{fig:idea}.
 
 All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a \gls{ch} or e.g. a \gls{dao} Store.
-
-It is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to.
 
 
 
