@@ -298,9 +298,10 @@ A resemblance between the two approaches is that neither of them consider a node
 In contrast to \gls{fleach}, our approach will elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider sub-factors such as battery level or number of nodes in the cluster.
 
 
-\glsfirst{gaf} \cite{gaf} propose a energy-aware location-based routing algorithm designed for mobile ad hoc networks, but are also applicable for sensor networks. First, the network area is divided into different zones and forms virtual grids. Inside each zone, the nodes communicate with each other to to figure out their different roles. E.g., one node will be elected to stay awake for a certain peroid of time and is reposonsible for monitoring and reporting data to the \gls{bs} while the rest of the nodes goes to sleep.
+\glsfirst{gaf} \cite{gaf} propose a energy-aware location-based routing algorithm designed for mobile ad hoc networks, but are also applicable for sensor networks. First, the network area is divided into different zones and forms virtual grids. Inside each zone, the nodes communicate with each other to to figure out their different roles. E.g., one node will be elected to stay awake for a certain period of time and is responsible for monitoring and reporting data to the \gls{bs} while the rest of the nodes goes to sleep. Each node is also located by a GPS-position which is associated with a point in the virtual grid. Nodes within the same point are considered equivalent in terms of packet routing. This means that some nodes within the same point can sleep in order to save energy. This apporach is also an example of adaptive fidelity \cite{adfidelity} where the quality (fidelity) of the answer of the algorithm can be traded against battery lifetime, network bandwidth, or number of active sensors.
 
-\textbf{MER MER MER!!! COMPARING!!}
+Our approach have no adaptive fidelity algorithm for trading battery lifetime, network bandwidth or number of active sensors. However, our approach use simulated GPS-coordinates (x,y) to place nodes within a grid as similar to \gls{gaf}. Nodes can only contact other nodes within a simulated broadcast width. This is explained further in Section \ref{chap:implementation}. In contrast to \gls{gaf}, will \gls{ch} and regular nodes in our approach accumulate received data  with its own data.
+
 
 \Glsfirst{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbour. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node, or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}. The greedy algorithm assumes that all nodes have a global knowledge of the network for constructing the chain. Each node, except the end nodes, performs data aggregation with data received from its neighbours data and transmit that to its other neighbours.
 
@@ -340,37 +341,24 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 %hva er veien, ikke hvilken vei..
 
-The technical idea behind the system is that it should be a partially centralized unstructured \glsfirst{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to  when a large number of nodes are frequently joining and leaving the network since its highly robust/\textbf{low cost} in the face of high rates of churn.
-
-The node lookup service in Figure \ref{chap:idea} should provide a functionality for nodes to discover other nodes. Together the nodes It may occur that the network will be partitioned into multiple clusters due to nodes not reaching each other.
-
-
-In a partially centralized network, the role of all peers are the same except of some nodes that assume a more important role. These nodes are called \glsfirst{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network decided by multiple sub-factors. 
-
-!!!\\
-All nodes should be able to observe data observed by other nodes and to gradually accumulate data and to \gls{ou}s being a a \gls{ch} or e.g. a \gls{dao} Store.
-
-It is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to. 
-The technical idea is shown in Figure \ref{fig:idea}. 
+The technical idea behind the system is that it should be a partially centralized unstructured \glsfirst{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to a large number of nodes are frequently joining and leaving the network since it's highly low cost in the face of high rates of churn. The technical idea is shown in Figure \ref{fig:idea}. 
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{idea.png}
-\caption{Figure shows the architecture of the system.}
+\caption{Figure shows the technical idea of the system.}
 \label{fig:idea}
 \end{figure}
 
 
-\subsubsection{Node Lookup Serivce}
-The node lookup service in Figure \ref{chap:idea} should provide a functionality for nodes to discover other nodes.
+The node lookup service in Figure \ref{chap:idea} should provide a functionality for nodes to discover other nodes. Together, the nodes creates a network of nodes. However, it may occur that the network will be partitioned into multiple clusters due to nodes not reaching each other.
 
-\subsubsection{Clusters}
-The clusters are created when nodes contact the node lookup service and contact reachable nodes. Each cluster will have a leader, also called a \glsfirst{ch}.
+In a partially centralized network, the role of all peers are the same except of some nodes that assume a more important role. These nodes are called \glsfirst{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network decided by multiple sub-factors. The \gls{ch} nodes are the red nodes in Figure \ref{fig:idea}.
 
-\subsubsection{Observation Unit}
+All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a \gls{ch} or e.g. a \gls{dao} Store.
 
+It is not feasible to deploy nodes in the Arctic Tundra at such an early development, there should be a functionality to make nodes discover nearby nodes they can connect to.
 
-\subsubsection{Data Accumulation}
 
 
 
@@ -524,7 +512,7 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 %CH changes so not
 
 
-\chapter{Implementation}
+\chapter{Implementation} \label{chap:implementation}
 %Threads, data structures, language
 
 This chapter will elaborate implementation of the system, general implementation requirements, issues and choices. 
@@ -1226,6 +1214,13 @@ H. Garcia-Molina,
 J. N. Al-Karaki and R. Ul-Mustafa and A. E. Kamal,
 \newblock {\em Data aggregation in wireless sensor networks - exact and approximate algorithms},
 \newblock in {\em  2004 Workshop on High Performance Switching and Routing, 2004. HPSR.}, pp.241-245.
+
+%30
+\bibitem{adfidelity}
+Estrin, Deborah and Govindan, Ramesh and Heidemann, John and Kumar, Satish,
+\newblock {\em Next Century Challenges: Scalable Coordination in Sensor Networks},
+\newblock in {\em Proceedings of the 5th Annual ACM/IEEE International Conference on Mobile Computing and Networking}, 1999, pp.263--270.
+
 
 
 \end{thebibliography}
