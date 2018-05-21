@@ -797,7 +797,7 @@ At last we measure how many times a \gls{ch} receives data from other nodes in t
 In this section we will discuss the results of the testing described in the sections above.
 
 \subsection{Memory Usage}
-The purpose of this experiment was to examine how much memory the system consumes when executing the program. The result is presented in Figure \ref{fig:memChart}. We can see that the system have between 60\% and 76\% memory usage and the graphs shows that each experiment us approximately the same amount of memory. However, there is one graph that stands out/emerge, which is the graph showing the memory after a random number of accumulations.
+The purpose of this experiment was to examine how much memory the system consumes when executing the program. The result is presented in Figure \ref{fig:memChart}. We can see that the system have between 60\% and 76\% memory usage and the graphs shows that each experiment us approximately the same amount of memory. However, there is one graph that stands out, which is the graph showing the memory after a random number of accumulations.
 There is reason to think that this implementation uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
 
 %random acc gives the least memory usage.. - mem 6 acc gives highest acc, not suprising becayse it does most wirtes to memory when accumulating data.. Otherwise, pretty similar memory usage.. no spikes or 
@@ -811,7 +811,11 @@ There is reason to think that this implementation uses less memory than the othe
 
 
 \subsection{CPU Usage}
-We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage ...
+We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and the each experiments uses approximately the same amount of CPU.
+
+\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..
+may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage??}
+
 %peaks during operations..??
 
 \begin{figure} 
@@ -1005,6 +1009,7 @@ One advantage with the present approach is that the \gls{ch} election chose the 
 
 %Vector clocks..
 
+\subsection{Different DAO Stores wants different data..}
 \subsection{Prioritization Of Data?}
 %Critical, non-ciritcal data?
 
