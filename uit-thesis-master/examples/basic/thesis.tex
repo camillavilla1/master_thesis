@@ -510,7 +510,7 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 
 This chapter will elaborate implementation of the system, general implementation requirements, issues and choices. 
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \glsfirst{tcp} network. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \glsfirst{tcp} network. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries. When nodes communicate with each other, they send packets structured as JSON \footnote{\url{https://www.json.org/}}.
 
 Each node in the network has a limited battery lifetime and during execution the node's battery will be drained causing the node to eventually die. A \gls{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
 
@@ -572,7 +572,7 @@ Our approach have several improvements discussed further in Section \ref{ssec:ch
 To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the \gls{ch} haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
 
 \subsection{Cluster Head Calculation}
-To make the system more realistic in terms of battery lifetime and the capability to become a \gls{ch}, each node will receive a\gls{ch} computation request before an election if the \gls{ch} election is started by a \gls{ch}. This approach assumes that all nodes are possible candidates to become \gls{ch}s. This is to simulate that the nodes characteristics may change during execution and that a node that was highly capable to be a \gls{ch} before may not be efficient in the next \gls{ch} election.
+To make the system more realistic in terms of battery lifetime and the capability to become a \gls{ch}, each node will receive a \gls{ch} computation request before an election if the \gls{ch} election is started by a \gls{ch}. This approach assumes that all nodes are possible candidates to become \gls{ch}s. This is to simulate that the nodes characteristics may change during execution and that a node that was highly capable to be a \gls{ch} before may not be efficient in the next \gls{ch} election.
 
 
 \section{Minimize Path To Cluster Head}
@@ -697,15 +697,15 @@ All experiments were conducted on a computer, described in the section \ref{eva:
 %execute around 15 minutes
 The experiments are ran with a 500 millisecond's measurement interval and system execute minimum 10 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
-Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average value which is displayed in the graphs.
+Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average value which is displayed in the graphs. Since each experiment is launched  independently, the clusters in the network may appear different in each experiment causing nodes to have more or less neighbour nodes and a longer or shorter path to the \gls{ch} than in another experiment.
 
 A \gls{ch} accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
 
 \begin{itemize}
 \item After \gls{ch} accumulated data 2 times
-\item After 4 accumulations
-\item After 6 accumulations
-\item After a random accumulation between one and six/ After \gls{ch} accumulated data a random time between one and six
+\item After \gls{ch} accumulated data 4 times
+\item After \gls{ch} accumulated data 6 times
+\item After \gls{ch} accumulated data a random time between one and six
 \end{itemize}
 
 %Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
@@ -760,7 +760,7 @@ This as well, is important to keep at a minimum due to execution on devices in r
 \end{itemize}
 
 
-\subsection{Network (Socket) Usage} \label{eva:net_measure}
+\subsection{Network Usage} \label{eva:net_measure}
 %psutil - ConnectionPid - Return a list of network connections opened by a process. 
 %\subsection{Process Connections Measurements}
 %psutil - Process 
@@ -775,7 +775,7 @@ Measuring the process connection is important since the system relies on network
 %\subsection{Network Lifetime?}
 
 \subsection{Number Of Sends To Neighbours}
-We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
+We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, connecting to other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
 
 
 \subsection{Number Of Sends To Cluster Head}
@@ -788,6 +788,7 @@ We also measure how many times nodes have been \gls{ch}s at each time interval t
 \subsection{Cluster Head Receives Packages}
 At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}
 
+\newpage
 
 \section{Results}
 %There is reason to think that (this implementation)...
@@ -797,80 +798,138 @@ At last we measure how many times a \gls{ch} receives data from other nodes in t
 In this section we will discuss the results of the testing described in the sections above.
 
 \subsection{Memory Usage}
+%random acc gives the least memory usage.. - mem 6 acc gives highest acc, not suprising becayse it does most wirtes to memory when accumulating data.. Otherwise, pretty similar memory usage.. no spikes or 
+
 The purpose of this experiment was to examine how much memory the system consumes when executing the program. The result is presented in Figure \ref{fig:memChart}. We can see that the system have between 60\% and 76\% memory usage and the graphs shows that each experiment us approximately the same amount of memory. However, there is one graph that stands out, which is the graph showing the memory after a random number of accumulations.
 There is reason to think that this implementation uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
 
-%random acc gives the least memory usage.. - mem 6 acc gives highest acc, not suprising becayse it does most wirtes to memory when accumulating data.. Otherwise, pretty similar memory usage.. no spikes or 
 
-\begin{figure} 
+%\begin{figure} 
+%\centering
+%\includegraphics[width=\textwidth]{Memchart.png}
+%\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
+%\label{fig:memChart}
+%\end{figure}
+
+\begin{figure} [!b]
 \centering
-\includegraphics[width=\textwidth]{Memchart.png}
+\includegraphics[width=\textwidth]{memChart2.png}
 \caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
 \label{fig:memChart}
 \end{figure}
 
 
 \subsection{CPU Usage}
-We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and the each experiments uses approximately the same amount of CPU.
+We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
+The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of ...
 
-\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..
-may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage??}
+\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
 
 %peaks during operations..??
 
-\begin{figure} 
+\begin{figure} [!b]
 \centering
 \includegraphics[width=\textwidth]{cpuChart.png}
 \caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
 \label{fig:cpuChart}
 \end{figure}
 
-
-
-\subsection{Network (Socket) Usage}
-
-%wave pattern - high = lots of connections.. average between 100 nodes.. similar to cpu utilization..
-
-%Figure \ref{fig:netconnChart}. 
-
-%\begin{figure}
+%\begin{figure} 
 %\centering
-%\includegraphics[width=\textwidth]{netconnChart.png}
-%\caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
-%\label{fig:netconnChart}
+%\includegraphics[width=\textwidth]{cpuChart2.png}
+%\caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
+%\label{fig:cpuChart}
 %\end{figure}
 
-%\subsection{Process Connections Measurements}
+
+\newpage
+
+\subsection{Network Usage}
+We measured the network usage and communication between nodes since it's important to keep this to a minimum. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 11 connections on average per node for 100 node in the system.
+There is reason to believe that these high wave like patterns showing a high amount on connections is because of three reasons:
+
+\begin{itemize}
+\item Firstly, nodes are created and communicate with reachable nodes to connect to and eventually starts a \gls{ch} election resulting in a high amount of connections.
+\item Second, when a \gls{ch} broadcasts a message that a data accumulation should be started, the message is broadcast to every node in the cluster resulting in many open connections.
+\item At last, after accumulating data from other nodes in the cluster, the \gls{ch} gossip a new \gls{ch} election calculation and then gossip a new \gls{ch} election.
+\end{itemize}
+
+
+%around 6 connections are average..
+
+
+\begin{figure} [!b]
+\centering
+\includegraphics[width=\textwidth]{netconnChart.png}
+\caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
+\label{fig:netconnChart}
+\end{figure}
+
+
+\newpage 
+
 %\subsection{Network Lifetime?}
 \subsection{Number Of Sends To Neighbours}
-%Figure \ref{fig:sendsChart}.
+As we can see from Figure \ref{fig:sendsChart}, will number of sends from one node to another increase during execution. This is an expected result since each time a node communicate with another node, it's counted and therefor will increase during execution. As mentioned in Section \ref{eva:exp_des}, are the different experiments ran independently causing the nodes in the network to create clusters of different size (numerous of cluster members).
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=\textwidth]{sendsChart.png}
-%\caption{Figure shows average number of sends to a nodes neighbours with different accumulation intervals (500 milliseconds).}
-%\label{fig:sendsChart}
-%\end{figure}
+\textit{Note to self: not surprising.. 4 accumulations have most sends to other neighbours.. these values can differ because of clusters change during each experiments, so nodes can have more or less neighbours from one experiment to another..}
+
+\begin{figure} [ht]
+\centering
+\includegraphics[width=\textwidth]{sendsChart.png}
+\caption{Figure shows average number of sends from nodes to neighbour nodes with different accumulation intervals (500 milliseconds).}
+\label{fig:sendsChart}
+\end{figure}
 
 
 \subsection{Number Of Sends To Cluster Head}
-%Figure \ref{fig:sendschChart}.
+Figure \ref{fig:sendschChart}.
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=\textwidth]{sendschChart.png}
-%\caption{Figure shows average number of sends to a \gls{ch} with different accumulation intervals (500 milliseconds).}
-%\label{fig:sendschChart}
-%\end{figure}
+\begin{figure} [ht]
+\centering
+\includegraphics[width=\textwidth]{sendschChart.png}
+\caption{Figure shows average number of sends to a \gls{ch} with different accumulation intervals (500 milliseconds).}
+\label{fig:sendschChart}
+\end{figure}
 
 
 \subsection{Cluster Head Count}
 %Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene..
 
+Figure \ref{fig:chCountChart}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{chCountChart.png}
+\caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
+\label{fig:chCountChart}
+\end{figure}
+
+
 
 \subsection{Cluster Head Receives Packages}
 
 
+Figure \ref{fig:recPktChart}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{recPktChart.png}
+\caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
+\label{fig:recPktChart}
+\end{figure}
+
+
+
+
+Figure \ref{fig:sentvsrecvChart}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{sentVsRecvChart.png}
+\caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
+\label{fig:sentvsrecvChart}
+\end{figure}
 
 
 \chapter{Discussion}
@@ -998,6 +1057,7 @@ One advantage with the present approach is that the \gls{ch} election chose the 
 %minimize path to leader
 %multiple leaders - multiple paths.. replication etc...?
 
+\subsection{Multi-hop or single-hop routing?}
 
 \section{Data Accumulation}
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
@@ -1029,6 +1089,32 @@ Note to self: scale with partially centralized network.. how about multiple \gls
 
 \section{CAP Theorem?}
 Note to self: evt bygge det litt inn i teksten..
+
+\section{Battery lifetime?}
+
+\section{Routing Challenges in WSNs}
+\begin{itemize}
+\item Node deployment
+\item Data reporting method
+\item Node/link heterogeneity
+\item Fault tolerance
+\item Scalability
+\item Network dynamics
+\item Transmission media
+\item Connectivity
+\item Coverage
+\item Data aggregation
+\item Quality of service
+\end{itemize}
+
+
+
+
+
+
+
+
+
 
 
 \chapter{Conclusion}
