@@ -539,7 +539,7 @@ d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
 
 Figure \ref{fig:broadcast_simulation} shows how a node contacts. The lookup service computes the node's position. Nodes within the simulated radio range is returned to the node. Finally, the node will try to connect to the these nodes.
 
-\begin{figure} [!b]
+\begin{figure} %[!b]
 \centering
 \includegraphics[width=\textwidth]{broadcast_simulation_kopi.png}
 \caption{Broadcast simulation}
@@ -547,7 +547,16 @@ Figure \ref{fig:broadcast_simulation} shows how a node contacts. The lookup serv
 \end{figure}
 
 \section{Connect To Neighbours}
-A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Presently, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the \gls{ch} decide whether the new node can connect to the neighbour or not. Improvements to this approach is discussed in Section \ref{disc:conn_neighbours}.
+A node will only be able to connect to another node in the network if the node accept the request to be neighbours. Presently, every node will be able to connect with their neighbours, as long as the node isn't unavailable by means of sleeping or if it's dead. There is no restriction in number of neighbours a node can have or that a node receiving a request from a new neighbour must forward the request to the \gls{ch} and let the \gls{ch} decide whether the new node can connect to the neighbour or not. Improvements to this approach is discussed in Section \ref{disc:conn_neighbours}. Figure \ref{fig:newNodeChart2} shows the flowchart of when a new node is created and when it will contact reachable neighbours and to start \gls{ch} election.
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.28]{newNodeChart2.png}
+\caption{Figure show flowchart of when a new node is created and eventually starts a \gls{ch} election.}
+\label{fig:newNodeChart2}
+\end{figure}
+
 
 
 \section{Cluster Head Election} \label{imp:ch_election}
@@ -685,17 +694,18 @@ The testing environment in our system is built with gopsutil, a psutil for Golan
 
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is executing one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
-The experiments are ran with a 500 millisecond's measurement interval and system execute around 15 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
+%execute around 15 minutes
+The experiments are ran with a 500 millisecond's measurement interval and system execute minimum 10 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
 Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average value which is displayed in the graphs.
 
 A \gls{ch} accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
 
 \begin{itemize}
-\item After 2 accumulations
+\item After \gls{ch} accumulated data 2 times
 \item After 4 accumulations
 \item After 6 accumulations
-\item After a random accumulation between 1 and 6.
+\item After a random accumulation between one and six/ After \gls{ch} accumulated data a random time between one and six
 \end{itemize}
 
 %Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
@@ -787,18 +797,32 @@ At last we measure how many times a \gls{ch} receives data from other nodes in t
 In this section we will discuss the results of the testing described in the sections above.
 
 \subsection{Memory Usage}
+The purpose of this experiment was to examine how much memory the system consumes when executing the program. The result is presented in Figure \ref{fig:memChart}. We can see that the system have between 60\% and 76\% memory usage and the graphs shows that each experiment us approximately the same amount of memory. However, there is one graph that stands out/emerge, which is the graph showing the memory after a random number of accumulations.
+There is reason to think that this implementation uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
 
-%Figure \ref{fig:memChart}
+%random acc gives the least memory usage.. - mem 6 acc gives highest acc, not suprising becayse it does most wirtes to memory when accumulating data.. Otherwise, pretty similar memory usage.. no spikes or 
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=\textwidth]{Memchart.png}
-%\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
-%\label{fig:memChart}
-%\end{figure}
+\begin{figure} 
+\centering
+\includegraphics[width=\textwidth]{Memchart.png}
+\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
+\label{fig:memChart}
+\end{figure}
 
 
 \subsection{CPU Usage}
+We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage ...
+%peaks during operations..??
+
+\begin{figure} 
+\centering
+\includegraphics[width=\textwidth]{cpuChart.png}
+\caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
+\label{fig:cpuChart}
+\end{figure}
+
+
+
 \subsection{Network (Socket) Usage}
 
 %wave pattern - high = lots of connections.. average between 100 nodes.. similar to cpu utilization..
