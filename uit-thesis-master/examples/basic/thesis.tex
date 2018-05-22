@@ -790,7 +790,7 @@ As described in Section \ref{eva:net_measure}, are communication between nodes a
 We also measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval. The \gls{ch} is only counted when it's done gathering all the data.
 
 \subsection{Cluster Head Receives Packages} \label{eva:ch_recv}
-At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}
+At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}.
 
 \newpage
 
@@ -808,13 +808,6 @@ The purpose of this experiment was to examine how much memory the system consume
 There is reason to think that this implementation uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
 
 
-%\begin{figure} 
-%\centering
-%\includegraphics[width=\textwidth]{Memchart.png}
-%\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
-%\label{fig:memChart}
-%\end{figure}
-
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{memChart2.png}
@@ -825,11 +818,11 @@ There is reason to think that this implementation uses less memory than the othe
 
 \subsection{CPU Usage}
 We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
-The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of ...
+The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of Golangs\footnote{\url{https://golang.org/}} ability to utilize multicore and networked machines. Another reason for the graphs being so stable can be because the nodes are waiting for a request to either accumulate data or elect a new \gls{ch}. Most of the execution time, the nodes are waiting for requests.
 
-\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
 
-%peaks during operations..??
+%\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
+
 
 \begin{figure} [ht]
 \centering
@@ -837,13 +830,6 @@ The CPU percentage is stable on around 75\% during the execution for each experi
 \caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
 \label{fig:cpuChart}
 \end{figure}
-
-%\begin{figure} 
-%\centering
-%\includegraphics[width=\textwidth]{cpuChart2.png}
-%\caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
-%\label{fig:cpuChart}
-%\end{figure}
 
 
 \newpage
@@ -858,9 +844,9 @@ There is reason to believe that these high wave like patterns showing a high amo
 \item At last, after accumulating data from other nodes in the cluster, the \gls{ch} gossip a new \gls{ch} election calculation and then gossip a new \gls{ch} election.
 \end{itemize}
 
+There is also reason to think that these wave like patterns occurs at different time intervals is because of the different implementations accumulate data and elect \gls{ch} at different time intervals.
 
 %around 6 connections are average..
-
 
 \begin{figure} [ht]
 \centering
@@ -886,6 +872,8 @@ As mentioned in Section \ref{eva:exp_des}, the different experiments are ran ind
 \end{figure}
 
 
+\newpage
+
 \subsection{Number Of Sends To Cluster Heads}
 Number of sends to \gls{ch}s is also connected to the experiment  with communication and network usage. The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \gls{ch}s increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between $\emptyset$ sends up til around 35 sends.
 
@@ -899,6 +887,8 @@ Number of sends to \gls{ch}s is also connected to the experiment  with communica
 \label{fig:sendschChart}
 \end{figure}
 
+
+\newpage
 
 \subsection{Cluster Head Count}
 %Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene.. vil bare øke etter X accumualtions.. 
@@ -915,11 +905,12 @@ Counting the number of \gls{ch} after a random number of accumulations, show a m
 \end{figure}
 
 
+\newpage
 
 \subsection{Cluster Head Receives Packages}
 
 
-Figure \ref{fig:recPktChart}.
+As we can see from Figure \ref{fig:recPktChart}, are the number of packets \gls{ch}s receives similar during each experiment. This result as well, is expected because the \gls{ch}s will receive more data each time they ask for it.
 
 \begin{figure} [ht]
 \centering
@@ -930,8 +921,9 @@ Figure \ref{fig:recPktChart}.
 
 
 
+Figure \ref{fig:sentvsrecvChart} show the number of sends from nodes to neighbours, sends from nodes to \gls{ch}s and number of times \gls{ch}s have received data.
 
-Figure \ref{fig:sentvsrecvChart}.
+%mye dat blir accumulert - resulterer i lavere ant recv enn sends.. det er jo bra!
 
 \begin{figure} [ht]
 \centering
@@ -988,18 +980,22 @@ An improvement to check if neighbours are alive or not, is to ping neighbouring 
 
 %multiple solutions: ask neighbours, hvis ulike svar, tell hvilket svar som det er flest av, ha timestamp pa election
 
-At the current approach, there is no timestamp or schedule for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will most likely forward its data to the old \gls{ch}. However, this isn't necessary a drawback since the node receiving this data will probably forward the accumulated data in the next gathering phase.
+At the current approach, there is no timestamp or schedule for when the \gls{ch} was elected. If a node was unavailable during the \gls{ch} election, it will most likely forward its data to the old \gls{ch}. However, this isn't necessary a drawback since the node receiving this data will forward the accumulated data in the next gathering phase.
+To improve this approach and avoid inconsistency of the \gls{ch}, we could implement a solution to ask the nodes neighbours who the \gls{ch} is. Each \gls{ch} election should have a timestamp to compare in case the node receives multiple different answers. Then the node could compare the different timestamps and choose the timestamp that is the biggest or the closets to its own clock, depending on the implementation. 
 
-\textbf{Otto: expand last sentence.. "probably"}
+Another approach is to have an consensus protocol for agreeing on a leader. This approach, together with other possible solutions for electing a new \gls{ch}, is discussed further in Section \ref{disc:ch_election}.
 
 
-\section{Cluster Head Election}
+
+\section{Cluster Head Election} \label{disc:ch_election}
 !!! A prior?? explain..
 
 \textbf{Otto: how much more?}
 
 Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior, e.g. by a \gls{bs} without any knowledge about the network, the node would quickly use up its limited energy. Once a \gls{ch} runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, our approach will not chose \gls{ch}s a prior/\textbf{priori}, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
-%\textbf{possibly/perchance} \textbf{rullere/rotate}
+
+
+\subsubsection{Consensus Protocol For Elections?}
 
 
 \subsection{Cluster Head Calculation} \label{ssec:ch_election}
