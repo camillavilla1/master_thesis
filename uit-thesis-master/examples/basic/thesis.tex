@@ -782,12 +782,12 @@ Measuring the process connection is important since the system relies on network
 We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. This experiment is in connection with the network usage and communication, described in Section \ref{eva:net_measure}. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, connecting to other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
 
 
-\subsection{Number Of Sends To Cluster Head} \label{eva:num_sends_ch}
+\subsection{Number Of Sends To Cluster Heads} \label{eva:num_sends_ch}
 As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum. Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
 
 \subsection{Cluster Head Count} \label{eva:ch_count}
-We also measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval.
+We also measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval. The \gls{ch} is only counted when it's done gathering all the data.
 
 \subsection{Cluster Head Receives Packages} \label{eva:ch_recv}
 At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}
@@ -886,15 +886,16 @@ As mentioned in Section \ref{eva:exp_des}, the different experiments are ran ind
 \end{figure}
 
 
-\subsection{Number Of Sends To Cluster Head}
-We ... The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \gls{ch}s increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between 0 send up til around 35 sends.
+\subsection{Number Of Sends To Cluster Heads}
+Number of sends to \gls{ch}s is also connected to the experiment  with communication and network usage. The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \gls{ch}s increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between $\emptyset$ sends up til around 35 sends.
+
 
 %her også avhenger hvert experiment på hvordan nodene har laget cluster.. ch kan ha hatt fler eller ferre naboer og flere eller ferre noder i clusteret..
 
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{sendschChart.png}
-\caption{Figure shows average number of sends to a \gls{ch} with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average number of sends to \gls{ch}s with different accumulation intervals (500 milliseconds).}
 \label{fig:sendschChart}
 \end{figure}
 
@@ -902,7 +903,9 @@ We ... The result is presented in Figure \ref{fig:sendschChart} where we can see
 \subsection{Cluster Head Count}
 %Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene.. vil bare øke etter X accumualtions.. 
 
-Figure \ref{fig:chCountChart}.
+The result is presented in Figure \ref{fig:chCountChart}. The graphs are as expected flat during parts of the execution because the \gls{ch}-count is only counted when the \gls{ch} is done gathering data.
+There is reason to think that the all graphs, except the graph of \gls{ch}-count after a random number of accumulations, have flat graphs during execution because all the \gls{ch}-counts happens approximately at the same time interval and don't change until the next \gls{ch} election.
+Counting the number of \gls{ch} after a random number of accumulations, show a more increasing graph during execution because of the accumulations happens at different time interval causing the \gls{ch} election to be more spread during execution.
 
 \begin{figure} [ht]
 \centering
