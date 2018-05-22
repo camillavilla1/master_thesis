@@ -132,9 +132,10 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 
 %\listofdefinition
 
-%\listoflistings
+\listoflistings
 
-\printglossary
+\printacronyms
+%\printglossary
 %\printglossary[type=\acronymtype]
 %\printglossaries
 
@@ -222,9 +223,11 @@ This thesis is structured into X chapters including the introduction.
 \chapter{Routing Techniques in WSNs}
 \glsfirst{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
 
+\definition{Multi-hop routing: multi-hop routing is ...}
+
 \gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \glsfirst{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
-\begin{figure}
+\begin{figure} [!ht]
 \centering
 \includegraphics[width=\textwidth]{wsn.png}
 \caption{Figure shows an example of a multi-hop \gls{wsn} architecture.}
@@ -536,8 +539,9 @@ d = \sqrt{(X_{2} - X_{1})^{2}+(Y_{2} - Y_{1})^{2}}
 \end{equation}
 
 %node attempt to connect..
+\newpage
 
-Figure \ref{fig:broadcast_simulation} shows how a node contacts. The lookup service computes the node's position. Nodes within the simulated radio range is returned to the node. Finally, the node will try to connect to the these nodes.
+Figure \ref{fig:broadcast_simulation} shows how a node contacts the lookup service. The lookup service computes the node's position. Nodes within the simulated radio range is returned to the node. Finally, the node will try to connect to the these nodes.
 
 \begin{figure} %[!b]
 \centering
@@ -702,9 +706,9 @@ Each node execute their own experiments when launched. Each time interval (500 m
 A \gls{ch} accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
 
 \begin{itemize}
-\item After \gls{ch} accumulated data 2 times
-\item After \gls{ch} accumulated data 4 times
-\item After \gls{ch} accumulated data 6 times
+\item After \gls{ch} accumulated data two times
+\item After \gls{ch} accumulated data four times
+\item After \gls{ch} accumulated data six times
 \item After \gls{ch} accumulated data a random time between one and six
 \end{itemize}
 
@@ -774,18 +778,18 @@ Measuring the process connection is important since the system relies on network
 
 %\subsection{Network Lifetime?}
 
-\subsection{Number Of Sends To Neighbours}
-We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, connecting to other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
+\subsection{Number Of Sends To Neighbours} \label{eva:num_sends}
+We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. This experiment is in connection with the network usage and communication, described in Section \ref{eva:net_measure}. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, connecting to other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
 
 
-\subsection{Number Of Sends To Cluster Head}
-Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
+\subsection{Number Of Sends To Cluster Head} \label{eva:num_sends_ch}
+As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum. Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
 
-\subsection{Cluster Head Count}
+\subsection{Cluster Head Count} \label{eva:ch_count}
 We also measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval.
 
-\subsection{Cluster Head Receives Packages}
+\subsection{Cluster Head Receives Packages} \label{eva:ch_recv}
 At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}
 
 \newpage
@@ -811,7 +815,7 @@ There is reason to think that this implementation uses less memory than the othe
 %\label{fig:memChart}
 %\end{figure}
 
-\begin{figure} [!b]
+\begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{memChart2.png}
 \caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
@@ -827,7 +831,7 @@ The CPU percentage is stable on around 75\% during the execution for each experi
 
 %peaks during operations..??
 
-\begin{figure} [!b]
+\begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{cpuChart.png}
 \caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
@@ -845,7 +849,7 @@ The CPU percentage is stable on around 75\% during the execution for each experi
 \newpage
 
 \subsection{Network Usage}
-We measured the network usage and communication between nodes since it's important to keep this to a minimum. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 11 connections on average per node for 100 node in the system.
+The purpose of this experiment was to measure the network usage and communication between nodes since it's important to keep this to a minimum. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 11 connections on average per node for 100 node in the system.
 There is reason to believe that these high wave like patterns showing a high amount on connections is because of three reasons:
 
 \begin{itemize}
@@ -858,7 +862,7 @@ There is reason to believe that these high wave like patterns showing a high amo
 %around 6 connections are average..
 
 
-\begin{figure} [!b]
+\begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{netconnChart.png}
 \caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
@@ -870,9 +874,9 @@ There is reason to believe that these high wave like patterns showing a high amo
 
 %\subsection{Network Lifetime?}
 \subsection{Number Of Sends To Neighbours}
-As we can see from Figure \ref{fig:sendsChart}, will number of sends from one node to another increase during execution. This is an expected result since each time a node communicate with another node, it's counted and therefor will increase during execution. As mentioned in Section \ref{eva:exp_des}, are the different experiments ran independently causing the nodes in the network to create clusters of different size (numerous of cluster members).
-
-\textit{Note to self: not surprising.. 4 accumulations have most sends to other neighbours.. these values can differ because of clusters change during each experiments, so nodes can have more or less neighbours from one experiment to another..}
+Since it's important to keep communication and network usage to a minimum, we measure the number of sends from nodes to neighbours. 
+As we can see from Figure \ref{fig:sendsChart}, will number of sends from one node to another increase during execution. The average number of sends from nodes range between 1 send up til around 95 sends. This is an expected result since each time a node communicate with another node, it's counted and therefor will increase during execution.
+As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.
 
 \begin{figure} [ht]
 \centering
@@ -883,7 +887,9 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
 
 
 \subsection{Number Of Sends To Cluster Head}
-Figure \ref{fig:sendschChart}.
+We ... The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \gls{ch}s increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between 0 send up til around 35 sends.
+
+%her også avhenger hvert experiment på hvordan nodene har laget cluster.. ch kan ha hatt fler eller ferre naboer og flere eller ferre noder i clusteret..
 
 \begin{figure} [ht]
 \centering
@@ -894,11 +900,11 @@ Figure \ref{fig:sendschChart}.
 
 
 \subsection{Cluster Head Count}
-%Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene..
+%Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene.. vil bare øke etter X accumualtions.. 
 
 Figure \ref{fig:chCountChart}.
 
-\begin{figure}
+\begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{chCountChart.png}
 \caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
@@ -912,7 +918,7 @@ Figure \ref{fig:chCountChart}.
 
 Figure \ref{fig:recPktChart}.
 
-\begin{figure}
+\begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{recPktChart.png}
 \caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
@@ -924,12 +930,14 @@ Figure \ref{fig:recPktChart}.
 
 Figure \ref{fig:sentvsrecvChart}.
 
-\begin{figure}
+\begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{sentVsRecvChart.png}
 \caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
 \label{fig:sentvsrecvChart}
 \end{figure}
+
+
 
 
 \chapter{Discussion}
@@ -1058,6 +1066,12 @@ One advantage with the present approach is that the \gls{ch} election chose the 
 %multiple leaders - multiple paths.. replication etc...?
 
 \subsection{Multi-hop or single-hop routing?}
+%https://en.wikipedia.org/wiki/Multi-hop_routing
+
+\textit{Since the transceiver is the major source of power consumption in a radio node and long distance transmission requires high power, in some cases multi-hop routing can be more energy efficient than single-hop routing.}
+
+
+
 
 \section{Data Accumulation}
 %What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
