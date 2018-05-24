@@ -132,7 +132,7 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 
 \tableofcontents
 
-%\listofdefinition
+\listofdefinition
 
 \listoflistings
 
@@ -226,9 +226,9 @@ This thesis is structured into X chapters including the introduction.
 
 \chapter{Routing Techniques in WSNs}
 \glsresetall
-\gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
+\gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be, with multi-hop routing. 
 
-\definition{Multi-hop routing: multi-hop routing is ...}
+%\definition{Multi-hop routing is a type of communication in radio networks where nodes use other nodes as relays to reach some destination.}
 
 \gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
@@ -1037,14 +1037,11 @@ Another approach to avoid flooding the network and reduce nodes energy level is 
  
  
 \subsection{When To Elect A New Cluster Head}
-The present approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times.
-%Current approach starts a new \gls{ch} election when the \gls{ch} have accumulated data 'X' times.
-Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
+The present approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times. Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
+
 %every other = annenhver
 
-The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}.
-
-Discussed further in Section \ref{disc:simult_el_acc}.??
+The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. This issue is also discussed further in Section \ref{disc:simult_el_acc}.
 
 %Improvements??
 %JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for a sende?
@@ -1052,12 +1049,10 @@ Discussed further in Section \ref{disc:simult_el_acc}.??
 %node have status= acc/LE.. if one, the other can not happen..?
 
 \section{Remember Previous Cluster Head}
-At the present approach, nodes do not know that they have been \glspl{ch} in an earlier election. The nodes should know if they have been elected to \glspl{ch} earlier because they have accumulated data from other nodes in the cluster. This data should eventually be sent to a \gls{bs}. The \glspl{ch} can have access to a \gls{bs} during their whole lifetime or at some points during their lifetime. Access to \glspl{bs} are discussed further in Section \ref{disc:bs_acc}
+At the present approach, nodes do not know that they have been \glspl{ch} in an earlier election. The nodes should know if they have been elected to \glspl{ch} earlier because they have accumulated data from other nodes in the cluster. This data should be sent to a \gls{bs}. The \glspl{ch} can have access to a \gls{bs} during their whole lifetime or at some points during their lifetime. Access to \glspl{bs} are discussed further in Section \ref{disc:bs_acc}
 
-To improve our current approach, each \gls{ch} should remember that they have been elected as \gls{ch} in an earlier election. Eventually, when the \gls{ch} have been in contact with a \gls{bs} that collects all the \glspl{ch} data, they can forget that they have been \glspl{ch}.
+To improve our current approach, each \gls{ch} should remember that they have been elected as \gls{ch} in an earlier election. Eventually, when the \gls{ch} have been in contact with a \gls{bs} that collects all the \glspl{ch} data, they can forget that they have been \glspl{ch} and also remove their data to increase memory capacity.
 
-%Another solution to the 
-%Should remember old leader.. or old leader should know that it has been a leader and have data to be sent to the bs..
 
 %remember CH status so data can be sent to BS/drone...
 
@@ -1065,29 +1060,40 @@ To improve our current approach, each \gls{ch} should remember that they have be
 \section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 The current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of work load for the \gls{ch}, and the path to the \gls{ch} can be long for some nodes.
-An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. \gls{ch} elections will be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent in terms of battery lifetime, network bandwidth and number of neighbours, the node should choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than necessary.
+An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. \gls{ch} elections will be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent in terms of battery lifetime, network bandwidth and number of neighbours, the node should choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than necessary. Having multiple \glspl{ch} that accumulates data would also support scalability issues in terms of balance work load between \glspl{ch}.
+
 
 \subsection{Replication Of Data}
 Multiple leaders - replication of data?
 
-\section{Path To Cluster Head}
+What if multiple leaders gather data? Replication of data is good, but also acquire more memory.. Find a trade off.. Can use fingerprint to identify data..
+
+
+\section{Path To Cluster Head} \label{disc:ch_path}
 One advantage with the present approach is that the \gls{ch} election chose the shortest path from a node to the \gls{ch} to avoid flooding the network with requests. The idea to use the shortest path \cite{dijkstra}, is presumably not beneficial to change in any approach. However, it may be that some nodes in a path to the \gls{ch} have a limited battery lifetime and therefor should not be in a path to the \gls{ch}. This is a corner case which will be difficult to give a right answer to since the paths and nodes can occur in many different scenarios.
 
 %avoid flooding
 %minimize path to leader
 %multiple leaders - multiple paths.. replication etc...?
 
-\subsection{Multi-hop or single-hop routing?}
+\subsection{Multi-hop or single-hop routing}
 %https://en.wikipedia.org/wiki/Multi-hop_routing
 
-\textit{Since the transceiver is the major source of power consumption in a radio node and long distance transmission requires high power, in some cases multi-hop routing can be more energy efficient than single-hop routing.}
+\gls{wsn} consists of hundreds or thousands of low-cost micro-sensor nodes and their main task is to collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the \gls{bs}, as Figure \ref{fig:hopping} shows. However, the problem is that the \gls{bs} may be places far away from the sensor node so a direct transmission would not be possible. Another problem can be that the routing path from a sensor node to the \gls{bs} is long and the node will require more power consumption than available.
 
+In some cases can multi-hop routing be more energy efficient than single-hop routing\cite{hopping2}. Our approach is currently using multi-hop routing to deliver accumulated data to the \gls{ch}. To use single-hop routing in our approach would not be efficient in terms of energy consumption or sensor nodes radio range. In a real-life scenario where nodes are deployed in the Arctic Tundra, all nodes would not be able to reach each other by radio range or a \gls{bs}.
 
+However, multi-hop routing has it's drawbacks. There is more likely a packet will be lost during multi-hop routing than single-hop because the packet will have multiple nodes in it's path that can be unavailable during transmission. Multi-hop routing can also introduce problems of routing in terms of different paths to a \gls{bs} or a \gls{ch}, as seen in Figure \ref{fig:hopping}. As mentioned in in Section \ref{disc:ch_path}, will nodes in our approach choose the shortest routing path to a \gls{ch}.
+
+\begin{figure} [ht]
+\centering
+\includegraphics[scale=0.35]{hopping.png}
+\caption{Figure show single-hop routing and multi-hop routing.}
+\label{fig:hopping}
+\end{figure}
 
 
 \section{Data Accumulation}
-%What if multiple leaders gather data? Replication of data is good, but also aqcuire more memory.. Find a tradeoff.. Can use fingerprint to identify data..
-
 %How to gather data? Receive a GET-post from BS or someone else telling the CH to accumulate/gather data or gather data periodically? How does a BS send a GET-request to CH?? The CH could not be in range of the BS, so maybe send to a node in range and forward msg all the way to CH.. But again, what if some nodes are sleeping to save battery? The CH will then not receive the msg..
 
 %\subsection{Data Accumulation}
@@ -1095,12 +1101,15 @@ One advantage with the present approach is that the \gls{ch} election chose the 
 
 %Vector clocks..
 
+The current approach accumulates data a antall ganger....
+
 \subsection{Different DAO Stores wants different data..}
 \subsection{Prioritization Of Data?}
 %Critical, non-ciritcal data?
 
 \subsection{GET Or POST Data To The Cluster Head}
 ch som initerer query bestanding eller kan andre bestemme seg for a sende??
+
 
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
 The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of \gls{ch}s and paths to \gls{ch} before all nodes have an consistent \gls{ch} election, as mentioned in Section \ref{sec:conc_events}.
@@ -1113,13 +1122,14 @@ The current approach provides an eventual consistency when electing a new \gls{c
 \section{Base Station Access} \label{disc:bs_acc}
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
 
-\section{Scalability?}
-Note to self: scale with partially centralized network.. how about multiple \gls{ch} to load balance work and maybe shorter path for nodes to leaders..
+%\section{Scalability?}
+%Note to self: scale with partially centralized network.. how about multiple \gls{ch} to load balance work and maybe shorter path for nodes to leaders..
 
 \section{CAP Theorem?}
 Note to self: evt bygge det litt inn i teksten..
 
-\section{Battery lifetime?}
+
+%\section{Battery lifetime?}
 
 \section{Routing Challenges in WSNs}
 \begin{itemize}
@@ -1136,13 +1146,6 @@ Note to self: evt bygge det litt inn i teksten..
 \item Data aggregation
 \item Quality of service
 \end{itemize}
-
-
-
-
-
-
-
 
 
 
@@ -1359,6 +1362,13 @@ J. N. Al-Karaki and R. Ul-Mustafa and A. E. Kamal,
 Estrin, Deborah and Govindan, Ramesh and Heidemann, John and Kumar, Satish,
 \newblock {\em Next Century Challenges: Scalable Coordination in Sensor Networks},
 \newblock in {\em Proceedings of the 5th Annual ACM/IEEE International Conference on Mobile Computing and Networking}, 1999, pp.263--270.
+
+
+%31
+\bibitem{hopping2}
+S. Fedor and M. Collier,
+\newblock {\em On the Problem of Energy Efficiency of Multi-Hop vs One-Hop Routing in Wireless Sensor Networks},
+\newblock in {\em Advanced Information Networking and Applications Workshops, 2007, AINAW '07. 21st International Conference on}, 2007, Vol.2, pp.380-385.
 
 
 
