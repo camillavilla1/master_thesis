@@ -1,5 +1,5 @@
 %!TEX root = thesis.tex
-%\immediate\write18{makeglossaries -q "\jobname"}
+\immediate\write18{makeglossaries -q "\jobname"}
 
 %:-------------------------- Preamble -----------------------
 
@@ -92,6 +92,7 @@
 \thesisprogramme{INF-3981 Master's Thesis in Computer Science ... May 2018}
 %\ThesisFrontpageImage{example_image.jpg}	% Optional
 
+
 \maketitle
 
 %:-------------------------- Frontmatter -----------------------
@@ -135,7 +136,8 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 
 \listoflistings
 
-\printacronyms
+%\glsaddall
+%\printacronyms
 %\printglossary
 %\printglossary[type=\acronymtype]
 %\printglossaries
@@ -1005,9 +1007,7 @@ Being a \gls{ch} is more energy intensive than being a regular cluster node beca
 
 
 \subsection{Cluster Head Calculation} \label{ssec:ch_election}
-Presently, the \gls{ch} election is based on which node has the highest score between $\emptyset$ and 1. This \textbf{intellectually} simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic in terms of saving battery lifetime and a real-life scenario for deploying sensors in the Arctic tundra, we could have used several sub-factors listed below:
-
-%now random number, to approve and make it more realistic: 
+Presently, the \gls{ch} election is based on which node has the highest score between $\emptyset$ and 1. This intentionally simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic in terms of saving battery lifetime and a real-life scenario for deploying sensors in the Arctic tundra, we could have used several sub-factors listed below:
 
 \begin{itemize}
 \item Number of nodes between a node and \gls{ch}
@@ -1042,14 +1042,20 @@ The present approach starts a new \gls{ch} election in two scenarios: either whe
 Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
 %every other = annenhver
 
-The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
+The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}.
 
-Improvements??
-JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for a sende?
+Discussed further in Section \ref{disc:simult_el_acc}.??
 
-%node have stats= acc/LE.. if one, the other can not happen..?
+%Improvements??
+%JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for a sende?
+
+%node have status= acc/LE.. if one, the other can not happen..?
 
 \section{Remember Previous Cluster Head}
+At the present approach, nodes do not know that they have been \glspl{ch} in an earlier election. The nodes should know if they have been elected to \glspl{ch} earlier because they have accumulated data from other nodes in the cluster. This data should eventually be sent to a \gls{bs}. The \glspl{ch} can have access to a \gls{bs} during their whole lifetime or at some points during their lifetime. Access to \glspl{bs} are discussed further in Section \ref{disc:bs_acc}
+
+To improve our current approach, each \gls{ch} should remember that they have been elected as \gls{ch} in an earlier election. Eventually, when the \gls{ch} have been in contact with a \gls{bs} that collects all the \glspl{ch} data, they can forget that they have been \glspl{ch}.
+
 %Another solution to the 
 %Should remember old leader.. or old leader should know that it has been a leader and have data to be sent to the bs..
 
@@ -1104,7 +1110,7 @@ The current approach provides an eventual consistency when electing a new \gls{c
 %Eventual/weak consistency with leader election.. Gossiping with an ID to check if node receive the msg before or not.. Updating leader..
 
 
-\section{Base Station Access}
+\section{Base Station Access} \label{disc:bs_acc}
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
 
 \section{Scalability?}
