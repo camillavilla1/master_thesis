@@ -1101,7 +1101,7 @@ However, multi-hop routing has it's drawbacks. There is more likely a packet wil
 
 %Vector clocks..
 
-The current approach accumulates data a antall ganger....
+In the current approach, \glspl{ch} accumulate data periodically by sending out a request to the other nodes in the clusters. Another approach would be that the node's sends their data when they have new data or when they have almost used up their memory capacity. However, if nodes have new data regularly, this approach would not be efficient in terms of energy consumption because other nodes in the routing path must be awake to transmit the data further to the \gls{ch}. There is reason to think that there is a possibility that the majority of the nodes in the clusters are awake most of their time instead of sleeping and saving battery. 
 
 \subsection{Different DAO Stores wants different data..}
 \subsection{Prioritization Of Data?}
