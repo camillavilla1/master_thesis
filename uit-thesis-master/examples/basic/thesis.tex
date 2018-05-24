@@ -1,4 +1,5 @@
 %!TEX root = thesis.tex
+%\immediate\write18{makeglossaries -q "\jobname"}
 
 %:-------------------------- Preamble -----------------------
 
@@ -144,9 +145,10 @@ What is wrong with the world? Motivation 1-3 sentences, Arch, Des, Imp, Exp 1,2-
 \mainmatter
 
 \chapter{Introduction}
-The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes \cite{coat2016}. Five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions developed a long-term research project called \glsfirst{coat}. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020 \cite{coat2016}.
+\glsresetall
+The Arctic tundra in the far northern hemisphere is challenged by climate changes in the world today and is one of the ecosystems that are most affected by these changes \cite{coat2016}. Five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions developed a long-term research project called \gls{coat}. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems. COAT was in autumn 2015 granted substantial funding to establish research infrastructure which allowed them to start up a research infrastructure during 2016-2020 \cite{coat2016}.
 
-\glsfirst{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
+\gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes. These nodes monitor and collect physical and environmental conditions. The various activities  in the sensor nodes consume lots of energy and the battery of the sensor node is difficult to recharge in wireless scenarios and also because the sensor nodes are located at remote areas in the Arctic tundra.
 
 
 %It is beneficial to make these sensors as cheap and energy-efficient as possible.
@@ -221,11 +223,12 @@ This thesis is structured into X chapters including the introduction.
 
 
 \chapter{Routing Techniques in WSNs}
-\glsfirst{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
+\glsresetall
+\gls{wsn} is a system that consists of hundreds or thousands of low-cost micro-sensor nodes which monitor and collect physical and environmental conditions. Figure \ref{fig:wsn} shows how a \gls{wsn} architecture can be. 
 
 \definition{Multi-hop routing: multi-hop routing is ...}
 
-\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \glsfirst{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
+\gls{wsn}s  main task is to periodically collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the BS. But the problem is that the \gls{bs} can be far away from the sensor node so a direct data transmission would not be possible, or if the routing path from the sensor node to the \gls{bs} is long, the sensor node may require more energy than available. There are multiple hierarchical protocols that has been proposed as a solution to this problem.
 
 \begin{figure} [!ht]
 \centering
@@ -246,7 +249,7 @@ Two approaches based on hierarchical routing are \gls{leach}\cite{leach} and \gl
 
 
 \subsection{Location-based Routing}
-In location-based routing, nodes are addressed based on their location. The distance between a node and its neighbour can be estimated by incoming signal strengths, by GPS or via coordination among nodes \cite{routing_survey}. Two approaches are \glsfirst{gaf}\cite{gaf} and \glsfirst{gear}\cite{gear}.
+In location-based routing, nodes are addressed based on their location. The distance between a node and its neighbour can be estimated by incoming signal strengths, by GPS or via coordination among nodes \cite{routing_survey}. Two approaches are \gls{gaf}\cite{gaf} and \gls{gear}\cite{gear}.
 
 
 \section{Flood And Gossiping Protocol}
@@ -258,8 +261,9 @@ Gossiping is a modified version of flooding attempting to correct some of its dr
 
 
 \chapter{Related Work} \label{chap:related_work}
+\glsresetall
 %\section{Routing Protocols in WSNs}
-To improve the overall energy dissipaton of \gls{wsn}s, \glsfirst{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \glsfirst{bs} or \glsfirst{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}. Details of the \gls{leach} algorithm is listed below:
+To improve the overall energy dissipaton of \gls{wsn}s, \gls{leach} \cite{leach} introduce a hierarchical clustering algorithm for sensor networks. It is self-organized and use randomization to distribute the energy load evenly among the sensors in the network. The sensor nodes organize themselves into local clusters where one node is the local \gls{bs} or \gls{ch}. The \gls{ch} are not fixed to avoid nodes to drain their battery and to spread the energy usage over multiple nodes. The nodes self-elect a new \gls{ch} depending on the amount of energy left at the nodes at different time-intervals. \gls{leach} is divided into different rounds where each round include a setup phase and a steady-state phase \cite{tree_based}. In the setup phase will each node decide whether to become a \gls{ch} or not. When a \gls{ch} is chosen, each node will select its own \gls{ch} based on the distance between the node and the \gls{ch} and join the cluster. In the steady-state phase will the \gls{ch} fuse the received data from the node members in the cluster and send it to \gls{bs}. Details of the \gls{leach} algorithm is listed below:
 
 \begin{itemize}
 \item \textbf{Advertisement Phase:} where each node decides whether to become a \gls{ch} or not. If a node has elected itself as \gls{ch}, it will broadcast a message to the rest of the nodes. Each node will then decide which cluster it belongs to for this round.
@@ -294,17 +298,17 @@ A resemblance between the two approaches is that neither of them consider a node
 %P_{i}(t)=\min\left\{\frac{E_{i}(t)}{E_{total}(t)}k, 1\right\}
 %\end{equation}
 
-\Glsfirst{fleach} \cite{fuzzy_logic, ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
+\Gls{fleach} \cite{fuzzy_logic, ch_fuzzy} have three different fuzzy descriptors such as energy, concentration and centrality used to complement the cluster head selection process. The \gls{bs} performs the \gls{ch} election in each round by computing the chances of a node becoming a \gls{ch} by calculating the three fuzzy descriptors. \Gls{fleach} also assumes that the \gls{bs} elects the appropriate \gls{ch} because it has a complete information about the whole network.
 
 In contrast to \gls{fleach}, our approach will elect a \gls{ch} by the nodes in the cluster and not in a \gls{bs}. The \gls{ch} election will not consider sub-factors such as battery level or number of nodes in the cluster.
 
 
-\glsfirst{gaf} \cite{gaf} propose a energy-aware location-based routing algorithm designed for mobile ad hoc networks, but are also applicable for sensor networks. First, the network area is divided into different zones and forms virtual grids. Inside each zone, the nodes communicate with each other to to figure out their different roles. E.g., one node will be elected to stay awake for a certain period of time and is responsible for monitoring and reporting data to the \gls{bs} while the rest of the nodes goes to sleep. Each node is also located by a GPS-position which is associated with a point in the virtual grid. Nodes within the same point are considered equivalent in terms of packet routing. This means that some nodes within the same point can sleep in order to save energy. This apporach is also an example of adaptive fidelity \cite{adfidelity} where the quality (fidelity) of the answer of the algorithm can be traded against battery lifetime, network bandwidth, or number of active sensors.
+\gls{gaf} \cite{gaf} propose a energy-aware location-based routing algorithm designed for mobile ad hoc networks, but are also applicable for sensor networks. First, the network area is divided into different zones and forms virtual grids. Inside each zone, the nodes communicate with each other to to figure out their different roles. E.g., one node will be elected to stay awake for a certain period of time and is responsible for monitoring and reporting data to the \gls{bs} while the rest of the nodes goes to sleep. Each node is also located by a GPS-position which is associated with a point in the virtual grid. Nodes within the same point are considered equivalent in terms of packet routing. This means that some nodes within the same point can sleep in order to save energy. This apporach is also an example of adaptive fidelity \cite{adfidelity} where the quality (fidelity) of the answer of the algorithm can be traded against battery lifetime, network bandwidth, or number of active sensors.
 
 Our approach have no adaptive fidelity algorithm for trading battery lifetime, network bandwidth or number of active sensors. However, our approach use simulated GPS-coordinates (x,y) to place nodes within a grid as similar to \gls{gaf}. Nodes can only contact other nodes within a simulated broadcast width. This is explained further in Section \ref{chap:implementation}. In contrast to \gls{gaf}, will \gls{ch} and regular nodes in our approach accumulate received data  with its own data.
 
 
-\Glsfirst{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbour. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node, or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}. The greedy algorithm assumes that all nodes have a global knowledge of the network for constructing the chain. Each node, except the end nodes, performs data aggregation with data received from its neighbours data and transmit that to its other neighbours.
+\Gls{pegasis} is a chain-based protocol with the idea to form a chain among the sensor nodes so each node will receive and transmit data to a close neighbour. The sensor nodes will also take turns on being the leader for transmitting data to the \gls{bs} and therefor distribute the energy load evenly among the sensor nodes. The chain can be organized by the nodes themselves using a greedy algorithm starting from some node, or the \gls{bs} can compute the chain and broadcast it to all the nodes in the network \cite{pegasis}. The greedy algorithm assumes that all nodes have a global knowledge of the network for constructing the chain. Each node, except the end nodes, performs data aggregation with data received from its neighbours data and transmit that to its other neighbours.
 
 Our approach do not assume that all nodes have a global knowledge of the network and computing the path is done in the same task as electing a \gls{ch}. Furthermore, our approach is a cluster based protocol and not a greedy based approach used for chain formation. Our network have one \gls{ch} per cluster instead of only one node who will aggregate data and pass it to the \gls{bs}.
 
@@ -315,7 +319,7 @@ A diversity to our approach is that ZebraNet stores multiple copies of the same 
 
 
 %\section{Gossip-based Protocols}
-Gossip-based protocols, or epidemic protocols, are popular protocols due to their ability to reliably pass information among a large set on interconnected nodes. Jelasity et al. \cite{gbsampling} provide a \glsfirst{gbcp} where each node have peers to gossip with in a large-scale distributed system \cite{demers}. These nodes can quickly join and leave the network at any given point of time. The general principle of their framework is that every node (1) maintains a relatively small local membership table that provides a partial view of all nodes and (2) periodically refreshes the table using a gossiping procedure.
+Gossip-based protocols, or epidemic protocols, are popular protocols due to their ability to reliably pass information among a large set on interconnected nodes. Jelasity et al. \cite{gbsampling} provide a \gls{gbcp} where each node have peers to gossip with in a large-scale distributed system \cite{demers}. These nodes can quickly join and leave the network at any given point of time. The general principle of their framework is that every node (1) maintains a relatively small local membership table that provides a partial view of all nodes and (2) periodically refreshes the table using a gossiping procedure.
 
 The difference between \gls{gbcp} and our approach is that our approach does not use a gossip protocol to update its table of nodes, but instead relies on the communication with other nodes to know about the election of a new \gls{ch}, which of the node is the \gls{ch} and when a node should accumulate data and send it to the \gls{ch}.
 
@@ -327,6 +331,7 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 
 \chapter{Idea} \label{chap:idea}
+\glsresetall
 %Technical idea
 
 %Unstructured p2p network..
@@ -339,7 +344,7 @@ The difference between \gls{gbcp} and our approach is that our approach does not
 
 %hva er veien, ikke hvilken vei..
 
-The technical idea behind the system is that it should be a partially centralized unstructured \glsfirst{p2p} system where nodes, also called \glsfirst{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to a large number of nodes that are frequently joining and leaving the network since it's highly low cost in the face of high rates of churn. The technical idea is shown in Figure \ref{fig:idea}. 
+The technical idea behind the system is that it should be a partially centralized unstructured \gls{p2p} system where nodes, also called \gls{ou}s, connect to nearby nodes and create clusters. Using an unstructured network would be efficient with regards to a large number of nodes that are frequently joining and leaving the network since it's highly low cost in the face of high rates of churn. The technical idea is shown in Figure \ref{fig:idea}. 
 
 \begin{figure}
 \centering
@@ -351,7 +356,7 @@ The technical idea behind the system is that it should be a partially centralize
 
 The node lookup service in Figure \ref{fig:idea} should provide a functionality for nodes to discover nearby nodes they can connect to. Together, the nodes creates a network of nodes. However, it may occur that the network will be partitioned into multiple clusters due to nodes not reaching each other.
 
-In a partially centralized network, the role of all peers are the same except of some nodes that assume a more important role. These nodes are called \glsfirst{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network decided by multiple sub-factors. The \gls{ch} nodes are the red nodes in Figure \ref{fig:idea}.
+In a partially centralized network, the role of all peers are the same except of some nodes that assume a more important role. These nodes are called \gls{ch}s or super nodes. These \gls{ch}s will be important when accumulating data for further use. A node will assume a more important role in the network decided by multiple sub-factors. The \gls{ch} nodes are the red nodes in Figure \ref{fig:idea}.
 
 All nodes should be able to observe data observed by other nodes and to gradually accumulate data to \gls{ou}s being a \gls{ch} or e.g. a \gls{dao} Store.
 
@@ -360,6 +365,7 @@ All nodes should be able to observe data observed by other nodes and to graduall
 
 
 \chapter{Architecture}
+\glsresetall
 %Tell it clean/neat. Abstractions, functionalities
 
 This chapter describes the architecture of the system. The main functionality can be divided into 4 sub-sections: a nodes lookup service, discovery of other nodes, data accumulation and incoming- and outgoing network requests. The architecture of the system is presented in Figure \ref{fig:architecture3}.
@@ -414,6 +420,7 @@ This request forwards a nodes data to the next node in the path to the \gls{ch}.
 
 
 \chapter{Design}
+\glsresetall
 %Server, p2p, protocols..
 In this chapter we will look at the design of the system and present the design of each component. Figure \ref{fig:design} shows how the cluster network may appear in the system. Nodes are connected to other nearby nodes represented by arrows and together they form a cluster network.
 
@@ -509,13 +516,14 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 
 
 \chapter{Implementation} \label{chap:implementation}
+\glsresetall
 %Threads, data structures, language
 
 This chapter will elaborate implementation of the system, general implementation requirements, issues and choices. 
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \glsfirst{tcp} network. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries. When nodes communicate with each other, they send packets structured as JSON \footnote{\url{https://www.json.org/}}.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries. When nodes communicate with each other, they send packets structured as JSON \footnote{\url{https://www.json.org/}}.
 
-Each node in the network has a limited battery lifetime and during execution the node's battery will be drained causing the node to eventually die. A \gls{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
+Each node in the network has a limited battery lifetime and during execution the node's battery will be drained causing the node to eventually die. A \glspl{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
 
 It is not suitable to have nodes deployed in the Arctic Tundra at such an early development. This implementation simulates a real-life environment where nodes can communicate with each other through the \gls{tcp} network. Each node is assigned \textit{x,y} coordinates within a network grid size and a broadcast width, as shown in \ref{fig:broadcastNeighbour2}. The purple nodes are new nodes in the network and the purple arrows show connection between the new node and reachable nodes.
 
@@ -664,7 +672,7 @@ If a \gls{ch} election and a data gathering happens concurrently, there may be i
 Our approach to a solution to this interference is to have the two functionalies divided into different phases similar to \gls{leach} \cite{leach}, described in Chapter \ref{chap:related_work}. Timers are implemented to stall the next phase by making the system sleep until the timer is ended. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
 
 
-%\textit{JM: kan du utvide dette til å virke med failed nodes?}
+%\textit{JM: kan du utvide dette til a virke med failed nodes?}
 
 
 %\section{Base Station Access}
@@ -672,6 +680,7 @@ Our approach to a solution to this interference is to have the two functionalies
 
 
 \chapter{Evaluation}
+\glsresetall
 This chapter describes the experimental setup and metrics used to evaluate the implemented system.
 
 \section{Experimental Setup}
@@ -689,12 +698,12 @@ The testing environment in our system is built with gopsutil, a psutil for Golan
 
 \section{Experimental Design} \label{eva:exp_des}
 %How did we do the experiments?
-%For hvert eksperiment bør du prøve å få fram: 
-%- hva ønsker du å finne ut? 
+%For hvert eksperiment bør du prøve a fa fram: 
+%- hva ønsker du a finne ut? 
 %- hvordan måler du + hva måler du? 
 %- hva gjør den delen av systemet som du måler? (leser fra disk, regner, sammenligner, koordinerer med andre osv)
 %- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
-%Det gjør det lettere for leseren å henge med. 
+%Det gjør det lettere for leseren a henge med. 
 
 All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is executing one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
 
@@ -891,7 +900,7 @@ Number of sends to \gls{ch}s is also connected to the experiment  with communica
 \newpage
 
 \subsection{Cluster Head Count}
-%Flat/stabilt når node venter på å same data igjen.. da venter også de andre nodene.. vil bare øke etter X accumualtions.. 
+%Flat/stabilt nar node venter pa a same data igjen.. da venter ogsa de andre nodene.. vil bare øke etter X accumualtions.. 
 
 The result is presented in Figure \ref{fig:chCountChart}. The graphs are as expected flat during parts of the execution because the \gls{ch}-count is only counted when the \gls{ch} is done gathering data.
 There is reason to think that the all graphs, except the graph of \gls{ch}-count after a random number of accumulations, have flat graphs during execution because all the \gls{ch}-counts happens approximately at the same time interval and don't change until the next \gls{ch} election.
@@ -936,6 +945,7 @@ Figure \ref{fig:sentvsrecvChart} show the number of sends from nodes to neighbou
 
 
 \chapter{Discussion}
+\glsresetall
 %There is reason to think that (this implementation)...
 %A thing to mention, is that ...
 %One can assume
@@ -988,18 +998,14 @@ Another approach is to have an consensus protocol for agreeing on a leader. This
 
 
 \section{Cluster Head Election} \label{disc:ch_election}
-!!! A prior?? explain..
-
-\textbf{Otto: how much more?}
-
-Being a \gls{ch} is much more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior, e.g. by a \gls{bs} without any knowledge about the network, the node would quickly use up its limited energy. Once a \gls{ch} runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, our approach will not chose \gls{ch}s a prior/\textbf{priori}, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
+Being a \gls{ch} is more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior, meaning the \gls{ch} is chosen before the nodes have knowledge of each other and created clusters, e.g. by a \gls{bs} without any knowledge about the network, then the node would quickly use up its limited energy. Once a \gls{ch} runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, our approach will not chose \gls{ch}s a priori, but instead have a \gls{ch} election algorithm to possibly rotate the \gls{ch}.
 
 
-\subsubsection{Consensus Protocol For Elections?}
+\subsection{Consensus Protocol For Elections?}
 
 
 \subsection{Cluster Head Calculation} \label{ssec:ch_election}
-Presently, the \gls{ch} election is based on which node has the highest score between $\emptyset$ and 1. This \textbf{intellectually} simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve \textbf{HOW?????} this approach and make it more realistic, we could have used several sub-factors listed below:
+Presently, the \gls{ch} election is based on which node has the highest score between $\emptyset$ and 1. This \textbf{intellectually} simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic in terms of saving battery lifetime and a real-life scenario for deploying sensors in the Arctic tundra, we could have used several sub-factors listed below:
 
 %now random number, to approve and make it more realistic: 
 
@@ -1011,18 +1017,19 @@ Presently, the \gls{ch} election is based on which node has the highest score be
 \item Bandwidth - WiFi, LoRaWan\footnote{\url{https://lora-alliance.org/about-lorawan}}, Ethernet
 \item Prior history
 \item Network traffic on node
-\item Er det bare en function-endring eller er det også spørsmål om du har nødvendig info?
 \end{itemize}
 
 %Bully algorithm.. traditonially algorithm: nodes ON, we assume nodes OFF/our nodes most likely OFF.. 
+Er det bare en function-endring eller er det også spørsmål om du har nødvendig info?
 
-%\subsection{Eventual Cluster Head Election Consistency?}
+
+\subsection{Eventual Cluster Head Election Consistency?}
+
+
 
 \subsection{Gossip Information Between Nodes}
-!! Kommer kanskje an på hvordan vi gjør gossip
-
-
-The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to \textbf{rapidly} spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
+%rapidly, maybe not always.. kommer an på
+The main advantages of gossiping is its ability to scale. Gossiping have no centralized component where information is coordinated and is therefor an excellent way to rapidly spread information among a large number of nodes using only local information. However, gossiping can not guarantee that all nodes will receive the information \cite{demers}.
 
 To avoid flooding the network, each message sent between nodes have an ID so the node can check if it has received the same message before. If the node have received the message earlier, the node doesn't need to forward the message because it has forwarded the message in an earlier gossip, as described in Section \ref{imp:ch_election}.
 
@@ -1030,7 +1037,6 @@ Another approach to avoid flooding the network and reduce nodes energy level is 
  
  
 \subsection{When To Elect A New Cluster Head}
-%When to elect new leader?
 The present approach starts a new \gls{ch} election in two scenarios: either when a new node joins the cluster or when the \gls{ch} have accumulated data 'X' times.
 %Current approach starts a new \gls{ch} election when the \gls{ch} have accumulated data 'X' times.
 Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{chap:related_work}, have multiple phases during execution where one phase is to elect a new \gls{ch} which occurs periodic.
@@ -1039,7 +1045,7 @@ Other approaches such as \gls{leach} \cite{leach}, mentioned in Chapter \ref{cha
 The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. 
 
 Improvements??
-JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for å sende?
+JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for a sende?
 
 %node have stats= acc/LE.. if one, the other can not happen..?
 
@@ -1053,8 +1059,9 @@ JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler and
 \section{Multiple Cluster Heads}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 The current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of work load for the \gls{ch}, and the path to the \gls{ch} can be long for some nodes.
-An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. Most likely \textbf{will the?????} \gls{ch} election be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent/have the same "...", the node should \textbf{probably - based on what do you propose this?} choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than needed/necessary.
+An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. \gls{ch} elections will be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent in terms of battery lifetime, network bandwidth and number of neighbours, the node should choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than necessary.
 
+\subsection{Replication Of Data}
 Multiple leaders - replication of data?
 
 \section{Path To Cluster Head}
@@ -1086,6 +1093,9 @@ One advantage with the present approach is that the \gls{ch} election chose the 
 \subsection{Prioritization Of Data?}
 %Critical, non-ciritcal data?
 
+\subsection{GET Or POST Data To The Cluster Head}
+ch som initerer query bestanding eller kan andre bestemme seg for a sende??
+
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
 The current approach provides an eventual consistency when electing a new \gls{ch} as mentioned before. This may raise some issues when a data gathering occurs when an election is ongoing due to rapidly change of \gls{ch}s and paths to \gls{ch} before all nodes have an consistent \gls{ch} election, as mentioned in Section \ref{sec:conc_events}.
 
@@ -1108,6 +1118,7 @@ Note to self: evt bygge det litt inn i teksten..
 \section{Routing Challenges in WSNs}
 \begin{itemize}
 \item Node deployment
+\item Energy consumption without losing accuracy
 \item Data reporting method
 \item Node/link heterogeneity
 \item Fault tolerance
@@ -1131,6 +1142,7 @@ Note to self: evt bygge det litt inn i teksten..
 
 
 \chapter{Conclusion}
+\glsresetall
 In this thesis, we have implemented a system/prototype...
 
 Our experiments showed that the system ...
