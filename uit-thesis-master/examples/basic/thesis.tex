@@ -615,16 +615,17 @@ When a node needs to send data, it will create a request containing the received
 The data is a fabricated byte array with a fingerprint that is the hashed value of the data. The fingerprint will make it easier to identify the numerous data on each node. The data will also have a boolean tag which is used to check whether the data has been accumulated or not. 
 %JM: endrer det hash?
 
+
 \subsection{CH Data Accumulation}
-Why 6??
- 
-When a \gls{ch} starts a gathering of data, the node will chose a value between one and six which indicates how many times it should gather data before it eventual sends out a new \gls{ch} election. \textbf{We chose to implement the \gls{ch}s to accumulate data between one and six times because ...}
+When a \gls{ch} starts a gathering of data, the node will chose a value between one and six which indicates how many times it should gather data before it eventual sends out a new \gls{ch} election. We chose to implement the \gls{ch}s to accumulate data between one and six times because finding the exact number of how many times a \gls{ch} should accumulate data wasn't our focus.
+
+%We chose to focus on the network and how nodes performed during \gls{ch} elections and data accumulations instead of finding the exact number for how many times a \gls{ch} should accumulate data.
 
 
 As mentioned previously, each node can receive multiple requests from different neighbour nodes.
-This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and written to from concurrent goroutines, the access must be \textbf{synchronized}/protected by a synchronization mechanism. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
+This especially occur in the \gls{ch} when collecting data from the nodes in the cluster. The collected data is stored in a map and maps in Go are not safe for concurrent use. If a map is read from and written to from concurrent goroutines, the access must be synchronized. One of the most common ways to protect maps is by using mutexes, illustrated in Listing \ref{test}.
 
-\newpage
+%\newpage
 
 \begin{lstlisting} [frame=single,caption={Small Go program showing how mutexes are used when updating a map by CH.},language=C, label={test}]
 
@@ -1107,16 +1108,16 @@ ch som initerer query bestanding eller kan andre bestemme seg for a sende??
 \section{Replication Of Data}
 In the current approach will nodes only accumulate data that haven't been accumulated earlier. This approach will therefore have some degree of replication because a nodes data will be accumulated at the next node in the routing path.
 
-Having multiple \glspl{ch} that collects data can make 
+It may take long time before a \gls{ch} gets access to a \gls{bs} or is contacted by a data mule that collects the data. Meanwhile, the \gls{ch} may fail or die due to battery limitations and all its accumulated data will be lost.
 
-Replication of node data is important if a node fails and we need to access the nodes data. However, replication of data also require more memory but sensor nodes have limited memory. 
-
-
-%if one node fails, you can find data at another node
-%Replication of data can be 
+An approach to this problem is to only let nodes delete its data if the \gls{ch} have delivered all the data to a \gls{bs} or a data mule. Otherwise, the data is stored at each node.
+Replication of node data is important if a node fails and we need to access the nodes data. However, replication of data also require more memory but sensor nodes have limited memory. In this case, there is a need for finding a degree of replica that can both be memory efficient and handling system failures.
 
 
-%What if multiple leaders gather data? Replication of data is good, but also acquire more memory.. Find a trade off.. Can use fingerprint to identify data..
+Another approach is to have multiple \glspl{ch} that collects the same data. In this approach, nodes that are not \glspl{ch} can delete their data when they have sent their data to the \gls{ch} to minimize memory usage.
+
+
+% Can use fingerprint to identify data..
 
 
 \section{Concurrent CH Election And Data Accumulation} \label{disc:simult_el_acc}
