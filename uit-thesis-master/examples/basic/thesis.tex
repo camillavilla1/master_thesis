@@ -117,16 +117,24 @@
 The Arctic Tundra in the far northern hemisphere is one of ecosystems that are most affected by the climate changes in the world today. Five Fram Center\footnote{\url{http://www.framsenteret.no/english}} institutions developed a long-term research project called \gls{coat}. Their goal is to create robust observation systems which enable documentation and understanding of climate change impacts on the Arctic tundra ecosystems.
 
 
-This thesis describes a prototype of a \gls{wsn} system where nodes in the network creates clusters to accumulate data. The purpose is to fetch and accumulate data observed by \gls{ou}s for further use and to provide for a more flexible and powerful sensor in the \gls{coat} monitoring of the Arctic Tundra.
+This thesis describes a prototype of a Wireless Sensor Network (\gls{wsn}) system where nodes in the network creates clusters of Observation Units (\glspl{ou}) to accumulate data. The purpose is to fetch and accumulate data observed by \gls{ou}s for further use and to provide for a more flexible and powerful sensor in the \gls{coat} monitoring of the Arctic Tundra.
 
-We develop a prototype of a \gls{wsn} system where nodes observe and accumulate data from other nodes for further use. We describe a system where nodes discover each other through a broadcast range and together they form clusters. Each cluster elect a \gls{ch} which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The \glspl{ch} are rotating to save battery.
+We describe a system where nodes discover each other through a broadcast range. Together they form clusters. Each cluster elect a Cluster Head (\gls{ch}) which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The \glspl{ch} are rotating to save battery.
+
+
+\textbf{HIGH/LOW etc... siste del uklart..}
 
 Results show that the system have a stable CPU and memory usage during execution. Experiments also show that the number of receiving packets at \glspl{ch} is lower than sent packets which indicates that the nodes in the system accumulates data when intended.
 
+Main conclusion/insight..
+
 \end{abstract}
 
+
 \begin{acknowledgement}
-First I would like to thank my main advisor Professor Otto Anshus and co-advisor Associate Professor John Markus Bjørndalen for providing guidance, support, ideas and feedback whenever I needed it through this thesis.
+First I would like to thank my main advisor Professor Otto Anshus and co-advisor Professor John Markus Bjørndalen for providing guidance, support, ideas and feedback whenever I needed it through this thesis.
+
+I would also like to thank TK and the administration...
 
 I want to express my sincerest gratitude to the \textit{Masterinos}. I would not have made it without you guys. 
 
@@ -177,8 +185,8 @@ This dissertation will develop an approach to let \gls{ou} observe each other an
 The dissertation makes the following contributions:
 
 \begin{itemize}
-\item An introduction to \gls{wsn}s and routing techniques in \gls{wsn}s.
-\item An implementation and description of a \gls{wsn} system...
+\item An description of relevant \gls{wsn}s and routing techniques in \gls{wsn}s.
+\item An (architecture, design)/\textbf{description} and implementation of a \gls{wsn} system.
 \item An evaluation of the system.
 \item Thoughts on further improvements to the current system and future work.
 \end{itemize}
@@ -673,10 +681,13 @@ func sendDataToLeaderHandler() {
 \newpage
 
 \section{Concurrent CH Election And Data Accumulation} \label{sec:conc_events}
-To avoid having a \gls{ch} election occur concurrently as a data accumulation, the following functionalities are scheduled to execute.
-Firstly, the \gls{ch} election will execute until the election result is consistent between all nodes. Then will the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. After gathering data according to the accumulation interval, will the \gls{ch} start a new \gls{ch} election. 
+To avoid having a \gls{ch} election occur concurrently with a data accumulation, the following functionalities are scheduled to execute.
+Firstly, the \gls{ch} election will execute until the election result is consistent between all nodes.Second, the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. Third, after gathering data according to the accumulation interval, the \gls{ch} starts a new \gls{ch} election. 
+
+\textbf{Hvilke issues??}
 
 If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. 
+
 
 Our approach to a solution to this interference is to have the two functionalies divided into different phases similar to \gls{leach} \cite{leach}, described in Chapter \ref{chap:related_work}. Timers are implemented to stall the next phase by making the system sleep until the timer is ended. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
 
@@ -698,43 +709,36 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 \begin{itemize} 
 \item Intel® CoreTM i5-6400T CPU @ 2.20GHz × 4
 \item Intel® HD Graphics 530 (Skylake GT2)
-\item 15,6 GiB memory and 503 GB disk
+\item 15,6 GiB memory and 503 GB disk \textbf{eller GIB??}
 \item Ubuntu 17.04 64-bit with gcc V6.3.0 compiler and GO 1.9.3
 \end{itemize}
 
 
-The testing environment in our system is built with gopsutil, a psutil for Golang \cite{golangPsutil}. We use gopsutil to measure CPU, memory, network and process connections. Each experiment is described further in Section \ref{eva:exp_des}.
+The environment for \textbf{evaluating/testing} our system is built with gopsutil, a psutil for Golang \cite{golangPsutil}. We use gopsutil to measure CPU, memory, network and process connections. Each experiment is described further in Section \ref{eva:exp_des}.
 
 \section{Experimental Design} \label{eva:exp_des}
-%How did we do the experiments?
-%For hvert eksperiment bør du prøve a fa fram: 
-%- hva ønsker du a finne ut? 
-%- hvordan måler du + hva måler du? 
-%- hva gjør den delen av systemet som du måler? (leser fra disk, regner, sammenligner, koordinerer med andre osv)
-%- Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
-%Det gjør det lettere for leseren a henge med. 
+\textbf{
+How did we do the experiments?
+For hvert eksperiment bør du prøve a fa fram: 
+\begin{itemize}
+\item hva ønsker du a finne ut?
+\item hvordan måler du + hva måler du? 
+\item hva gjør den delen av systemet som du måler? (leser fra disk, regner, sammenligner, koordinerer med andre osv)
+\item Hva er metrikken (eks: operasjoner per sekund, minutter per oppgave osv)
+\item Det gjør det lettere for leseren a henge med.
+\end{itemize}
+}
 
-All experiments were conducted on a computer, described in the section \ref{eva:exp_des}, where one process is executing one node which is simulating an \gls{ou}. In order to determine how well the nodes perform in terms of memory, CPU and network usage several experiment scenarios were designed and performed, revealing some of the system's capabilities and limitations. It is important that the cost of running the system is kept to a minimum since it's aimed to execute on small, low-power \gls{ou}s.
+All experiments were conducted on a computer, where a process is simulating an \gls{ou}. In order to determine memory, CPU and network usage, several experiment scenarios were designed and performed.
 
 %execute around 15 minutes
-The experiments are ran with a 500 millisecond's measurement interval and system execute minimum 10 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
+\textbf{Forklar (hva menes + why)}
 
-Each node execute their own experiments when launched. Each time interval (500 millisecond) also contains an average value which is displayed in the graphs. Since each experiment is launched  independently, the clusters in the network may appear different in each experiment causing nodes to have more or less neighbour nodes and a longer or shorter path to the \gls{ch} than in another experiment.
+The experiments are ran with a 500 millisecond's measurement interval because  ... 
 
-A \gls{ch} accumulates data after a given interval and the experience are ran on 4 different accumulation intervals as listed below:
+The system execute minimum 10 minutes. The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
 
-\begin{itemize}
-\item After \gls{ch} accumulated data two times
-\item After \gls{ch} accumulated data four times
-\item After \gls{ch} accumulated data six times
-\item After \gls{ch} accumulated data a random time between one and six
-\end{itemize}
-
-%Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
-%For each time interval (500 millisecond), the average value was calculated to limit the 
-%Test were/was conducted X times for each time period in order to obtain the average values...
-
-\begin{table}
+\begin{table} [ht]
 \centering
 \begin{tabular}{|l|l|}
 \hline
@@ -747,24 +751,29 @@ Node broadcast width     & 50             \\ \hline
 \label{tab:simTable}
 \end{table}
 
-%\begin{table}[]
-%\centering
-%\begin{tabular}{|l|l|l|}
-%\hline
-%\textbf{Parameter}   & \multicolumn{2}{c|}{\textbf{Value}} \\ \hline
-%No. of nodes         & 50               & 100              \\ \hline
-%Network grid size         & \multicolumn{2}{l|}{500 x 500}  \\ \hline
-%Node broadcast width & \multicolumn{2}{c|}{50}             \\ \hline
-%\end{tabular}
-%\caption{Parameters of simulation}
-%\label{tab:simTable}
-%\end{table}
+\textbf{Forklar bedre - trenger repeterbare exp..}
+
+Each node execute their own experiment when launched. Each time interval (500 millisecond) also \textbf{contains} an average value which is displayed in the graphs. \textbf{Fjerne?? Since each experiment is launched  independently, the clusters in the network may appear different in each experiment causing nodes to have more or less neighbour nodes and a longer or shorter path to the \gls{ch} than in another experiment.}
+
+
+A \gls{ch} will chose a value between one and six which indicates how many times it should gather data. The experiments are ran on 4 different accumulation intervals as listed below:
+
+\begin{itemize}
+\item \gls{ch} accumulate data two times
+\item \gls{ch} accumulate data four times
+\item \gls{ch} accumulate data six times
+\item \gls{ch} accumulate data a random time between one and six times
+\end{itemize}
+
+%Notes to myself: Each node execute their own experiments when launched.. graphs shows average.. too much with 100 lines in a graph...
+%For each time interval (500 millisecond), the average value was calculated to limit the 
+%Test were/was conducted X times for each time period in order to obtain the average values...
 
 
 \subsection{Memory Measurements} \label{eva:mem_measure}
 %discover/observe/see
-We measure the memory utilities to examine how much memory is consumed when executing the program. The memory utilities measured, is the total percentage of RAM used by the program, and not for individual nodes/processes.
-Measuring the memory is essential because it needs to be relatively low to be able to make the device function as normal in a real-life environment/scenario.
+We measure the memory usage to examine how much memory is consumed when executing our system. The memory usage measured, is the total percentage of RAM used by the program, and not for individual processes. The memory usage is essential to examine because it ...
+% to be relatively low to be able to make the device function as normal in a real-life environment/scenario.
 
 \begin{itemize}
 \item \textbf{Psutil - VirtualMemoryStat - UsedPercent:} percentage of RAM used by programs.
@@ -773,7 +782,7 @@ Measuring the memory is essential because it needs to be relatively low to be ab
 
 
 \subsection{CPU Measurements} \label{eva:cpu_measure}
-We measure the total CPU usage for the computers 4 cores combined to examine how much computational power is needed to execute the program. This means that the CPU usage is similar for all nodes/processes in the experiment.
+We measure the total CPU usage for the computers four cores combined to document how much computational power is needed to execute the program. This means that the CPU usage is similar for all nodes/processes in the experiment.
 This as well, is important to keep at a minimum due to execution on devices in real-life environment to avoid draining the battery.
 
 
@@ -787,7 +796,7 @@ This as well, is important to keep at a minimum due to execution on devices in r
 %\subsection{Process Connections Measurements}
 %psutil - Process 
 
-Measuring the process connection is important since the system relies on network usage and communication between nodes and it is important to keep it to a minimum. The number of communication channels are represented by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch} election, forwarding- and data accumulation.
+We measure the number of process connection since the system relies on network usage and communication between nodes and it is important to keep it to a minimum. The number of communication channels are represented by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch} election, forwarding- and data accumulation.
 
 \begin{itemize}
 \item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process.
@@ -797,18 +806,21 @@ Measuring the process connection is important since the system relies on network
 %\subsection{Network Lifetime?}
 
 \subsection{Number Of Sends To Neighbours} \label{eva:num_sends}
-We measure number of sends to neighbours to observe the average of sends between nodes in the system during execution. This experiment is in connection with the network usage and communication, described in Section \ref{eva:net_measure}. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, connecting to other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
+We measure number of sends to neighbours to \textbf{measure/calculate} the number of sends between nodes in the system during execution. This experiment is in connection with the network usage and communication, described in Section \ref{eva:net_measure}. The number of sends are counted every time the node sends a request to a neighbour, like discovering other nodes, connecting to other nodes, \gls{ch} election or sending and accumulating data to \gls{ch}.
 
 
 \subsection{Number Of Sends To Cluster Heads} \label{eva:num_sends_ch}
+We measure the number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
+
 As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum. Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
 
 \subsection{Cluster Head Count} \label{eva:ch_count}
-We also measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval. The \gls{ch} is only counted when it's done gathering all the data.
+We measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval. The \gls{ch} is only counted when it's done gathering all the data.
+
 
 \subsection{Cluster Head Receives Packages} \label{eva:ch_recv}
-At last we measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}. We want to measure this to examine the difference between the number of sends to a \gls{ch} and how many times a \gls{ch} have received a packet.
+We measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}. We want to measure this to examine the difference between the number of sends to a \gls{ch} and how many times a \gls{ch} have received a packet.
 
 \newpage
 
@@ -817,7 +829,7 @@ At last we measure how many times a \gls{ch} receives data from other nodes in t
 %A thing to mention, is that ...
 
 %What does the results say?
-In this section we will discuss the results of the testing described in the sections above.
+In this section we will present and discuss the results of the experiments described in the sections above.
 
 \subsection{Memory Usage}
 %random acc gives the least memory usage.. - mem 6 acc gives highest acc, not suprising becayse it does most wirtes to memory when accumulating data.. Otherwise, pretty similar memory usage.. no spikes or 
@@ -853,7 +865,7 @@ The CPU percentage is stable on around 75\% during the execution for each experi
 \newpage
 
 \subsection{Network Usage}
-The purpose of this experiment was to measure the network usage and communication between nodes since it's important to keep this to a minimum. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 11 connections on average per node for 100 node in the system.
+The purpose of this experiment was to measure the network usage and communication between nodes since it's important to keep this to a minimum since it's aimed to execute on small, low-power \gls{ou}s. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 11 connections on average per node for 100 node in the system.
 There is reason to believe that these high wave like patterns showing a high amount on connections is because of three reasons:
 
 \begin{itemize}
