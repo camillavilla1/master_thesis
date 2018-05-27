@@ -121,12 +121,12 @@ This thesis describes a prototype of a Wireless Sensor Network (\gls{wsn}) syste
 
 We describe a system where nodes discover each other through a broadcast range. Together they form clusters. Each cluster elect a Cluster Head (\gls{ch}) which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The \glspl{ch} are rotating to save battery.
 
+Results show that the system have a steady memory between 60\% and 76\% and CPU usage around 75\%  during execution. Experiments also show that the \gls{ch} receives fewer packets of data than sent packets from nodes in the cluster which indicates that the nodes in the system accumulates data when intended.
 
-\textbf{HIGH/LOW etc... siste del uklart..}
+The proposed prototype of the system proved capable of ...
+As a prototype, it still has room for improvements such as the availability of nodes in the system, \gls{ch} elections and multiple \glspl{ch} in each cluster.
 
-Results show that the system have a stable CPU and memory usage during execution. Experiments also show that the number of receiving packets at \glspl{ch} is lower than sent packets which indicates that the nodes in the system accumulates data when intended.
-
-Main conclusion/insight..
+There is a need for conducting further work for a real-life environment in the Arctic Tundra...
 
 \end{abstract}
 
@@ -134,9 +134,9 @@ Main conclusion/insight..
 \begin{acknowledgement}
 First I would like to thank my main advisor Professor Otto Anshus and co-advisor Professor John Markus Bjørndalen for providing guidance, support, ideas and feedback whenever I needed it through this thesis.
 
-I would also like to thank TK and the administration...
+I would also like to thank the Department of Computer Science with its technical and administrative staff for support when needed.
 
-I want to express my sincerest gratitude to the \textit{Masterinos}. I would not have made it without you guys. 
+I want to express my sincerest gratitude to the \textit{Masterinos}. Thank you for all your help and for five great and fun years, both outside and inside the university. I would not have made it without you guys.
 
 I would also like to thanks my parents for encouraging me to take a higher education and supporting me through every decision. At last I would like to thank my boyfriend.
 
@@ -186,7 +186,7 @@ The dissertation makes the following contributions:
 
 \begin{itemize}
 \item An description of relevant \gls{wsn}s and routing techniques in \gls{wsn}s.
-\item An (architecture, design)/\textbf{description} and implementation of a \gls{wsn} system.
+\item An architecture, design and implementation of a \gls{wsn} system.
 \item An evaluation of the system.
 \item Thoughts on further improvements to the current system and future work.
 \end{itemize}
@@ -684,10 +684,7 @@ func sendDataToLeaderHandler() {
 To avoid having a \gls{ch} election occur concurrently with a data accumulation, the following functionalities are scheduled to execute.
 Firstly, the \gls{ch} election will execute until the election result is consistent between all nodes.Second, the \gls{ch} broadcast a request for gathering data and nodes will accumulate and send data to the \gls{ch}. Third, after gathering data according to the accumulation interval, the \gls{ch} starts a new \gls{ch} election. 
 
-\textbf{Hvilke issues??}
-
-If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. 
-
+If a \gls{ch} election and a data gathering happens concurrently, there may be issues when the node is supposed to send its data because the \gls{ch} may have changed and the path to the \gls{ch} may be incorrect. The node assumes there is a path to the \gls{ch}, but if there isn't any because of a ongoing \gls{ch} election, the node will receive an index out of range error. To avoid this issue, the node will only send it's data if there are nodes in the path to the \gls{ch}. Otherwise, it will wait for a new accumulation request from the \gls{ch}.
 
 Our approach to a solution to this interference is to have the two functionalies divided into different phases similar to \gls{leach} \cite{leach}, described in Chapter \ref{chap:related_work}. Timers are implemented to stall the next phase by making the system sleep until the timer is ended. This issue and improvements are discussed further in Section \ref{disc:simult_el_acc}.
 
@@ -907,7 +904,7 @@ There is also reason to think that these wave like patterns occurs at different 
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{netconnChart.png}
-\caption{Figure shows average network connections with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average network connections with different accumulation intervals.}
 \label{fig:netconnChart}
 \end{figure}
 
@@ -925,7 +922,7 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{sendsChart.png}
-\caption{Figure shows average number of sends from nodes to neighbour nodes with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average number of sends from nodes to neighbour nodes with different accumulation intervals.}
 \label{fig:sendsChart}
 \end{figure}
 
@@ -941,7 +938,7 @@ Number of sends to \gls{ch}s is also connected to the experiment  with communica
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{sendschChart.png}
-\caption{Figure shows average number of sends to \gls{ch}s with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average number of sends to \gls{ch}s with different accumulation intervals.}
 \label{fig:sendschChart}
 \end{figure}
 
@@ -958,7 +955,7 @@ Counting the number of \gls{ch} after a random number of accumulations, show a m
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{chCountChart.png}
-\caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
 \label{fig:chCountChart}
 \end{figure}
 
@@ -972,7 +969,7 @@ As we can see from Figure \ref{fig:recPktChart}, are the number of packets \gls{
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{recPktChart.png}
-\caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
 \label{fig:recPktChart}
 \end{figure}
 
@@ -985,7 +982,7 @@ Figure \ref{fig:sentvsrecvChart} show the number of sends from nodes to neighbou
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{sentVsRecvChart.png}
-\caption{Figure shows average number of \gls{ch} with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
 \label{fig:sentvsrecvChart}
 \end{figure}
 
