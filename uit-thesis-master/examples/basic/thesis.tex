@@ -706,7 +706,7 @@ All experiments were done on a Lenovo ThinkCenter with the following specificati
 \begin{itemize} 
 \item Intel® CoreTM i5-6400T CPU @ 2.20GHz × 4
 \item Intel® HD Graphics 530 (Skylake GT2)
-\item 15,6 GiB memory and 503 GB disk \textbf{eller GIB??}
+\item 15,6 GiB memory and 503 GB disk
 \item Ubuntu 17.04 64-bit with gcc V6.3.0 compiler and GO 1.9.3
 \end{itemize}
 
@@ -731,7 +731,7 @@ The experiments are ran with a 500 millisecond's measurement interval and the sy
 
 The log-file contains data for each time interval (500 millisecond) where  one row is one node and one column is one time interval during execution. We calculate each column in the log-file to obtain an average value because of the huge amount of data. The graphs displayed contains the average values for each time interval (500 millisecond).
 
-The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. Each node execute their own experiment when launched. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at \gls{ch}s.
+The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. Each node execute their own experiment when launched. During execution, the nodes in the system will communicate between each other, gossip \gls{ch} election and store and accumulate data both between themselves and at the \glspl{ch}.
 
 \begin{table} [ht]
 \centering
@@ -776,7 +776,7 @@ We measure the memory usage independently for each node every 500 milliseconds d
 
 
 \subsection{CPU Measurements} \label{eva:cpu_measure}
-We measure the total CPU usage for the computers four cores combined to document how much computational power is needed to execute the program. This as well, is important to keep at a minimum due to execution on devices in real-life environment to avoid draining the battery.
+We measure the total CPU usage for the computers four cores combined to document CPU utilization. This as well, is important to keep at a minimum due to execution on devices in real-life environment to avoid draining the battery.
 
 We measure the CPU usage independently for each node every 500 milliseconds during execution when the nodes communicate with each other, electing new \glspl{ch} and accumulating data to the \glspl{ch}.
 
@@ -807,9 +807,9 @@ We measure the number of sends independently for each node every 500 millisecond
 
 
 \subsection{Number Of Sends To Cluster Heads} \label{eva:num_sends_ch}
-We measure the number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
+We measure the number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}. As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum.
 
-As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum. Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. 
+% Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. 
 %The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
 We measure the number of sends to the \gls{ch} independently for each node every 500 milliseconds during execution every time there is a accumulation request to send data to a \gls{ch}.
