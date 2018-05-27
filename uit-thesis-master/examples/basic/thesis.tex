@@ -843,21 +843,38 @@ In this section we will present and discuss the results of the experiments descr
 \subsection{Memory Usage}
 %random acc gives the least memory usage.. - mem 6 acc gives highest acc, not suprising becayse it does most wirtes to memory when accumulating data.. Otherwise, pretty similar memory usage.. no spikes or 
 
-The purpose of this experiment was to examine how much memory the system consumes when executing the program. The result is presented in Figure \ref{fig:memChart}. We can see that the system have between 60\% and 76\% memory usage and the graphs shows that each experiment us approximately the same amount of memory. However, there is one graph that stands out, which is the graph showing the memory after a random number of accumulations.
-There is reason to think that this implementation uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
+The purpose of this experiment was to examine memory footprint when executing the system.
+
+The result is presented in Figure \ref{fig:memChart}. We can see that the system has between 60\% and 76\% memory usage during execution and the graphs shows that each experiment us approximately the same amount of memory.
+
+However, there is one graph that stand out by using less memory than the others, which is the graph showing the memory usage after a random number of accumulations.
+There is reason \textbf{hvilke da??} to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
 
 
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{memChart2.png}
-\caption{Figure shows average memory percentage with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average memory percentage with different accumulation intervals.}
 \label{fig:memChart}
 \end{figure}
 
 
+\begin{figure} [ht]
+\centering
+\includegraphics[width=\textwidth]{memChart_dev.png}
+\caption{Figure shows average memory percentage with different accumulation intervals.}
+\label{fig:memChartDev}
+\end{figure}
+
+
 \subsection{CPU Usage}
-We measured the CPU utilities to examine the CPU percentage of the system. As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
-The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of Golangs\footnote{\url{https://golang.org/}} ability to utilize multicore and networked machines. Another reason for the graphs being so stable can be because the nodes are waiting for a request to either accumulate data or elect a new \gls{ch}. Most of the execution time, the nodes are waiting for requests.
+As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
+The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of Golangs\footnote{\url{https://golang.org/}} built-in language features and ability to utilize multicore and networked machines.
+
+Every node in the system spawn new goroutines when they starts a new \gls{ch} election and sends- or receives requests from other nodes in the network.
+Golangs goroutines are very cheap to create and because they are so light, it is possible to have hundreds or thousands of them running at the same time, and in the same address space. Threads are the basic units for processor scheduling and distribution. Threads need to go to the kernel when acquiring a lock for synchronization in contrast to goroutines that are implemented on-top of OS threads and can stay in user space and acquire locks.
+
+Another reason for the graphs being so stable can be because the nodes are waiting for a request to either accumulate data or elect a new \gls{ch}. Most of the execution time, the nodes are waiting for requests.
 
 
 %\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
@@ -866,7 +883,7 @@ The CPU percentage is stable on around 75\% during the execution for each experi
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{cpuChart.png}
-\caption{Figure shows average CPU percentage with different accumulation intervals (500 milliseconds).}
+\caption{Figure shows average CPU percentage with different accumulation intervals.}
 \label{fig:cpuChart}
 \end{figure}
 
@@ -901,7 +918,9 @@ There is also reason to think that these wave like patterns occurs at different 
 \subsection{Number Of Sends To Neighbours}
 Since it's important to keep communication and network usage to a minimum, we measure the number of sends from nodes to neighbours. 
 As we can see from Figure \ref{fig:sendsChart}, will number of sends from one node to another increase during execution. The average number of sends from nodes range between 1 send up til around 95 sends. This is an expected result since each time a node communicate with another node, it's counted and therefore will increase during execution.
-As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.
+
+\textbf{As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.}
+
 
 \begin{figure} [ht]
 \centering
