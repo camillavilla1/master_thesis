@@ -79,7 +79,6 @@
     {\protect\numberline{\thechapter.\thedefinition}#1}\par%
 }
 
-\font\zerofont = cmsy7 at 9.3pt
 
 \begin{document}
 
@@ -119,9 +118,9 @@ The Arctic Tundra in the far northern hemisphere is one of ecosystems that are m
 
 This thesis describes a prototype of a Wireless Sensor Network (\gls{wsn}) system where nodes in the network creates clusters of Observation Units (\glspl{ou}) to accumulate data. The purpose is to fetch and accumulate data observed by \gls{ou}s for further use and to provide for a more flexible and powerful sensor in the \gls{coat} monitoring of the Arctic Tundra.
 
-We describe a system where nodes discover each other through a broadcast range. Together they form clusters. Each cluster elect a Cluster Head (\gls{ch}) which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The \glspl{ch} are rotating to save battery.
+We describe a system where nodes discover each other through a range limited broadcast. Together they form clusters. Each cluster elect a Cluster Head (\gls{ch}) which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The role as \gls{ch} is rotating among the nodes to conserve battery.
 
-Results show that the system have a steady memory between 60\% and 76\% and CPU usage around 75\%  during execution. Experiments also show that the \gls{ch} receives fewer packets of data than sent packets from nodes in the cluster which indicates that the nodes in the system accumulates data when intended.
+Results show that the system have a steady memory between 60\% and 76\% and CPU usage around 75\%  during execution. Experiments also show that the \gls{ch} received fewer packets of data than sent packets from \glspl{ou} in the cluster which indicates that the \glspl{ou} in the system accumulates data when intended.
 
 The proposed prototype of the system proved capable of ...
 As a prototype, it still has room for improvements such as the availability of nodes in the system, \gls{ch} elections and multiple \glspl{ch} in each cluster.
@@ -170,7 +169,7 @@ This thesis presents the architecture, design, implementation and evaluation of 
 \section{Motivation}
 The motivation behind this project is that multiple \gls{dao}-Stores \cite{dao} may want different data from sensors deployed in the Arctic Tundra. With all the data gathered from each sensor, will there be a need for gathering data that is most important for each \gls{dao}-Store. One example can be a \gls{dao}-Store \gls{coat} that wants data such as images for their research.
 
-This dissertation will develop an approach to let \gls{ou} observe each other and gradually accumulate data to \glspl{ou} being a \gls{dao}-Store. There can be multiple \glspl{dao}-Stores depending on user needs. The purpose is to fetch and accumulate data observed by \gls{ou}s for further use and to provide for a more flexible and powerful sensor in the \gls{coat} monitoring of the Arctic Tundra.
+This thesis will develop an approach to let \gls{ou} observe each other and gradually accumulate data to \glspl{ou} being a \gls{dao}-Store. There can be multiple \glspl{dao}-Stores depending on user needs. The purpose is to fetch and accumulate data observed by \gls{ou}s for further use and to provide for a more flexible and powerful sensor in the \gls{coat} monitoring of the Arctic Tundra.
 
 
 %This project will develop an approach to 
@@ -182,7 +181,7 @@ This dissertation will develop an approach to let \gls{ou} observe each other an
 
 
 \section{Contributions}
-The dissertation makes the following contributions:
+The thesis makes the following contributions:
 
 \begin{itemize}
 \item An description of relevant \gls{wsn}s and routing techniques in \gls{wsn}s.
@@ -198,13 +197,13 @@ The dissertation makes the following contributions:
 \section{Limitations}
 %Avgrense viktig!
 %Fokus på cluster som tar hensyn til batteri mtp at nodene er ute i tundraen og ikke har mye tilgang til strøm.. redundancy, reliability, scalability?? 
-This dissertation focuses on creating a prototype of a cluster network and do not focus on the data passed between the nodes. Data collected from the nodes are not actual data collected from sensors, as this isn't crucial for the system implementation itself.
+This thesis focuses on creating a prototype of a cluster network and do not focus on the data passed between the nodes. Data collected from the nodes are not actual data collected from sensors, as this isn't crucial for the system implementation itself.
 
 
 \newpage
 
 \section{Outline}
-This thesis is structured into X chapters including the introduction.
+This thesis is structured into 12 chapters including the introduction.
 
 \begin{description}
 \item[Chapter 2] describes different routing- and communication protocols in \gls{wsn}s.
@@ -537,7 +536,7 @@ A \gls{ch} will start gathering data by gossiping a message to nodes in the clus
 
 This chapter will elaborate implementation of the system, general implementation requirements, issues and choices. 
 
-The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries. When nodes communicate with each other, they send packets structured as JSON \footnote{\url{https://www.json.org/}}.
+The system is implemented in the open source programming language GO 1.9.3\footnote{\url{https://golang.org/}}. Each node is launched as an unique process and they communicate with each other by Golangs HTTP Server which listens on the \gls{tcp} network address. The reason for using Golang is because it's developed for making concurrent mechanisms easy and to utilize multicore and networked machines, and it offers multiple different libraries. When nodes communicate with each other, they send packets structured as JSON \footnote{\url{https://www.json.org/}}.
 
 Each node in the network has a limited battery lifetime and during execution the node's battery will be drained causing the node to eventually die. A \glspl{ch} battery lifetime will be drained faster to simulate that a \gls{ch} have potentially more tasks than a regular node.
 
@@ -594,7 +593,7 @@ A node will only be able to connect to another node in the network if the node a
 
 
 A \gls{ch} election is proposed either when a new node joins the network or by a \gls{ch}. 
-The \gls{ch} election algorithm is based on the Bully algorithm \cite{bully} where typically the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score by choosing a random value between $\emptyset$ and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
+The \gls{ch} election algorithm is based on the Bully algorithm \cite{bully} where typically the node with the highest ID number is selected to be the \gls{ch}. Our approach do not use the node with highest ID number, but elect the node with highest score by choosing a random value between $0$ and 1 to be a \gls{ch}. Each node makes its own decision about whether to become a \gls{ch} or not depending on the received score from neighbour nodes.
 Our approach have several improvements discussed further in Section \ref{ssec:ch_election}. 
 
 To avoid flooding the network, each \gls{ch} election round have an ID. If a node receiving an election have received a request with similar ID and the \gls{ch} haven't changed, the request will not be forwarded to other nodes considering that the node have forwarded the same request previous.
@@ -784,6 +783,8 @@ We measure the CPU usage independently for each node every 500 milliseconds duri
 \item \textbf{Psutil - Percent:} calculates the percentage of CPU used either per CPU or combined.
 \end{itemize}
 
+\textbf{JM: hr du provd a se pa kun dine processer eler har du passet pa at ingenting annet kjorte og forstyrret? total cpu har en fordel: du far med system overhead ogsa.}
+
 
 \subsection{Network Usage} \label{eva:net_measure}
 We measure the number of process connection and network usage when executing our system. The number of communication channels are represented by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch} election, forwarding- and data accumulation. It's important to measure the number of process connection and network usage because the system heavily relies on it and it's important to keep it to a minimum.
@@ -809,10 +810,12 @@ We measure the number of sends independently for each node every 500 millisecond
 \subsection{Number Of Sends To Cluster Heads} \label{eva:num_sends_ch}
 We measure the number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}. As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum.
 
+\textbf{JM: en ch er vel også en valing ou. betyr dette at vi overser noe, eller er det bare acc-comm du er interessert i na?}
 % Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. 
 %The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
 We measure the number of sends to the \gls{ch} independently for each node every 500 milliseconds during execution every time there is a accumulation request to send data to a \gls{ch}.
+
 
 \subsection{Cluster Head Count} \label{eva:ch_count}
 We measure how many times nodes have been \gls{ch}s at each time interval to examine if how many \gls{ch} there is at each time interval. The \gls{ch} is only counted when it's done gathering all the data.
@@ -822,7 +825,7 @@ We measure how many times nodes have been \gls{ch}s at each time interval to exa
 
 
 \subsection{Cluster Head Receives Packages} \label{eva:ch_recv}
-We measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}. We want to measure this to examine the difference between the number of sends to a \gls{ch} and how many times a \gls{ch} have received a packet.
+We measure how many times a \gls{ch} receives data from other nodes in the network. This is measured only at each \gls{ch}. We want to measure this to examine the difference between the number of sends to a \gls{ch} and how many times a \gls{ch} have received a packet and to see the effect of the accumulation.
 
 
 We measure the number of receives independently for each node every 500 milliseconds during execution every time the \gls{ch} receives a request containing accumulated data.
@@ -842,11 +845,12 @@ In this section we will present and discuss the results of the experiments descr
 
 The purpose of this experiment was to examine memory footprint when executing the system.
 
-The result is presented in Figure \ref{fig:memChart}. We can see that the system has between 60\% and 76\% memory usage during execution and the graphs shows that each experiment us approximately the same amount of memory.
+The result is presented in Figure \ref{fig:memChart}. We can see that the system has between 60\% and 76\% memory usage during execution and the graphs shows that each experiment use approximately the same amount of memory.
 
 However, there is one graph that stand out by using less memory than the others, which is the graph showing the memory usage after a random number of accumulations.
 There is reason \textbf{hvilke da??} to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
 
+\textbf{JM: hvor mye ma her node ta vare pa ved accumulering? Kan gi oss insight i grafene}
 
 \begin{figure} [ht]
 \centering
@@ -876,6 +880,7 @@ Another reason for the graphs being so stable can be because the nodes are waiti
 
 %\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
 
+\textbf{JM: Hva skjer i start og slutt av graf? Tar bare litt tid a starte alt? Tar tid a finne naboer? Hvorfor "symmetrisk" i begge ender?}
 
 \begin{figure} [ht]
 \centering
@@ -918,6 +923,7 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
 
 \textbf{As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.}
 
+\textbf{JM: Hva skjer i fallet her (gronn graf)?}
 
 \begin{figure} [ht]
 \centering
@@ -952,6 +958,8 @@ The result is presented in Figure \ref{fig:chCountChart}. The graphs are as expe
 There is reason to think that the all graphs, except the graph of \gls{ch}-count after a random number of accumulations, have flat graphs during execution because all the \gls{ch}-counts happens approximately at the same time interval and don't change until the next \gls{ch} election.
 Counting the number of \gls{ch} after a random number of accumulations, show a more increasing graph during execution because of the accumulations happens at different time interval causing the \gls{ch} election to be more spread during execution.
 
+\textbf{JM: bla: hvorfor oker ant CHs? Partisjonering? Gronn: her synger det}
+
 \begin{figure} [ht]
 \centering
 \includegraphics[width=\textwidth]{chCountChart.png}
@@ -976,6 +984,8 @@ As we can see from Figure \ref{fig:recPktChart}, are the number of packets \gls{
 
 
 Figure \ref{fig:sentvsrecvChart} show the number of sends from nodes to neighbours, sends from nodes to \gls{ch}s and number of times \gls{ch}s have received data. As we can see, are the number of received packets less than sends to \glspl{ch}. It is therefore reason to think that the nodes accumulate data to reduce the number of packets a \gls{ch} receives.
+
+\textbf{JM: hvorfor gar acc num ned? Noen som avslutter slik at de ikke regnes lenger?}
 
 %mye dat blir accumulert - resulterer i lavere ant recv enn sends.. det er jo bra!
 
@@ -1007,7 +1017,7 @@ This chapter discusses our approach, experiences, how we solved the problem and 
 
 % CH elect if node can join cluster or not...
 
-In the current approach a node can connect to nearby nodes and be a part of a cluster without any restrictions. In our first approach when a node received a request from a new node, would forward the request to the \gls{ch}. The \gls{ch} then determine if the new node is allowed connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} needs to know information about the whole network or at least its own cluster, and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} can consider are:
+In the current approach a node can connect to nearby nodes and be a part of a cluster without any restrictions. In our first approach when a node received a request from a new node, it would forward the request to the \gls{ch}. The \gls{ch} then determine if the new node is allowed connect to the cluster or not. However, making a \gls{ch} take this decision could be problematic because the \gls{ch} needs to know information about the whole network or at least its own cluster, and also need some requirements for when a node can join and not. Some requirements that a \gls{ch} can consider are:
 
 \begin{itemize}
 \item Number of nodes per cluster
@@ -1020,9 +1030,10 @@ Another interference with having a \gls{ch} take the decision is that the \gls{c
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
 \subsection{Ping Neighbours}
-An improvement to check if neighbours are alive or not, is to ping neighbouring nodes frequently to check if they are alive or not/\textbf{there is any response}. However, pinging other nodes frequently will eventually flood the network. An improved solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
+An improvement to check if neighbours are alive or not, is to ping neighbouring nodes frequently to check if they are alive or not. However, pinging other nodes frequently will eventually flood the network. An improved solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a \textbf{wake-up call} to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
 
 %how to know if node is dead or just sleeping
+\textbf{JM: wake-up call: har du tenkt noe pa hvrodan dette kunne gjores med sovende ouer i feltet? time slots for nar de er vakne rimer med funken om  ved bestemte tidspunkt eller hendelser.}
 
 
 \subsection{Node Waking Up After Sleeping/Being Unavailable}
@@ -1049,7 +1060,7 @@ Being a \gls{ch} is more energy intensive than being a regular cluster node beca
 
 
 \subsection{Cluster Head Calculation} \label{ssec:ch_election}
-Presently, the \gls{ch} election is based on which node has the highest score between $\emptyset$ and 1. This intentionally simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic in terms of saving battery lifetime and a real-life scenario for deploying sensors in the Arctic tundra, we could have used several sub-factors listed below:
+Presently, the \gls{ch} election is based on which node has the highest score between $0$ and 1. This intentionally simplified does not take in account many other realistic aspects which would improve the \gls{ch} election. To improve this approach and make it more realistic in terms of saving battery lifetime and a real-life scenario for deploying sensors in the Arctic tundra, we could have used several sub-factors listed below:
 
 \begin{itemize}
 \item Number of nodes between a node and \gls{ch}
@@ -1088,6 +1099,8 @@ The present approach starts a new \gls{ch} election in two scenarios: either whe
 
 The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. This issue is also discussed further in Section \ref{disc:simult_el_acc}.
 
+\textbf{JM: husker ikke i farten: har du tatt for de en node ellertil og med en CH som blir borte= eks: tom for strom, krasjer eller noe sker som ødelgger den (flom, dyr, etc..)}
+
 %Improvements??
 %JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for a sende?
 
@@ -1104,8 +1117,9 @@ To improve our current approach, each \gls{ch} should remember that they have be
 \section{Multiple Cluster Heads} \label{disc:multi_ch}
 %multiple leaders load balance the network and nodes with work.. shorter path to leaders for some nodes
 The current approach have only one \gls{ch} per cluster. If there are many nodes in one cluster, there can be a lot of work load for the \gls{ch}, and the path to the \gls{ch} can be long for some nodes.
-An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. \gls{ch} elections will be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent in terms of battery lifetime, network bandwidth and number of neighbours, the node should choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than necessary. Having multiple \glspl{ch} that accumulates data would also support scalability and perofrmance issues in terms of balance work load between \glspl{ch}.
+An improvement to this is to introduce multiple leaders to load balance work and may also provide shorter path for some nodes. The question is then which \gls{ch} should a node choose to be its \gls{ch} if there are multiple. \gls{ch} elections will be based on several sub-factors described in Section \ref{ssec:ch_election}. If we assume that all nodes that are qualified to become \gls{ch}s are equivalent in terms of battery lifetime, network bandwidth and number of neighbours, the node should choose the \gls{ch} with the shortest path to avoid flooding the network with requests and to avoid draining the limited energy on more nodes than necessary. Having multiple \glspl{ch} that accumulates data would also support scalability and performance issues in terms of balance work load between \glspl{ch}.
 
+\textbf{JM: har du multiple CH na? litt uklart her..}
 
 \section{Path To Cluster Head} \label{disc:ch_path}
 One advantage with the present approach is that the \gls{ch} election chose the shortest path from a node to the \gls{ch} to avoid flooding the network with requests. The idea to use the shortest path \cite{dijkstra}, is presumably not beneficial to change in any approach. However, it may be that some nodes in a path to the \gls{ch} have a limited battery lifetime and therefore should not be in a path to the \gls{ch}. This is a corner case which will be difficult to give a right answer to since the paths and nodes can occur in many different scenarios.
@@ -1117,11 +1131,13 @@ One advantage with the present approach is that the \gls{ch} election chose the 
 \subsection{Multi-hop or single-hop routing} \label{disc:hopping}
 %https://en.wikipedia.org/wiki/Multi-hop_routing
 
-\gls{wsn} consists of hundreds or thousands of low-cost micro-sensor nodes and their main task is to collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the \gls{bs}, as Figure \ref{fig:hopping} shows. However, the problem is that the \gls{bs} may be places far away from the sensor node so a direct transmission would not be possible. Another problem can be that the routing path from a sensor node to the \gls{bs} is long and the node will require more power consumption than available.
+\gls{wsn} consists of hundreds or thousands of low-cost micro-sensor nodes and their main task is to collect information of the interested area and broadcast the information to a \gls{bs}. An easy approach to achieve this task is to make each sensor node transmit their data directly to the \gls{bs}, as Figure \ref{fig:hopping} shows. However, the problem is that the \gls{bs} may be placed far away from the sensor node so a direct transmission would not be possible. Another problem can be that the routing path from a sensor node to the \gls{bs} is long and the node will require more power consumption than available.
 
 In some cases can multi-hop routing be more energy efficient than single-hop routing\cite{hopping2}. Our approach is currently using multi-hop routing to deliver accumulated data to the \gls{ch}. To use single-hop routing in our approach would not be efficient in terms of energy consumption or sensor nodes radio range. In a real-life scenario where nodes are deployed in the Arctic Tundra, all nodes would not be able to reach each other by radio range or a \gls{bs}.
 
 However, multi-hop routing has it's drawbacks. There is more likely a packet will be lost during multi-hop routing than single-hop because the packet will have multiple nodes in it's path that can be unavailable during transmission. Multi-hop routing can also introduce problems of routing in terms of different paths to a \gls{bs} or a \gls{ch}, as seen in Figure \ref{fig:hopping}. As mentioned in in Section \ref{disc:ch_path}, will nodes in our approach choose the shortest routing path to a \gls{ch}.
+
+\textbf{JM: Tja.. samtidig slipper du long range conn som ogsa kan are stabilt. Tradeoffs som du sier }
 
 \begin{figure} [ht]
 \centering
@@ -1167,7 +1183,7 @@ The current approach provides an eventual consistency when electing a new \gls{c
 
 %\textit{Forklar litt mer om fasene i \gls{leach} og mine, fra Section \ref{sec:conc_events}...}
 
-\gls{leach} have have divided their sysem into different rounds, as described in Chapter \ref{chap:related_work}. To improve our approach, we could have implemented our system to be divided into rounds such as in \gls{leach}. Instead of having timers to stall the next phase, an improvement to our approach could be to have a status at each node saying if the node is going through a \gls{ch} election, if it accumulates data to the \gls{ch} or if it's just waiting for requests. In this way, when one status is true, e.g. a \gls{ch} election, can't a data accumulation happens.
+\gls{leach} have divided their system into different rounds, as described in Chapter \ref{chap:related_work}. To improve our approach, we could have implemented our system to be divided into rounds such as in \gls{leach}. Instead of having timers to stall the next phase, an improvement to our approach could be to have a status at each node saying if the node is going through a \gls{ch} election, if it accumulates data to the \gls{ch} or if it's just waiting for requests. In this way, when one status is true, e.g. a \gls{ch} election has status true, can't a  data accumulation happen because its status will be false.
 
 
 %node have status= acc/LE.. if one, the other can not happen..?
@@ -1178,10 +1194,15 @@ The current approach provides an eventual consistency when electing a new \gls{c
 
 \section{Base Station Access} \label{disc:bs_acc}
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
-At the current approach, all nodes have the same broadcast range to reach nearby neighbours. This means that there is no node that have access to a \gls{bs}.
+At the current approach, all nodes have the same broadcast range to reach nearby neighbours. This means that there is \textbf{no node} that have access to a \gls{bs}.
+
+\textbf{JM:Ingen? ch far vel acess to bs? Kjorte du med en CH som ikke nar en bs betyr det evl at ingen far slettet meldinger? kan det forklare noe av maleresultatene?}
+
 
 Another question is how nodes or \gls{ch} have contact with \glspl{bs}. As discussed in \autoref{disc:ch_election}, can a node be elected as \gls{ch} if it has access to a \gls{bs}, if there are any placed in the same area as the nodes. Another approach is to use a data mules to collect data from the \glspl{ch}.
 One problem is how the \gls{ch} should be contacted since the \gls{bs} or data mule don't know who has the data in the cluster. One approach is that they know who the \glspl{ch} are, another approach is to let the \gls{bs} or data mule contact an arbitrary node and let the node alert the \gls{ch} that it should send it's data.
+
+\textbf{JM: en node kan kanskje fortelle mule hvor ch her}
 
 %\defintion{A data mule is a vehicle that physically carries a computer with storage between remote locations to create data communication links and to collect data.}
 
@@ -1225,7 +1246,7 @@ Our experiments showed that the system have a stable CPU and memory usage. We ca
 We will outline some of the areas that can be elaborated in future work. These include:
 
 \begin{itemize}
-\item \textbf{Availability of node}: In the current implementation can node join the cluster without any requirements, as discussed in \autoref{disc:node_conn}. We discuss how  how we could improve the implementation by having the \gls{ch} take the decision if a node can join the cluster or not. We also discussed how to improve a nodes knowledge about the network around them and how to get the newest information.
+\item \textbf{Availability of node}: In the current implementation can nodes join the cluster without any requirements, as discussed in \autoref{disc:node_conn}. We discuss how  how we could improve the implementation by having the \gls{ch} take the decision if a node can join the cluster or not. We also discussed how to improve a nodes knowledge about the network around them and how to get the newest information.
 
 \item \textbf{\gls{ch} election:} The \gls{ch} election, together with the \gls{ch} calculation, in the current solution is not the best, but it is an introduction to a solution. As mentioned in \autoref{disc:ch_election}, would another approach be to include sub-factors such as power left on node, network traffic, number of neighbours etc, to calculate which nodes that are most qualified to be a \gls{ch}. 
 
