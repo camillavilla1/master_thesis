@@ -851,6 +851,9 @@ There is reason \textbf{hvilke da??} to think that this implementation version u
 
 \textbf{JM: hvor mye ma her node ta vare pa ved accumulering? Kan gi oss insight i grafene}
 
+\textbf{JM:Ingen? ch far vel acess to bs? Kjorte du med en CH som ikke nar en bs betyr det evl at ingen far slettet meldinger? kan det forklare noe av maleresultatene?}
+
+
 
 \begin{figure} [ht]
 \centering
@@ -1039,12 +1042,12 @@ Another interference with having a \gls{ch} take the decision is that the \gls{c
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
 \subsection{Ping Neighbours}
-An improvement to check if neighbours are alive or not, is to ping neighbouring nodes frequently to check if they are alive or not. However, pinging other nodes frequently will eventually flood the network. An improved solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a \textbf{wake-up call} to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}.
-
+An improvement to check if neighbours are alive or not, is to ping neighbouring nodes frequently to check if they are alive or not. However, pinging other nodes frequently will eventually flood the network. An improved solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}. Another approach is to have time slots for when nodes are awake. During these time slots, nodes could ping other nodes to check if they're alive or not. \gls{ch}-elections and accumulating and forwarding data would also happen during these time slots.
 
 
 %how to know if node is dead or just sleeping
-\textbf{JM: wake-up call: har du tenkt noe pa hvordan dette kunne gjores med sovende ouer i feltet? time slots for nar de er vakne rimer med funken om  ved bestemte tidspunkt eller hendelser.}
+
+%\textbf{JM: wake-up call: har du tenkt noe pa hvordan dette kunne gjores med sovende ouer i feltet? time slots for nar de er vakne rimer med tanken om  ping ved bestemte tidspunkt eller hendelser.}
 
 
 \subsection{Node Waking Up After Sleeping/Being Unavailable}
@@ -1062,6 +1065,7 @@ To improve this approach and avoid inconsistency of the \gls{ch}, we could imple
 
 %Another approach is to have an consensus protocol for agreeing on a leader. This approach, together with other possible solutions for electing a new \gls{ch}, is discussed further in Section \ref{disc:ch_election}.
 
+\newpage
 
 \section{Cluster Head Election} \label{disc:ch_election}
 Being a \gls{ch} is more energy intensive than being a regular cluster node because it may transfers data over longer distances and performs more tasks. If the \gls{ch} is chosen a prior, meaning the \gls{ch} is chosen before the nodes have knowledge of each other and created clusters, e.g. by a \gls{bs} without any knowledge about the network, then the node would quickly use up its limited energy. Once a \gls{ch} runs out of battery, it is no longer operational and all nodes belonging to the cluster will lose their communication ability. To avoid this problem, our approach will not chose \gls{ch}s a priori, but instead have a \gls{ch}-election algorithm to possibly rotate the \gls{ch}.
@@ -1202,9 +1206,7 @@ The current approach provides an eventual consistency when electing a new \gls{c
 
 \section{Base Station Access} \label{disc:bs_acc}
 %how to access bs/superOU, does some nodes have longer radio range, bigger antenna thant other, bw etc..? Is there one node in the system that only observe the network so a node can contact this node and get info about the system and know e.g. CH or neighbours, or if negihbours died etc..?
-At the current approach, all nodes have the same broadcast range to reach nearby neighbours. This means that there is \textbf{no node} that have access to a \gls{bs}.
-
-\textbf{JM:Ingen? ch far vel acess to bs? Kjorte du med en CH som ikke nar en bs betyr det evl at ingen far slettet meldinger? kan det forklare noe av maleresultatene?}
+At the current approach, all nodes have the same broadcast range to reach nearby neighbours. This means that there is no node that have access to a \gls{bs} where it can deliver it's data.
 
 
 Another question is how nodes or \gls{ch} have contact with \glspl{bs}. As discussed in \autoref{disc:ch_election}, can a node be elected as \gls{ch} if it has access to a \gls{bs}, if there are any placed in the same area as the nodes. Another approach is to use a data mules to collect data from the \glspl{ch}.
@@ -1243,7 +1245,7 @@ One problem is how the \gls{ch} should be contacted since the \gls{bs} or data m
 
 \chapter{Conclusion}
 \glsresetall
-In this thesis, we have implemented a prototype of a \gls{wsn} system where nodes observe and accumulate data from other nodes for further use. We describe a system where nodes discover each other through a broadcast range and together they form clusters. Each cluster elect  a \gls{ch} which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. This \gls{ch} is rotating to save battery. Even though our approach works as intended, there is a need for improvements in how a \gls{ch} is elected and when a \gls{ch} should accumulate data.
+In this thesis, we have implemented a prototype of a \gls{wsn} system where nodes observe and accumulate data from other nodes for further use. We describe a system where nodes discover each other through a broadcast range and together they form clusters. Each cluster elect  a \gls{ch} which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The role as \gls{ch} is rotating among the nodes to conserve battery. Even though our approach works as intended, there is a need for improvements in how a \gls{ch} is elected and when a \gls{ch} should accumulate data.
 
 Our experiments showed that the system have a stable CPU and memory usage. We can also see that the number of receiving packets of accumulated data is lower than sent packets with accumulated data which indicates that the nodes in the system accumulates data when intended to reduce traffic on the paths to the \glspl{ch}.
 
