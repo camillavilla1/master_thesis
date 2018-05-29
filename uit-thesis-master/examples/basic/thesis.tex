@@ -128,10 +128,7 @@ We describe a system where nodes discover each other through a range limited bro
 
 Results show that the system have a steady memory between 60\% and 76\% and CPU usage around 75\%  during execution. Experiments also show that the \gls{ch} received fewer packets of data than sent packets from \glspl{ou} in the cluster which indicates that the \glspl{ou} in the system accumulates data when intended.
 
-The proposed prototype of the system proved capable of ...
-As a prototype, it still has room for improvements such as the availability of nodes in the system, \gls{ch}-elections and multiple \glspl{ch} in each cluster.
-
-There is a need for conducting further work for a real-life environment in the Arctic Tundra...
+The proposed prototype of the system proved capable of electing \glspl{ch} that gathers and accumulates data efficiently. As a prototype, it still has room for improvements such as the availability of nodes in the system, \gls{ch}-elections and multiple \glspl{ch} in each cluster. A future system could further investigate the benefits of having multiple \glspl{ch} and how to gather and accumulate data more efficiently. There is still a need for conducting further work for a real-life environment in the Arctic Tundra.
 
 \end{abstract}
 
@@ -732,7 +729,7 @@ We use gopsutil, a psutil for Golang \cite{golangPsutil}, to measure CPU, memory
 
 All experiments were conducted on a computer, where a process is simulating an \gls{ou}. In order to determine memory, CPU and network usage, several experiment scenarios were designed and performed.
 
-The experiments are ran with a 500 millisecond's measurement interval and the system execute minimum 10 minutes. Each 500 millisecond during execution are the measurement values written to a log-file for further evaluation. We chose to measure with a 500 millisecond time interval because the system is implemented to run concurrently and the experimental measurements change rapidly in terms of \gls{ch}-elections and data accumulations. 
+The experiments are ran with a 500 millisecond's measurement interval and the system execute minimum 10 minutes. Each \gls{ou} starts it's own experiment, and each 500 millisecond during execution are the measurement values written to a log-file for further evaluation. We chose to measure with a 500 millisecond time interval because the system is implemented to run concurrently and the experimental measurements change rapidly in terms of \gls{ch}-elections and data accumulations. 
 
 The log-file contains data for each time interval (500 millisecond) where  one row is one node and one column is one time interval during execution. We calculate each column in the log-file to obtain an average value because of the huge amount of data. The graphs displayed contains the average values for each time interval (500 millisecond).
 
@@ -789,7 +786,7 @@ We measure the CPU usage independently for each node every 500 milliseconds duri
 \item \textbf{Psutil - Percent:} calculates the percentage of CPU used either per CPU or combined.
 \end{itemize}
 
-\textbf{JM: hr du provd a se pa kun dine processer eler har du passet pa at ingenting annet kjorte og forstyrret? total cpu har en fordel: du far med system overhead ogsa.}
+%\textbf{JM: hr du provd a se pa kun dine processer eler har du passet pa at ingenting annet kjorte og forstyrret? total cpu har en fordel: du far med system overhead ogsa.}
 
 
 \subsection{Network Usage} \label{eva:net_measure}
@@ -816,7 +813,8 @@ We measure the number of sends independently for each node every 500 millisecond
 \subsection{Number Of Sends To Cluster Heads} \label{eva:num_sends_ch}
 We measure the number of sends to a \gls{ch} during execution. The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}. As described in Section \ref{eva:net_measure}, are communication between nodes and network usage important to keep to a minimum.
 
-\textbf{JM: en ch er vel også en vanlig ou. betyr dette at vi overser noe, eller er det bare acc-comm du er interessert i na?}
+%\textbf{JM: en ch er vel også en vanlig ou. betyr dette at vi overser noe, eller er det bare acc-comm du er interessert i na?}
+
 % Besides measuring number of sends to neighbours, we measured number of sends to a \gls{ch} during execution. 
 %The number of sends are only counted when there is a accumulation request to send data to a \gls{ch}.
 
@@ -852,67 +850,68 @@ The purpose of this experiment was to examine memory footprint when executing th
 
 The result is presented in Figure \ref{fig:memChart}. We can see that the system has between 60\% and 76\% memory usage during execution and the graphs shows that each experiment use approximately the same amount of memory.
 
-However, there is one graph that stand out by using less memory than the others, which is the graph showing the memory usage after a random number of accumulations.
-There is reason \textbf{hvilke da??} to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval. As for the experiment for the implementation with six accumulations, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
+There is one graph that stands out by using under 50\% of the memory during execution, which is the graph showing the memory usage after 4 accumulations, as seen in \autoref{fig:memfig2}.
 
-\textbf{JM: hvor mye ma her node ta vare pa ved accumulering? Kan gi oss insight i grafene}
+As for the experiment for the implementation with a random number of accumulations, as seen in \autoref{fig:memfig4}, we can see that this implementation use between 58\% and 68\% memory while executing. There is reason to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \gls{ch}s accumulated data appropriately at the same time interval.
 
-\textbf{JM:Ingen? ch far vel acess to bs? Kjorte du med en CH som ikke nar en bs betyr det evl at ingen far slettet meldinger? kan det forklare noe av maleresultatene?}
+As for the experiment for the implementation with six accumulations, seen in \autoref{fig:memfig3}, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
+ 
 
+%\textbf{JM: hvor mye ma her node ta vare pa ved accumulering? Kan gi oss insight i grafene}
 
-
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{memChart2.png}
-\caption{Figure shows average memory percentage with different accumulation intervals.}
-\label{fig:memChart}
-\end{figure}
+%\textbf{JM:Ingen? ch far vel acess to bs? Kjorte du med en CH som ikke nar en bs betyr det evl at ingen far slettet meldinger? kan det forklare noe av maleresultatene?}
 
 
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{memChart2.png}
+%\caption{Figure shows average memory percentage with different accumulation intervals.}
+%\label{fig:memChart}
+%\end{figure}
 
 \begin{figure*}
         \centering
         \begin{subfigure}[b]{0.475\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{1Mem_stdev.png}
-            \caption[Network2]%
+            \includegraphics[width=\textwidth]{Mem_stdev_2.png}
+            \caption[Network1]%
             {{\small Network 1}}    
-            \label{fig:sendfig1}
+            \label{fig:memfig1}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.475\textwidth}  
             \centering 
-            \includegraphics[width=\textwidth]{2Mem_stdev.png}
+            \includegraphics[width=\textwidth]{Mem_stdev_4.png}
             \caption[]%
             {{\small Network 2}}    
-            \label{fig:sendfig2}
+            \label{fig:memfig2}
         \end{subfigure}
         \vskip\baselineskip
         \begin{subfigure}[b]{0.475\textwidth}   
             \centering 
-            \includegraphics[width=\textwidth]{3Mem_stdev.png}
+            \includegraphics[width=\textwidth]{Mem_stdev_6.png}
             \caption[]%
             {{\small Network 3}}    
-            \label{fig:sendfig3}
+            \label{fig:memfig3}
         \end{subfigure}
         \quad
         \begin{subfigure}[b]{0.475\textwidth}   
             \centering 
-            \includegraphics[width=\textwidth]{4Mem_stdev.png}
+            \includegraphics[width=\textwidth]{Mem_stdev_rand.png}
             \caption[]%
             {{\small Network 4}}    
-            \label{fig:sendfig4}
+            \label{fig:memfig4}
         \end{subfigure}
-        \caption[ ABC]
+        \caption[ Figures show average memory percentage with different accumulation intervals.]
         {\small Figures show average memory percentage with different accumulation intervals.} 
-        \label{fig:memChart2}
+        \label{fig:memChart}
     \end{figure*}
 
 
-
+\newpage
 
 \subsection{CPU Usage}
-As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 40\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
+As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 50\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
 The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of Golangs\footnote{\url{https://golang.org/}} built-in language features and ability to utilize multicore and networked machines.
 
 Every node in the system spawn new goroutines when they starts a new \gls{ch}-election and sends- or receives requests from other nodes in the network.
@@ -920,23 +919,63 @@ Golangs goroutines are very cheap to create and because they are so light, it is
 
 Another reason for the graphs being so stable can be because the nodes are waiting for a request to either accumulate data or elect a new \gls{ch}. Most of the execution time, the nodes are waiting for requests.
 
+From \autoref{fig:cpuChart}, we can see that each implementation uses less CPU usage in the start and end of the execution. This is because in the beginning, nodes takes time to start and to find neighbours to connect to. Then, the CPU usage will increase because nodes that have found nearby neighbours to connect to will start \gls{ch}-elections.
+In the end of the execution, nodes will die because of energy consumption during the execution.
 
 %\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
 
-\textbf{JM: Hva skjer i start og slutt av graf? Tar bare litt tid a starte alt? Tar tid a finne naboer? Hvorfor "symmetrisk" i begge ender?}
 
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{cpuChart.png}
-\caption{Figure shows average CPU percentage with different accumulation intervals.}
-\label{fig:cpuChart}
-\end{figure}
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{cpuChart.png}
+%\caption{Figure shows average CPU percentage with different accumulation intervals.}
+%\label{fig:cpuChart}
+%\end{figure}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{CPU_stdev_2.png}
+            \caption[Network2]%
+            {{\small Network 1}}    
+            \label{fig:cpufig1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{CPU_stdev_4.png}
+            \caption[]%
+            {{\small Network 2}}    
+            \label{fig:cpufig2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{CPU_stdev_6.png}
+            \caption[]%
+            {{\small Network 3}}    
+            \label{fig:cpufig3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{CPU_stdev_rand.png}
+            \caption[]%
+            {{\small Network 4}}    
+            \label{fig:cpufig4}
+        \end{subfigure}
+        \caption[Figures show average CPU percentage with different accumulation intervals.]
+        {\small Figures show average CPU percentage with different accumulation intervals.} 
+        \label{fig:cpuChart}
+    \end{figure*}
+
 
 
 \newpage
 
 \subsection{Network Usage}
-The purpose of this experiment was to measure the network usage and communication between nodes since it's important to keep this to a minimum since it's aimed to execute on small, low-power \gls{ou}s. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 11 connections on average per node for 100 node in the system.
+The purpose of this experiment was to measure the network usage and communication between nodes since it's important to keep this to a minimum since it's aimed to execute on small, low-power \gls{ou}s. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 18 connections on average per node for 100 node in the system.
 There is reason to believe that these high wave like patterns showing a high amount on connections is because of three reasons:
 
 \begin{itemize}
@@ -949,13 +988,52 @@ There is also reason to think that these wave like patterns occurs at different 
 
 %around 6 connections are average..
 
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{netconnChart.png}
-\caption{Figure shows average network connections with different accumulation intervals.}
-\label{fig:netconnChart}
-\end{figure}
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{netconnChart.png}
+%\caption{Figure shows average network connections with different accumulation intervals.}
+%\label{fig:netconnChart}
+%\end{figure}
 
+
+\begin{figure*} [ht]
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{numConn_stdev_2.png}
+            \caption[Network2]%
+            {{\small Network 1}}    
+            \label{fig:connfig1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{numConn_stdev_4.png}
+            \caption[]%
+            {{\small Network 2}}    
+            \label{fig:connfig2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{numConn_stdev_6.png}
+            \caption[]%
+            {{\small Network 3}}    
+            \label{fig:connfig3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{numConn_stdev_rand.png}
+            \caption[]%
+            {{\small Network 4}}    
+            \label{fig:connfig4}
+        \end{subfigure}
+        \caption[Figures show average network connections with different accumulation intervals.]
+        {\small Figures show average network connections with different accumulation intervals.} 
+        \label{fig:netconnChart}
+    \end{figure*}
+    
 
 \newpage 
 
@@ -964,20 +1042,22 @@ There is also reason to think that these wave like patterns occurs at different 
 Since it's important to keep communication and network usage to a minimum, we measure the number of sends from nodes to neighbours. 
 As we can see from Figure \ref{fig:sendsChart}, will number of sends from one node to another increase during execution. The average number of sends from nodes range between 1 send up til around 95 sends. This is an expected result since each time a node communicate with another node, it's counted and therefore will increase during execution.
 
+As \autoref{fig:sendsChart} also show, is how some nodes send few messages while other nodes send a lot of requests. As we can see from \autoref{fig:sendfig2}, some nodes have sent requests over 160 times and other nodes only around 20 requests. This will vary in terms of where the nodes are placed in the network. Those nodes that have a low rate of sends are most likely placed at the outer edge of the cluster while the nodes that have a high rate are most likely placed in the path to the \gls{ch} for many nodes resulting in a higher send rate.
 
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{sendsChart.png}
-\caption{Figure shows average number of sends from nodes to neighbour nodes with different accumulation intervals.}
-\label{fig:sendsChart}
-\end{figure}
+
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{sendsChart.png}
+%\caption{Figure shows average number of sends from nodes to neighbour nodes with different accumulation intervals.}
+%\label{fig:sendsChart}
+%\end{figure}
 
 
 \begin{figure*}
         \centering
         \begin{subfigure}[b]{0.475\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{1numSends.png}
+            \includegraphics[width=\textwidth]{numSends_stdev_2.png}
             \caption[Network2]%
             {{\small Network 1}}    
             \label{fig:sendfig1}
@@ -985,7 +1065,7 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
         \hfill
         \begin{subfigure}[b]{0.475\textwidth}  
             \centering 
-            \includegraphics[width=\textwidth]{22numSends.png}
+            \includegraphics[width=\textwidth]{numSends_stdev_4.png}
             \caption[]%
             {{\small Network 2}}    
             \label{fig:sendfig2}
@@ -993,7 +1073,7 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
         \vskip\baselineskip
         \begin{subfigure}[b]{0.475\textwidth}   
             \centering 
-            \includegraphics[width=\textwidth]{3numSends.png}
+            \includegraphics[width=\textwidth]{numSends_stdev_6.png}
             \caption[]%
             {{\small Network 3}}    
             \label{fig:sendfig3}
@@ -1001,38 +1081,77 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
         \quad
         \begin{subfigure}[b]{0.475\textwidth}   
             \centering 
-            \includegraphics[width=\textwidth]{4numSends.png}
+            \includegraphics[width=\textwidth]{numSends_stdev_rand.png}
             \caption[]%
             {{\small Network 4}}    
             \label{fig:sendfig4}
         \end{subfigure}
-        \caption[ ABC]
+        \caption[Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals.]
         {\small Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals.} 
-        \label{fig:sendsChart2}
+        \label{fig:sendsChart}
     \end{figure*}
 
 
 
-\textbf{As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.}
+%\textbf{As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.}
 
-\textbf{JM: Hva skjer i fallet her (gronn graf)?}
 
 
 
 \newpage
 
 \subsection{Number Of Sends To Cluster Heads}
-Number of sends to \gls{ch}s is also connected to the experiment  with communication and network usage. The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \gls{ch}s increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between $\emptyset$ sends up til around 35 sends.
+Number of sends to \glspl{ch} is also connected to the experiment with communication and network usage. The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \glspl{ch} increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between $0$ sends up til around 35 sends.
 
+\autoref{fig:sendchfig4} show how nodes quickly accumulates data to the \gls{ch} by having the \gls{ch} chose a random value of how many times it should accumulate data between 1 and six. Even though the \gls{ch} starts gathering in a more varied way, it has less sends to the \gls{ch} than the other implementations. We can also see that this graph increase right after 1400 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
 
 %her også avhenger hvert experiment på hvordan nodene har laget cluster.. ch kan ha hatt fler eller ferre naboer og flere eller ferre noder i clusteret..
 
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{sendschChart.png}
-\caption{Figure shows average number of sends to \gls{ch}s with different accumulation intervals.}
-\label{fig:sendschChart}
-\end{figure}
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{sendschChart.png}
+%\caption{Figure shows average number of sends to \gls{ch}s with different accumulation intervals.}
+%\label{fig:sendschChart}
+%\end{figure}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{numSendsCh_stdev_2.png}
+            \caption[Network2]%
+            {{\small Network 1}}    
+            \label{fig:sendchfig1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{numSendsCh_stdev_4.png}
+            \caption[]%
+            {{\small Network 2}}    
+            \label{fig:sendchfig2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{numSendsCh_stdev_6.png}
+            \caption[]%
+            {{\small Network 3}}    
+            \label{fig:sendchfig3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{numSendsCh_stdev_rand.png}
+            \caption[]%
+            {{\small Network 4}}    
+            \label{fig:sendchfig4}
+        \end{subfigure}
+        \caption[Figures show average number of sends to \gls{ch}s with different accumulation intervals.]
+        {\small Figures show average number of sends to \gls{ch}s with different accumulation intervals.} 
+        \label{fig:sendschChart}
+    \end{figure*}
+
 
 
 \newpage
@@ -1043,16 +1162,27 @@ Number of sends to \gls{ch}s is also connected to the experiment  with communica
 The result is presented in Figure \ref{fig:chCountChart}. The graphs are as expected flat during parts of the execution because the \gls{ch}-count is only counted when the \gls{ch} is done gathering data.
 There is reason to think that the all graphs, except the graph of \gls{ch}-count after a random number of accumulations, have flat graphs during execution because all the \gls{ch}-counts happens approximately at the same time interval and don't change until the next \gls{ch}-election.
 
-\textit{Blue graph increase to almost double because of \gls{ch}-elections in cluster. Since only two gatherings of data, more time to elect new \glspl{ch}. Previous \gls{ch} elected as \gls{ch} again, causing the average value to increase.. hvorfor oker ant CHs? Partisjonering?}
+We can see that the \gls{ch}-count after 2 accumulations increase to almost double  because of \gls{ch}-elections in the clusters. Since there is only 2 gathering of data per \gls{ch}, there is more time to elect new \glspl{ch}. Our implementation also support that a \gls{ch} can be elected as \gls{ch} again, which can explain why the graph increase significantly. Since it's the average value from the 100 nodes running during the experiment, some \glspl{ch} may have been elected \gls{ch} again causing the graph to increase to double.
 
-\textit{Orange graph have a little increase, some clusters have elected new \gls{ch}. Use longer time to accumulate data since it's gathering data six times instead of two or four..}
+%\textit{Blue graph increase to almost double because of \gls{ch}-elections in cluster. Since only two gatherings of data, more time to elect new \glspl{ch}. Previous \gls{ch} elected as \gls{ch} again, causing the average value to increase.. hvorfor oker ant CHs? Partisjonering?}
 
-Counting the number of \gls{ch} after a random number of accumulations, show a more increasing graph during execution because of the accumulations happens at different time interval causing the \gls{ch}-election to be more spread during execution. We can also see that this graph decrease right after 1500 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
+\gls{ch}-election after 6 accumulations have also a little increase by around 2. This may also be caused by some a \gls{ch}-election where some previous \glspl{ch} have been elected again. 
 
+%\textit{Orange graph have a little increase, some clusters have elected new \gls{ch}. Use longer time to accumulate data since it's gathering data six times instead of two or four..}
+
+Counting the number of \gls{ch} after a random number of accumulations, show a more increasing graph during execution because of the accumulations happens at different time interval causing the \gls{ch}-election to be more spread during execution. We can also see that this graph stop right after 1600 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
+
+
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{chCountChart.png}
+%\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
+%\label{fig:chCountChart}
+%\end{figure}
 
 \begin{figure} [ht]
 \centering
-\includegraphics[width=\textwidth]{chCountChart.png}
+\includegraphics[width=\textwidth]{CH_count_stdev.png}
 \caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
 \label{fig:chCountChart}
 \end{figure}
@@ -1064,18 +1194,57 @@ Counting the number of \gls{ch} after a random number of accumulations, show a m
 
 As we can see from Figure \ref{fig:recPktChart}, are the number of packets \gls{ch}s receives relatively similar during each experiment. This result as well, is expected because the \gls{ch}s will receive more data each time they ask for it.
 
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{recPktChart.png}
-\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
-\label{fig:recPktChart}
-\end{figure}
+%\begin{figure} [ht]
+%\centering
+%\includegraphics[width=\textwidth]{recPktChart.png}
+%\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
+%\label{fig:recPktChart}
+%\end{figure}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{RecvPkt_stdev_2.png}
+            \caption[Network2]%
+            {{\small Network 1}}    
+            \label{fig:recvfig1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{RecvPkt_stdev_4.png}
+            \caption[]%
+            {{\small Network 2}}    
+            \label{fig:recvfig2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{RecvPkt_stdev_6.png}
+            \caption[]%
+            {{\small Network 3}}    
+            \label{fig:recvfig3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{RecvPkt_stdev_rand.png}
+            \caption[]%
+            {{\small Network 4}}    
+            \label{fig:recvfig4}
+        \end{subfigure}
+        \caption[Figures show average number of \gls{ch} with different accumulation intervals.]
+        {\small Figures show average number of \gls{ch} with different accumulation intervals.} 
+        \label{fig:recPktChart}
+    \end{figure*}
 
 
 
-Figure \ref{fig:sentvsrecvChart} show the number of sends from nodes to neighbours, sends from nodes to \gls{ch}s and number of times \gls{ch}s have received data. As we can see, are the number of received packets less than sends to \glspl{ch}. It is therefore reason to think that the nodes accumulate data to reduce the number of packets a \gls{ch} receives.
 
-\textbf{JM: hvorfor gar acc num ned? Noen som avslutter slik at de ikke regnes lenger?}
+Figure \ref{fig:sentvsrecvChart} show the number of sends from nodes to neighbours, sends from nodes to \gls{ch}s and number of times \gls{ch}s have received data. As we can see, are the number of received packets less than sends to \glspl{ch}. It is therefore reason to think that the nodes accumulate data to reduce the number of packets a \gls{ch} receives. The reason for the drop down at the end of the iteration is caused by nodes shutting down due to their limited energy and they these nodes are not taking in account when calculating an average.
+
+%\textbf{JM: hvorfor gar acc num ned? Noen som avslutter slik at de ikke regnes lenger?}
 
 %mye dat blir accumulert - resulterer i lavere ant recv enn sends.. det er jo bra!
 
@@ -1119,7 +1288,7 @@ In the current approach a node can connect to nearby nodes and be a part of a cl
 Another interference with having a \gls{ch} take the decision is that the \gls{ch} may be unavailable because it's sleeping or if it's unreachable because nodes in the path to the \gls{ch} are sleeping or unavailable due to e.g. saving battery. 
 
 %Ping othern nodes regulary to check if neighbours are alive or not, or ping right befre a sending of data to ch.. what if a node in the path to leader is dead? what if there is no other way to the ch? what happens? 
-\subsection{Ping Neighbours}
+\subsection{Ping Neighbours} \label{disc:ping_nodes}
 An improvement to check if neighbours are alive or not, is to ping neighbouring nodes frequently to check if they are alive or not. However, pinging other nodes frequently will eventually flood the network. An improved solution is to only ping neighbours if there is a need for communication between nodes. For example to ping neighbours before forwarding a message to the \gls{ch}. This ping-request will most likely contain a wake-up call to the next node in the path to the \gls{ch} so nodes are awake when receiving a forwarding request to the \gls{ch}. Another approach is to have time slots for when nodes are awake. During these time slots, nodes could ping other nodes to check if they're alive or not. \gls{ch}-elections and accumulating and forwarding data would also happen during these time slots.
 
 
@@ -1190,7 +1359,10 @@ The present approach starts a new \gls{ch}-election in two scenarios: either whe
 
 The current approach is similar to \gls{leach} using different phases for electing a new \gls{ch} and accumulate data. We chose this solution because of concurrency issue when these two events happen at the same time, as mentioned in Section \ref{sec:conc_events}. This issue is also discussed further in Section \ref{disc:simult_el_acc}.
 
-\textbf{JM: husker ikke i farten: har du tatt for deg en node eller til og med en CH som blir borte eks: tom for strom, krasjer eller noe skjer som odelgger den (flom, dyr, etc..)}
+There is also a need for electing a new \gls{ch} if the \gls{ch} itself crashes, out of battery or something happens like a flood or if the node gets destroyed by an animal. This can be done by either ping the \gls{ch} to check if it's alive during time slots, as discussed in \autoref{disc:node_conn}. If there is no response from the \gls{ch}, the node responsible for the ping starts a new \gls{ch}-election.
+
+
+%\textbf{JM: husker ikke i farten: har du tatt for deg en node eller til og med en CH som blir borte eks: tom for strom, krasjer eller noe skjer som odelgger den (flom, dyr, etc..)}
 
 %Improvements??
 %JM: en mulig sak hva skjer hvis CH fpr X mndinger samtidig som en eller fler andre vil sende? er dert ch som initere query bestandig eller kan andre bestemme seg for a sende?
@@ -1325,7 +1497,9 @@ One problem is how the \gls{ch} should be contacted since the \gls{bs} or data m
 \glsresetall
 In this thesis, we have implemented a prototype of a \gls{wsn} system where nodes observe and accumulate data from other nodes for further use. We describe a system where nodes discover each other through a broadcast range and together they form clusters. Each cluster elect  a \gls{ch} which is responsible for sending out a request for gather and accumulate data from the other nodes in the cluster. The role as \gls{ch} is rotating among the nodes to conserve battery. Even though our approach works as intended, there is a need for improvements in how a \gls{ch} is elected and when a \gls{ch} should accumulate data.
 
-Our experiments showed that the system have a stable CPU and memory usage. We can also see that the number of receiving packets of accumulated data is lower than sent packets with accumulated data which indicates that the nodes in the system accumulates data when intended to reduce traffic on the paths to the \glspl{ch}.
+Our experiments showed that the system have a steady CPU and memory usage. We can also see that the number of receiving packets of accumulated data is lower than sent packets with accumulated data which indicates that the nodes in the system accumulates data when intended to reduce traffic on the paths to the \glspl{ch}. There is also a big variety of how many requests nodes in the system sends, depending on their location in the network.
+
+A future system could further investigate the benefits of having multiple \glspl{ch} and how to gather and accumulate data more efficiently. There is still a need for conducting further work for a real-life environment in the Arctic Tundra
 
 
 \chapter{Future Work}
