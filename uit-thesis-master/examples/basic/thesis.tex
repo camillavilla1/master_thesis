@@ -20,6 +20,12 @@
 \usepackage{listings-golang} % import this package after listings
 \usepackage{color}
 
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{mwe}
+
+
 \lstset{ % add your own preferences
     frame=single,
     basicstyle=\footnotesize\ttfamily,
@@ -863,12 +869,46 @@ There is reason \textbf{hvilke da??} to think that this implementation version u
 \end{figure}
 
 
-\begin{figure} [ht]
-\centering
-\includegraphics[width=\textwidth]{memChart_dev.png}
-\caption{Figure shows average memory percentage with different accumulation intervals.}
-\label{fig:memChartDev}
-\end{figure}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{1Mem_stdev.png}
+            \caption[Network2]%
+            {{\small Network 1}}    
+            \label{fig:sendfig1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{2Mem_stdev.png}
+            \caption[]%
+            {{\small Network 2}}    
+            \label{fig:sendfig2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{3Mem_stdev.png}
+            \caption[]%
+            {{\small Network 3}}    
+            \label{fig:sendfig3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{4Mem_stdev.png}
+            \caption[]%
+            {{\small Network 4}}    
+            \label{fig:sendfig4}
+        \end{subfigure}
+        \caption[ ABC]
+        {\small Figures show average memory percentage with different accumulation intervals.} 
+        \label{fig:memChart2}
+    \end{figure*}
+
+
 
 
 \subsection{CPU Usage}
@@ -933,11 +973,49 @@ As we can see from Figure \ref{fig:sendsChart}, will number of sends from one no
 \end{figure}
 
 
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{1numSends.png}
+            \caption[Network2]%
+            {{\small Network 1}}    
+            \label{fig:sendfig1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}  
+            \centering 
+            \includegraphics[width=\textwidth]{22numSends.png}
+            \caption[]%
+            {{\small Network 2}}    
+            \label{fig:sendfig2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{3numSends.png}
+            \caption[]%
+            {{\small Network 3}}    
+            \label{fig:sendfig3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}   
+            \centering 
+            \includegraphics[width=\textwidth]{4numSends.png}
+            \caption[]%
+            {{\small Network 4}}    
+            \label{fig:sendfig4}
+        \end{subfigure}
+        \caption[ ABC]
+        {\small Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals.} 
+        \label{fig:sendsChart2}
+    \end{figure*}
+
+
+
 \textbf{As mentioned in Section \ref{eva:exp_des}, the different experiments are ran independently causing the nodes in the network to create clusters with different number of cluster members. There is one graph-line that stands out compared to the three others. There is reason to believe that the result of accumulating data four times have a higher average of sends between nodes because the nodes in clusters in this experiment had more neighbour nodes and possibly a longer path to the \gls{ch} when accumulating data.}
 
 \textbf{JM: Hva skjer i fallet her (gronn graf)?}
-
-
 
 
 
