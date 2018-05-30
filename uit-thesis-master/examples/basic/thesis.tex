@@ -1154,7 +1154,7 @@ As \autoref{fig:sendsChart} also show, is how some nodes send few messages while
 \subsection{Number Of Sends To Cluster Heads}
 Number of sends to \glspl{ch} is also connected to the experiment with communication and network usage. The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \glspl{ch} increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between $0$ sends up til around 35 sends.
 
-\autoref{fig:sendchfig4} show how nodes quickly accumulates data to the \gls{ch} by having the \gls{ch} chose a random value of how many times it should accumulate data between 1 and six. Even though the \gls{ch} starts gathering in a more varied way, it has less sends to the \gls{ch} than the other implementations. We can also see that this graph increase right after 1400 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
+\autoref{fig:sendchfig4} show how nodes quickly accumulates data to the \gls{ch} by having the \gls{ch} chose a random value of how many times it should accumulate data between one and six. Even though the \gls{ch} starts gathering in a more varied way, it has less sends to the \gls{ch} than the other implementations. We can also see that this graph increase right after 1400 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
 
 %her også avhenger hvert experiment på hvordan nodene har laget cluster.. ch kan ha hatt fler eller ferre naboer og flere eller ferre noder i clusteret..
 
@@ -1572,10 +1572,42 @@ We will outline some of the areas that can be elaborated in future work. These i
 
 
 \chapter{Appendix}
+\glsresetall
 %Readme
+Get and install Golang: \url{https://golang.org/doc/install}
 
+Run \textit{go get github.com/shirou/gopsutil/...}
 
+\subsection{Running The System}
+\begin{itemize}
+\item Locate folder \textit{master\_thesis\_code}
+\item Run \textit{go install ./...}
+\end{itemize}
 
+\subsubsection{Start simulator}
+\begin{itemize}
+\item Locate folder \textit{master\_thesis\_code/cmd/simulator}
+\item \textit{go run simulation.go -numCh=5}
+\end{itemize}
+
+\subsubsection{Start One Observation Unit}
+\begin{itemize}
+\item Locate folder \textit{master\_thesis\_code/cmd/server}
+\item \textit{go run server.go run -Simport=8080 -host=localhost -port=:8082}
+\begin{itemize}
+\item \textbf{-Simport=:8080}: port of simulator
+\item \textbf{-host:localhost}: host of \gls{ou}
+\item \textbf{-port=}: port of \gls{ou}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Start Multiple Observation Units}
+\begin{itemize}
+\item \textit{go run run\_all.go 3}
+\begin{itemize}
+\item \textbf{3}: number of \glspl{ou}
+\end{itemize}
+\end{itemize}
 \backmatter
 
 %%% BIBLOGRAPHY
