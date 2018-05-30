@@ -729,9 +729,9 @@ We use gopsutil, a psutil for Golang \cite{golangPsutil}, to measure CPU, memory
 
 All experiments were conducted on a computer, where a process is simulating an \gls{ou}. In order to determine memory, CPU and network usage, several experiment scenarios were designed and performed.
 
-The experiments are ran with a 500 millisecond's measurement interval and the system execute minimum 10 minutes. Each \gls{ou} starts it's own experiment, and each 500 millisecond during execution are the measurement values written to a log-file for further evaluation. We chose to measure with a 500 millisecond time interval because the system is implemented to run concurrently and the experimental measurements change rapidly in terms of \gls{ch}-elections and data accumulations. 
+The experiments ran with a 500 millisecond's measurement interval and the system execute minimum 10 minutes. Each \gls{ou} starts it's own experiment, and each 500 millisecond during execution are the measurement values written to a log-file for further evaluation. We chose to measure with a 500 millisecond time interval because the system is implemented to run concurrently and the experimental measurements change rapidly in terms of \gls{ch}-elections and data accumulations. 
 
-The log-file contains data for each time interval (500 millisecond) where  one row is one node and one column is one time interval during execution. We calculate each column in the log-file to obtain an average value because of the huge amount of data. The graphs displayed contains the average values for each time interval (500 millisecond).
+The log-file contains data for each time interval (500 millisecond) where  one row is one node and one column is one time interval during execution. We calculate each column in the log-file to obtain an average value because of the huge amount of data. The graphs displayed contains the average values for each time interval (500 millisecond) with a standard deviation of all values.
 
 The experiments are done executing 100 nodes with a broadcast range at 50, as shown in Table \ref{tab:simTable}. Each node execute their own experiment when launched. During execution, the nodes in the system will communicate between each other, gossip \gls{ch}-election and store and accumulate data both between themselves and at the \glspl{ch}.
 
@@ -766,7 +766,7 @@ A \gls{ch} will chose a value between one and six which indicates how many times
 
 \subsection{Memory Measurements} \label{eva:mem_measure}
 %discover/observe/see
-We measure the memory usage to examine how much memory is consumed when executing our system. The memory usage measured, is the total percentage of RAM used by the program, and not for individual processes. It is important to keep the memory usage at a minimum due to execution on devices in real-life environment to avoid exceeding the limited memory.
+We measure the memory usage to examine how much memory is consumed when executing our system. The memory usage measured, is the total percentage of RAM used by the program. It is important to keep the memory usage at a minimum due to execution on devices in real-life environment to avoid exceeding the limited memory.
 
 %The memory usage is essential to examine because it ... to be relatively low to be able to make the device function as normal in a real-life environment/scenario.
 
@@ -845,7 +845,7 @@ We measure the number of process connection and network usage when executing our
 
 %We measure the number of process connection since the system relies on network usage and communication between nodes and it is important to keep it to a minimum. The number of communication channels are represented by open sockets that a node have open at any given point. These open sockets may be because of discovery of other nodes, \gls{ch}-election, forwarding- and data accumulation.
 
-We measure number of process connections and network usage independently for each node every 500 milliseconds during execution when the nodes communicate with each other, electing new \glspl{ch} and accumulating data to the \glspl{ch}.
+We measure the number of process connections and network usage independently for each node every 500 milliseconds during execution when the nodes communicate with each other, electing new \glspl{ch} and accumulating data to the \glspl{ch}.
 
 \begin{itemize}
 \item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process. Listing \ref{psutil} show how the the psutil is used to measure number of process connections and network usage.
@@ -904,6 +904,8 @@ The result is presented in Figure \ref{fig:memChart}. We can see that the system
 There is one graph that stands out by using under 50\% of the memory during execution, which is the graph showing the memory usage after 4 accumulations, as seen in \autoref{fig:memfig2}.
 
 As for the experiment for the implementation with a random number of accumulations, as seen in \autoref{fig:memfig4}, we can see that this implementation use between 58\% and 68\% memory while executing. There is reason to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \glspl{ch} accumulated data appropriately at the same time interval.
+
+\textbf{JM: skjer ikke acc like ofte, det er bare antall acs før du byter ch?}
 
 As for the experiment for the implementation with six accumulations, seen in \autoref{fig:memfig3}, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
  
