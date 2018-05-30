@@ -642,7 +642,7 @@ This especially occur in the \gls{ch} when collecting data from the nodes in the
 
 %\newpage
 
-\begin{lstlisting} [frame=single,caption={Small Go program showing how mutexes are used when updating a map by CH.},language=C, label={test}]
+\begin{lstlisting} [frame=single,caption={Small Go program showing how mutexes are used when updating a map by CH.}, label={test}]
 
 /*SensorData is data from "sensors" on the OU */
 type SensorData struct {
@@ -772,10 +772,61 @@ We measure the memory usage to examine how much memory is consumed when executin
 
 We measure the memory usage independently for each node every 500 milliseconds during execution when the nodes communicate with each other, electing new \glspl{ch} and accumulating data to the \glspl{ch}.
 
+
+
 \begin{itemize}
-\item \textbf{Psutil - VirtualMemoryStat - UsedPercent:} percentage of RAM used by programs.
+\item \textbf{Psutil - VirtualMemoryStat - UsedPercent:} percentage of RAM used by programs. Listing \ref{psutil} show how the the psutil is used to measure memory usage.
 \end{itemize}
 
+\newpage
+
+\begin{lstlisting} [frame=single,caption={Go program showing how psutil is implemented for experiments}, label={psutil}]
+
+func (ou *ObservationUnit) Experiments(pid int) {
+	tickChan := time.NewTicker(time.Millisecond * 500).C
+	
+	infoSlice := []string{}
+	
+	(...)
+	
+	go func() {
+		time.Sleep(time.Second * time.Duration(batteryStart))
+		doneChan <- true
+	}()
+
+	for {
+		select {
+		case <-tickChan:
+		
+		//Measure memory usage
+		mem, _ := mem.VirtualMemory()
+		
+		//Round used percent memory to 3 decimals
+		memUsedPercentage := toFixed(mem.UsedPercent, 3)
+		infoSlice = append(infoSlice, memUsedPercentage)
+		
+		//Measure CPU usage
+		oneCPUPercentage, _ := cpu.Percent(0, false)
+		
+		//Round used CPU percent to 3 decimals
+		oneCPUPercentage[0] = toFixed(oneCPUPercentage[0], 3)
+		infoSlice = append(infoSlice, oneCPUPercentage[0])
+		
+		//NET - number of connections for process by pid
+		conn, err := net.ConnectionsPid("all", int32(pid))
+		ErrorMsg("conn: ", err)
+		
+		//Number of connections
+		numConn := len(conn)
+		infoSlice = append(infoSlice, numConn)
+		
+		//Append to a file
+		AppendFile(path, writer, infoSlice) 
+	}
+}
+\end{lstlisting}
+
+\newpage
 
 \subsection{CPU Measurements} \label{eva:cpu_measure}
 We measure the total CPU usage for the computers four cores combined to document CPU utilization. This as well, is important to keep at a minimum due to execution on devices in real-life environment to avoid draining the battery.
@@ -783,7 +834,7 @@ We measure the total CPU usage for the computers four cores combined to document
 We measure the CPU usage independently for each node every 500 milliseconds during execution when the nodes communicate with each other, electing new \glspl{ch} and accumulating data to the \glspl{ch}.
 
 \begin{itemize}
-\item \textbf{Psutil - Percent:} calculates the percentage of CPU used either per CPU or combined.
+\item \textbf{Psutil - Percent:} calculates the percentage of CPU used either per CPU or combined. Listing \ref{psutil} show how the the psutil is used to measure CPU usage.
 \end{itemize}
 
 %\textbf{JM: hr du provd a se pa kun dine processer eler har du passet pa at ingenting annet kjorte og forstyrret? total cpu har en fordel: du far med system overhead ogsa.}
@@ -797,7 +848,7 @@ We measure the number of process connection and network usage when executing our
 We measure number of process connections and network usage independently for each node every 500 milliseconds during execution when the nodes communicate with each other, electing new \glspl{ch} and accumulating data to the \glspl{ch}.
 
 \begin{itemize}
-\item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process.
+\item \textbf{Psutil - ConnectionsPid:} Return a list of network connections opened by a process. Listing \ref{psutil} show how the the psutil is used to measure number of process connections and network usage.
 \end{itemize}
 
 
@@ -902,8 +953,8 @@ As for the experiment for the implementation with six accumulations, seen in \au
             {{\small Network 4}}    
             \label{fig:memfig4}
         \end{subfigure}
-        \caption[ Figures show average memory percentage with different accumulation intervals.]
-        {\small Figures show average memory percentage with different accumulation intervals.} 
+        \caption[ Figures show average memory percentage with different accumulation intervals with standard deviation.]
+        {\small Figures show average memory percentage (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:memChart}
     \end{figure*}
 
@@ -965,8 +1016,8 @@ In the end of the execution, nodes will die because of energy consumption during
             {{\small Network 4}}    
             \label{fig:cpufig4}
         \end{subfigure}
-        \caption[Figures show average CPU percentage with different accumulation intervals.]
-        {\small Figures show average CPU percentage with different accumulation intervals.} 
+        \caption[Figures show average CPU percentage with different accumulation intervals with standard deviation.]
+        {\small Figures show average CPU percentage (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:cpuChart}
     \end{figure*}
 
@@ -1029,8 +1080,8 @@ There is also reason to think that these wave like patterns occurs at different 
             {{\small Network 4}}    
             \label{fig:connfig4}
         \end{subfigure}
-        \caption[Figures show average network connections with different accumulation intervals.]
-        {\small Figures show average network connections with different accumulation intervals.} 
+        \caption[Figures show average network connections with different accumulation intervals with standard deviation (lighter colors).]
+        {\small Figures show average network connections (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:netconnChart}
     \end{figure*}
     
@@ -1086,8 +1137,8 @@ As \autoref{fig:sendsChart} also show, is how some nodes send few messages while
             {{\small Network 4}}    
             \label{fig:sendfig4}
         \end{subfigure}
-        \caption[Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals.]
-        {\small Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals.} 
+        \caption[Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals with standard deviation.]
+        {\small Figures show average number of sends from nodes (dark colors) to neighbour nodes with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:sendsChart}
     \end{figure*}
 
@@ -1147,8 +1198,8 @@ Number of sends to \glspl{ch} is also connected to the experiment with communica
             {{\small Network 4}}    
             \label{fig:sendchfig4}
         \end{subfigure}
-        \caption[Figures show average number of sends to \glspl{ch} with different accumulation intervals.]
-        {\small Figures show average number of sends to \glspl{ch} with different accumulation intervals.} 
+        \caption[Figures show average number of sends to \glspl{ch} with different accumulation intervals with standard deviation.]
+        {\small Figures show average number of sends to \glspl{ch} (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:sendschChart}
     \end{figure*}
 
@@ -1234,8 +1285,8 @@ As we can see from Figure \ref{fig:recPktChart}, are the number of packets \glsp
             {{\small Network 4}}    
             \label{fig:recvfig4}
         \end{subfigure}
-        \caption[Figures show average number of \gls{ch} with different accumulation intervals.]
-        {\small Figures show average number of \gls{ch} with different accumulation intervals.} 
+        \caption[Figures show average number of \gls{ch} with different accumulation intervals with standard deviation.]
+        {\small Figures show average number of \gls{ch} (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:recPktChart}
     \end{figure*}
 
@@ -1459,7 +1510,7 @@ The current approach provides an eventual consistency when electing a new \gls{c
 At the current approach, all nodes have the same broadcast range to reach nearby neighbours. This means that there is no node that have access to a \gls{bs} where it can deliver it's data.
 
 
-Another question is how nodes or \gls{ch} have contact with \glspl{bs}. As discussed in \autoref{disc:ch_election}, can a node be elected as \gls{ch} if it has access to a \gls{bs}, if there are any placed in the same area as the nodes. Another approach is to use a data mules to collect data from the \glspl{ch}.
+Another question is how nodes or \glspl{ch} have contact with \glspl{bs}. As discussed in \autoref{disc:ch_election}, can a node be elected as \gls{ch} if it has access to a \gls{bs}, if there are any placed in the same area as the nodes. Another approach is to use a data mules to collect data from the \glspl{ch}.
 One problem is how the \gls{ch} should be contacted since the \gls{bs} or data mule don't know who has the data in the cluster. One approach is that they know who the \glspl{ch} are, another approach is to let the \gls{bs} or data mule contact an arbitrary node and let the node alert the \gls{ch} that it should send it's data. The node can also tell the mule where the \gls{ch} is located by giving the mule the \glspl{ch} x- and y-coordinates.
 
 
@@ -1499,7 +1550,7 @@ In this thesis, we have implemented a prototype of a \gls{wsn} system where node
 
 Our experiments showed that the system have a steady CPU and memory usage. We can also see that the number of receiving packets of accumulated data is lower than sent packets with accumulated data which indicates that the nodes in the system accumulates data when intended to reduce traffic on the paths to the \glspl{ch}. There is also a big variety of how many requests nodes in the system sends, depending on their location in the network.
 
-A future system could further investigate the benefits of having multiple \glspl{ch} and how to gather and accumulate data more efficiently. There is still a need for conducting further work for a real-life environment in the Arctic Tundra
+A future system could further investigate the benefits of having multiple \glspl{ch} and how to gather and accumulate data more efficiently. There is still a need for conducting further work for a real-life environment in the Arctic Tundra.
 
 
 \chapter{Future Work}
@@ -1507,7 +1558,7 @@ A future system could further investigate the benefits of having multiple \glspl
 We will outline some of the areas that can be elaborated in future work. These include:
 
 \begin{itemize}
-\item \textbf{Availability of node}: In the current implementation can nodes join the cluster without any requirements, as discussed in \autoref{disc:node_conn}. We discuss how  how we could improve the implementation by having the \gls{ch} take the decision if a node can join the cluster or not. We also discussed how to improve a nodes knowledge about the network around them and how to get the newest information.
+\item \textbf{Availability of node}: In the current implementation, nodes can join the cluster without any requirements, as discussed in \autoref{disc:node_conn}. We discuss how  how we could improve the implementation by having the \gls{ch} take the decision if a node can join the cluster or not. We also discussed how to improve a nodes knowledge about the network around them and how to get the newest information.
 
 \item \textbf{\gls{ch}-election:} The \gls{ch}-election, together with the \gls{ch} calculation, in the current solution is not the best, but it is an introduction to a solution. As mentioned in \autoref{disc:ch_election}, would another approach be to include sub-factors such as power left on node, network traffic, number of neighbours etc, to calculate which nodes that are most qualified to be a \gls{ch}. 
 
