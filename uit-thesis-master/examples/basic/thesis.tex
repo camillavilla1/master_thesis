@@ -903,9 +903,9 @@ The result is presented in Figure \ref{fig:memChart}. We can see that the system
 
 There is one graph that stands out by using under 50\% of the memory during execution, which is the graph showing the memory usage after 4 accumulations, as seen in \autoref{fig:memfig2}.
 
-As for the experiment for the implementation with a random number of accumulations, as seen in \autoref{fig:memfig4}, we can see that this implementation use between 58\% and 68\% memory while executing. There is reason to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \glspl{ch} accumulated data appropriately at the same time interval.
+As for the experiment for the implementation with a random number of accumulations, as seen in \autoref{fig:memfig4}, we can see that this implementation use between 58\% and 68\% memory while executing. There is reason to think that this implementation version uses less memory than the others because the accumulation intervals are more distributed during execution in contrast to the other accumulation intervals where all \glspl{ch} accumulat data appropriately at the same time interval. This also means that the \gls{ch}-elections also will occur at different times  compared to the other implementation where this will happen at the same iterations per implementation. 
 
-\textbf{JM: skjer ikke acc like ofte, det er bare antall acs før du byter ch?}
+%\textbf{JM: skjer ikke acc like ofte, det er bare antall acs før du byter ch?}
 
 As for the experiment for the implementation with six accumulations, seen in \autoref{fig:memfig3}, the memory percentage is the overall highest of all experiments. We can assume that this is because of the most amount of accumulation causing the \gls{ch} to use more memory.
  
@@ -955,8 +955,8 @@ As for the experiment for the implementation with six accumulations, seen in \au
             {{\small Network 4}}    
             \label{fig:memfig4}
         \end{subfigure}
-        \caption[ Figures show average memory percentage with different accumulation intervals with standard deviation.]
-        {\small Figures show average memory percentage (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
+        \caption[ Figures show average memory percentage for 100 nodes per network with different accumulation intervals with standard deviation.]
+        {\small Figures show average memory percentage (dark colors) for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:memChart}
     \end{figure*}
 
@@ -967,13 +967,13 @@ As for the experiment for the implementation with six accumulations, seen in \au
 As we can see from Figure \ref{fig:cpuChart}, the CPU percentage is between 50\% and 95\% during execution and each experiments uses approximately the same amount of CPU.
 The CPU percentage is stable on around 75\% during the execution for each experiment. We believe that the reason there is no peaks during execution, is because of Golangs\footnote{\url{https://golang.org/}} built-in language features and ability to utilize multicore and networked machines.
 
-Every node in the system spawn new goroutines when they starts a new \gls{ch}-election and sends- or receives requests from other nodes in the network.
+Every node in the system spawn new goroutines when they start a new \gls{ch}-election and sends- or receives requests from other nodes in the network.
 Golangs goroutines are very cheap to create and because they are so light, it is possible to have hundreds or thousands of them running at the same time, and in the same address space. Threads are the basic units for processor scheduling and distribution. Threads need to go to the kernel when acquiring a lock for synchronization in contrast to goroutines that are implemented on-top of OS threads and can stay in user space and acquire locks.
 
 Another reason for the graphs being so stable can be because the nodes are waiting for a request to either accumulate data or elect a new \gls{ch}. Most of the execution time, the nodes are waiting for requests.
 
 From \autoref{fig:cpuChart}, we can see that each implementation uses less CPU usage in the start and end of the execution. This is because in the beginning, nodes takes time to start and to find neighbours to connect to. Then, the CPU usage will increase because nodes that have found nearby neighbours to connect to will start \gls{ch}-elections.
-In the end of the execution, nodes will die because of energy consumption during the execution.
+In the end of the execution, nodes will die because of simulated energy consumption during the execution.
 
 %\textit{Note to self: Starting nodes, elect leaders, gather data after some time.., eventually elect new leader, and gather data again..may be that clusters are so "small" that they do not make any crazy things about CPU. More nodes connected - more CPU usage?? also golang that utilize multicore and networked machines..? nodes running and waiting for requests.. should probably peak when ch electing or data accumulation.. but maybe golang is the shit..}
 
@@ -985,7 +985,7 @@ In the end of the execution, nodes will die because of energy consumption during
 %\label{fig:cpuChart}
 %\end{figure}
 
-\begin{figure*}
+\begin{figure*} [ht]
         \centering
         \begin{subfigure}[b]{0.475\textwidth}
             \centering
@@ -1018,16 +1018,15 @@ In the end of the execution, nodes will die because of energy consumption during
             {{\small Network 4}}    
             \label{fig:cpufig4}
         \end{subfigure}
-        \caption[Figures show average CPU percentage with different accumulation intervals with standard deviation.]
-        {\small Figures show average CPU percentage (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
+        \caption[Figures show average CPU percentage for 100 nodes per network with different accumulation intervals with standard deviation.]
+        {\small Figures show average CPU percentage (dark colors) for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:cpuChart}
-    \end{figure*}
-
+\end{figure*}
 
 
 \newpage
 
-\subsection{Network Usage}
+\subsection{Network Usage Amounted By Number Of Connections}
 The purpose of this experiment was to measure the network usage and communication between nodes since it's important to keep this to a minimum since it's aimed to execute on small, low-power \glspl{ou}. The result is presented in Figure \ref{fig:netconnChart} and show a wave like pattern. The number of connections in the system range from 1 connection to 18 connections on average per node for 100 node in the system.
 There is reason to believe that these high wave like patterns showing a high amount on connections is because of three reasons:
 
@@ -1037,7 +1036,9 @@ There is reason to believe that these high wave like patterns showing a high amo
 \item At last, after accumulating data from other nodes in the cluster, the \gls{ch} gossip a new \gls{ch}-election calculation and then gossip a new \gls{ch}-election.
 \end{itemize}
 
-There is also reason to think that these wave like patterns occurs at different time intervals is because of the different implementations accumulate data and elect \gls{ch} at different time intervals.
+%The open connections are closed after each exchange
+
+There is also reason to think that these wave like patterns occurs at different time intervals is because of the different implementations accumulate data and elect \gls{ch} at different time intervals. Each cluster of nodes may also get out of sync with the other clusters resulting in that accumulation of data and \gls{ch}-elections occurs at different iterations. This may smooth out the graphs eventually, as seen in \autoref{fig:connfig3}
 
 %around 6 connections are average..
 
@@ -1082,8 +1083,8 @@ There is also reason to think that these wave like patterns occurs at different 
             {{\small Network 4}}    
             \label{fig:connfig4}
         \end{subfigure}
-        \caption[Figures show average network connections with different accumulation intervals with standard deviation (lighter colors).]
-        {\small Figures show average network connections (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
+        \caption[Figures show average network connections for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).]
+        {\small Figures show average network connections (dark colors) for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:netconnChart}
     \end{figure*}
     
@@ -1093,7 +1094,7 @@ There is also reason to think that these wave like patterns occurs at different 
 %\subsection{Network Lifetime?}
 \subsection{Number Of Sends To Neighbours}
 Since it's important to keep communication and network usage to a minimum, we measure the number of sends from nodes to neighbours. 
-As we can see from Figure \ref{fig:sendsChart}, will number of sends from one node to another increase during execution. The average number of sends from nodes range between 1 send up til around 95 sends. This is an expected result since each time a node communicate with another node, it's counted and therefore will increase during execution.
+As we can see from Figure \ref{fig:sendsChart}, the number of sends from one node to another increases during execution. The average number of sends from nodes range between 1 send up til around 95 sends. This is an expected result since each time a node communicate with another node, it's counted and therefore will increase during execution.
 
 As \autoref{fig:sendsChart} also show, is how some nodes send few messages while other nodes send a lot of requests. As we can see from \autoref{fig:sendfig2}, some nodes have sent requests over 160 times and other nodes only around 20 requests. This will vary in terms of where the nodes are placed in the network. Those nodes that have a low rate of sends are most likely placed at the outer edge of the cluster while the nodes that have a high rate are most likely placed in the path to the \gls{ch} for many nodes resulting in a higher send rate.
 
@@ -1139,8 +1140,8 @@ As \autoref{fig:sendsChart} also show, is how some nodes send few messages while
             {{\small Network 4}}    
             \label{fig:sendfig4}
         \end{subfigure}
-        \caption[Figures show average number of sends from nodes to neighbour nodes with different accumulation intervals with standard deviation.]
-        {\small Figures show average number of sends from nodes (dark colors) to neighbour nodes with different accumulation intervals with standard deviation (lighter colors).} 
+        \caption[Figures show average number of sends from nodes to neighbour nodes for 100 nodes per network with different accumulation intervals with standard deviation.]
+        {\small Figures show average number of sends from nodes (dark colors) to neighbour nodes for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:sendsChart}
     \end{figure*}
 
@@ -1156,7 +1157,7 @@ As \autoref{fig:sendsChart} also show, is how some nodes send few messages while
 \subsection{Number Of Sends To Cluster Heads}
 Number of sends to \glspl{ch} is also connected to the experiment with communication and network usage. The result is presented in Figure \ref{fig:sendschChart} where we can see that the number of sends to \glspl{ch} increase during execution. This is also an expected result in thought of the \gls{ch} are gathering more and more data. The average number of sends to \gls{ch} range between $0$ sends up til around 35 sends.
 
-\autoref{fig:sendchfig4} show how nodes quickly accumulates data to the \gls{ch} by having the \gls{ch} chose a random value of how many times it should accumulate data between one and six. Even though the \gls{ch} starts gathering in a more varied way, it has less sends to the \gls{ch} than the other implementations. We can also see that this graph increase right after 1400 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
+\autoref{fig:sendchfig4} show how nodes quickly accumulates data to the \gls{ch} by having the \gls{ch} chose a random value of how many times it should accumulate data between one and six. Even though the \gls{ch} starts gathering in a more varied way, it has less sends to the \gls{ch} than the other implementations. We can also see that this graph decrease right after 1400 iterations. The reason for this is assumable because nodes starts dying of energy consumption because of a more spread \gls{ch}-election and data accumulation during execution causing the nodes do drain more of their limited battery.
 
 %her også avhenger hvert experiment på hvordan nodene har laget cluster.. ch kan ha hatt fler eller ferre naboer og flere eller ferre noder i clusteret..
 
@@ -1200,8 +1201,8 @@ Number of sends to \glspl{ch} is also connected to the experiment with communica
             {{\small Network 4}}    
             \label{fig:sendchfig4}
         \end{subfigure}
-        \caption[Figures show average number of sends to \glspl{ch} with different accumulation intervals with standard deviation.]
-        {\small Figures show average number of sends to \glspl{ch} (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
+        \caption[Figures show average number of sends to \glspl{ch} for 100 nodes per network with different accumulation intervals with standard deviation.]
+        {\small Figures show average number of sends to \glspl{ch} (dark colors) for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:sendschChart}
     \end{figure*}
 
@@ -1215,7 +1216,7 @@ Number of sends to \glspl{ch} is also connected to the experiment with communica
 The result is presented in Figure \ref{fig:chCountChart}. The graphs are as expected flat during parts of the execution because the \gls{ch}-count is only counted when the \gls{ch} is done gathering data.
 There is reason to think that the all graphs, except the graph of \gls{ch}-count after a random number of accumulations, have flat graphs during execution because all the \gls{ch}-counts happens approximately at the same time interval and don't change until the next \gls{ch}-election.
 
-We can see that the \gls{ch}-count after 2 accumulations increase to almost double  because of \gls{ch}-elections in the clusters. Since there is only 2 gathering of data per \gls{ch}, there is more time to elect new \glspl{ch}. Our implementation also support that a \gls{ch} can be elected as \gls{ch} again, which can explain why the graph increase significantly. Since it's the average value from the 100 nodes running during the experiment, some \glspl{ch} may have been elected \gls{ch} again causing the graph to increase to double.
+We can see that the \gls{ch}-count after 2 accumulations increase to almost double  because of \gls{ch}-elections in the clusters. Since there is only 2 gathering of data per \gls{ch}, the \gls{ch} will get started earlier with a \gls{ch}-election. Our implementation also support that a \gls{ch} can be elected as \gls{ch} again, which can explain why the graph increase significantly. Since it's the average value from the 100 nodes running during the experiment, some \glspl{ch} may have been elected \gls{ch} again causing the graph to increase to double.
 
 %\textit{Blue graph increase to almost double because of \gls{ch}-elections in cluster. Since only two gatherings of data, more time to elect new \glspl{ch}. Previous \gls{ch} elected as \gls{ch} again, causing the average value to increase.. hvorfor oker ant CHs? Partisjonering?}
 
@@ -1233,10 +1234,10 @@ Counting the number of \gls{ch} after a random number of accumulations, show a m
 %\label{fig:chCountChart}
 %\end{figure}
 
-\begin{figure} [ht]
+\begin{figure}
 \centering
 \includegraphics[width=\textwidth]{CH_count_stdev.png}
-\caption{Figure shows average number of \gls{ch} with different accumulation intervals.}
+\caption{Figure shows the number of \gls{ch} for 100 nodes per network with different accumulation intervals.}
 \label{fig:chCountChart}
 \end{figure}
 
@@ -1254,7 +1255,7 @@ As we can see from Figure \ref{fig:recPktChart}, are the number of packets \glsp
 %\label{fig:recPktChart}
 %\end{figure}
 
-\begin{figure*}
+\begin{figure*}  [ht]
         \centering
         \begin{subfigure}[b]{0.475\textwidth}
             \centering
@@ -1287,8 +1288,8 @@ As we can see from Figure \ref{fig:recPktChart}, are the number of packets \glsp
             {{\small Network 4}}    
             \label{fig:recvfig4}
         \end{subfigure}
-        \caption[Figures show average number of \gls{ch} with different accumulation intervals with standard deviation.]
-        {\small Figures show average number of \gls{ch} (dark colors) with different accumulation intervals with standard deviation (lighter colors).} 
+        \caption[Figures show average number of \gls{ch} for 100 nodes per network with different accumulation intervals with standard deviation.]
+        {\small Figures show average number of \gls{ch} (dark colors) for 100 nodes per network with different accumulation intervals with standard deviation (lighter colors).} 
         \label{fig:recPktChart}
     \end{figure*}
 
@@ -1572,16 +1573,15 @@ We will outline some of the areas that can be elaborated in future work. These i
 \end{itemize}
 
 
-
+\appendix
 \chapter{Appendix}
 \glsresetall
 %Readme
-Get and install Golang: \url{https://golang.org/doc/install}
+\subsubsection{Running The System}
 
-Run \textit{go get github.com/shirou/gopsutil/...}
-
-\subsection{Running The System}
 \begin{itemize}
+\item Get and install Golang: \url{https://golang.org/doc/install}
+\item Run \textit{go get github.com/shirou/gopsutil/...}
 \item Locate folder \textit{master\_thesis\_code}
 \item Run \textit{go install ./...}
 \end{itemize}
@@ -1610,6 +1610,8 @@ Run \textit{go get github.com/shirou/gopsutil/...}
 \item \textbf{3}: number of \glspl{ou}
 \end{itemize}
 \end{itemize}
+
+
 \backmatter
 
 %%% BIBLOGRAPHY
