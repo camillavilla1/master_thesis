@@ -24,6 +24,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{mwe}
+\usepackage{appendix}
 
 
 \lstset{ % add your own preferences
@@ -1574,47 +1575,6 @@ We will outline some of the areas that can be elaborated in future work. These i
 \end{itemize}
 
 
-\appendix
-\chapter{Appendix}
-\glsresetall
-%Readme
-\subsubsection{Running The System}
-
-\begin{itemize}
-\item Get and install Golang: \url{https://golang.org/doc/install}
-\item Run \textit{go get github.com/shirou/gopsutil/...}
-\item Locate folder \textit{master\_thesis\_code}
-\item Run \textit{go install ./...}
-\end{itemize}
-
-\subsubsection{Start simulator}
-\begin{itemize}
-\item Locate folder \textit{master\_thesis\_code/cmd/simulator}
-\item \textit{go run simulation.go -numCh=5}
-\end{itemize}
-
-\subsubsection{Start One Observation Unit}
-\begin{itemize}
-\item Locate folder \textit{master\_thesis\_code/cmd/server}
-\item \textit{go run server.go run -Simport=8080 -host=localhost -port=:8082}
-\begin{itemize}
-\item \textbf{-Simport=:8080}: port of simulator
-\item \textbf{-host:localhost}: host of \gls{ou}
-\item \textbf{-port=}: port of \gls{ou}
-\end{itemize}
-\end{itemize}
-
-\subsubsection{Start Multiple Observation Units}
-\begin{itemize}
-\item \textit{go run run\_all.go 3}
-\begin{itemize}
-\item \textbf{3}: number of \glspl{ou}
-\end{itemize}
-\end{itemize}
-
-
-\backmatter
-
 %%% BIBLOGRAPHY
 
 \newpage{}
@@ -1822,6 +1782,49 @@ O. Anshus,
 
 \end{thebibliography}
 
+
+
+\appendix
+\appendixpage
+\addappheadtotoc
+\chapter{Running The System}
+\glsresetall
+%Readme
+\subsubsection{Running The System}
+
+\begin{itemize}
+\item Get and install Golang: \url{https://golang.org/doc/install}
+\item Run \textit{go get github.com/shirou/gopsutil/...}
+\item Locate folder \textit{master\_thesis\_code}
+\item Run \textit{go install ./...}
+\end{itemize}
+
+\subsubsection{Start simulator}
+\begin{itemize}
+\item Locate folder \textit{master\_thesis\_code/cmd/simulator}
+\item \textit{go run simulation.go -numCh=5}
+\end{itemize}
+
+\subsubsection{Start One Observation Unit}
+\begin{itemize}
+\item Locate folder \textit{master\_thesis\_code/cmd/server}
+\item \textit{go run server.go run -Simport=8080 -host=localhost -port=:8082}
+\begin{itemize}
+\item \textbf{-Simport=:8080}: port of simulator
+\item \textbf{-host:localhost}: host of \gls{ou}
+\item \textbf{-port=}: port of \gls{ou}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Start Multiple Observation Units}
+\begin{itemize}
+\item \textit{go run run\_all.go 3}
+\begin{itemize}
+\item \textbf{3}: number of \glspl{ou}
+\end{itemize}
+\end{itemize}
+
+\backmatter
 
 \end{document}
 
